@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AtCoderCSharp
 {
@@ -9,23 +6,21 @@ namespace AtCoderCSharp
 	{
 		static void Main(string[] args)
 		{
-			List<int> intDataList = new List<int>();
-			string strData;
-			for (int i = 0; i < 2; ++i) {
-				string line = Console.ReadLine();
-				string[] strs = line.Split(' ');
-				foreach (var str in strs) {
-					int data = int.Parse(str);
-					intDataList.Add(data);
-				}
-			}
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			string strData = "";
+			string line = Console.ReadLine();
+			a = int.Parse(line);
 
-			{
-				string line = Console.ReadLine();
-				strData = line;
-			}
+			line = Console.ReadLine();
+			string[] strs = line.Split(' ');
+			b = int.Parse(strs[0]);
+			c = int.Parse(strs[1]);
 
-			Console.WriteLine($"{intDataList.Sum()} " + strData);
+			strData = Console.ReadLine();
+
+			Console.WriteLine($"{a + b + c} " + strData);
 		}
 	}
 }
