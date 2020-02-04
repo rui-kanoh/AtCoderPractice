@@ -16,3 +16,4 @@ namespace AtCoder.Lib
             return Convert.ToInt32(Math.Ceiling((double)x / a));
         }
     }
+}
