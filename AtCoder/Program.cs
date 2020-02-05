@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AtCoder
@@ -13,13 +14,17 @@ namespace AtCoder
 			long b = abk[1];
 			long k = abk[2];
 
-			long j = 0;
-			for (var i = a; i <= b; ++i) {
-				if (j < k || b - k < i) {
-					Console.WriteLine(i.ToString());
-				}
+			for (long i = a; i < a + k && i <= b; ++i) {
+				Console.WriteLine(i.ToString());
+			}
 
-				++j;
+			List<long> list = new List<long>();
+			for (long i = b; i > b - k + 1 && i >= a; --i) {
+				list.Add(i);
+			}
+
+			for (int i = list.Count - 1; i >= 0; --i) {
+				//Console.WriteLine(list[i].ToString());
 			}
 
 			//Console.WriteLine(remain.ToString());
