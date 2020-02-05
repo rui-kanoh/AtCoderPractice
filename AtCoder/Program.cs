@@ -14,17 +14,23 @@ namespace AtCoder
 			long b = abk[1];
 			long k = abk[2];
 
+			List<long> listA = new List<long>();
 			for (long i = a; i < a + k && i <= b; ++i) {
-				Console.WriteLine(i.ToString());
+				listA.Add(i);
 			}
 
-			List<long> list = new List<long>();
-			for (long i = b; i > b - k + 1 && i >= a; --i) {
-				list.Add(i);
+			foreach (var item in listA) {
+				Console.WriteLine(item.ToString());
 			}
 
-			for (int i = list.Count - 1; i >= 0; --i) {
-				//Console.WriteLine(list[i].ToString());
+			List<long> listB = new List<long>();
+			for (long i = b; i >= b - k + 1 && i > listA.Last(); --i) {
+				listB.Add(i);
+			}
+
+			listB.Reverse();
+			foreach (var item in listB) {
+				Console.WriteLine(item.ToString());
 			}
 
 			//Console.WriteLine(remain.ToString());
