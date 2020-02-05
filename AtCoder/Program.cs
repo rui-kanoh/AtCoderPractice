@@ -13,10 +13,13 @@ namespace AtCoder
 			long b = abk[1];
 			long k = abk[2];
 
+			long j = 0;
 			for (var i = a; i <= b; ++i) {
-				if (i <= k || b - k <= i) {
+				if (j < k || b - k < i) {
 					Console.WriteLine(i.ToString());
 				}
+
+				++j;
 			}
 
 			//Console.WriteLine(remain.ToString());
