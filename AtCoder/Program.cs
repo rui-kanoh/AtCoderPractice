@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AtCoder
 {
@@ -6,17 +7,19 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			// 整数の入力
-			long x = long.Parse(Console.ReadLine());
-			long a = long.Parse(Console.ReadLine());
-			long b = long.Parse(Console.ReadLine());
+			// 整数配列の入力
+			var abk = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long a = abk[0];
+			long b = abk[1];
+			long k = abk[2];
 
-			long remain = x - a;
-			while (remain >= b) {
-				remain -= b;
+			for (var i = a; i <= b; ++i) {
+				if (i <= k || b - k <= i) {
+					Console.WriteLine(i.ToString());
+				}
 			}
 
-			Console.WriteLine(remain.ToString());
+			//Console.WriteLine(remain.ToString());
 
 			Console.Out.Flush();
 
