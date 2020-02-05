@@ -37,3 +37,22 @@ namespace AtCoder.Abc
 		}
 	}
 }
+
+public class Contest141
+{
+	List<string> weather_ = new List<string>() { "Sunny", "Cloudy", "Rainy" };
+	public string Prediction(string weather)
+	{
+		if (weather_.Contains(weather) == false) {
+			return "";
+		}
+
+		int index = weather_.FindIndex((w) => w == weather);
+		if (index == weather_.Count - 1) {
+			index = -1;
+		}
+
+		return weather_[index + 1];
+	}
+}
+
