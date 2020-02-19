@@ -24,13 +24,18 @@ namespace AtCoder
 			long five = -1;
 			long one = -1;
 
-			long yy = y / 1000;
+			long max = y / 1000;
 
-			for (var i = 0; i <= yy; ++i) {
-				for (var j = 0; j <= yy; ++j) {
-					long total = 1000 * i + 5000 * j + 10000 * (yy - i - j);
-					if (total == y && n - i - j > 0) {
-						ten = n - i - j;
+			for (var i = 0; i <= n; ++i) {
+				for (var j = 0; j <= n; ++j) {
+					var k = n - i - j;
+					if (k < 0) {
+						break;
+					}
+
+					long total = 1000 * i + 5000 * j + 10000 * k;
+					if (total == y) {
+						ten = k;
 						five = j;
 						one = i;
 					}
