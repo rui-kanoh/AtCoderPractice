@@ -24,74 +24,21 @@ namespace AtCoder
 			long five = -1;
 			long one = -1;
 
-			long ans = y / n;
-			long amari = y % n;
-			if (amari == 0) {
-				if (ans > 10000) {
-					string str = $"{ten} {five} {one}";
-					Console.WriteLine(str);
-					Console.ReadLine();
-					return;
-				}
-
-				if (ans == 10000) {
-					ten = n;
-					five = 0;
-					one = 0;
-
-					string str = $"{ten} {five} {one}";
-					Console.WriteLine(str);
-					Console.ReadLine();
-					return;
-				} else if (ans == 5000) {
-					ten = 0;
-					five = n;
-					one = 0;
-
-					string str = $"{ten} {five} {one}";
-					Console.WriteLine(str);
-					Console.ReadLine();
-					return;
-				} else if (ans == 1000) {
-					ten = 0;
-					five = 0;
-					one = n;
-
-					string str = $"{ten} {five} {one}";
-					Console.WriteLine(str);
-					Console.ReadLine();
-					return;
-				} else {
-					string str = $"{ten} {five} {one}";
-					Console.WriteLine(str);
-					Console.ReadLine();
-					return;
+			for (var i = 0; i <= n; ++i) {
+				for (var j = 0; j <= n; ++j) {
+					long total = 10000 * i + 5000 * j + 1000 * (n - i - j);
+					if (total == y && n - i - j > 0) {
+						ten = i;
+						five = j;
+						one = n - i - j;
+					}
 				}
 			}
 
-			long total = 10000 * n;// + 5000 * j + 1000 * k;
-			long total2 = total;
-			for (int i = 1; i < n; ++i) {
-				total2 -= 10000 + 5000;
-				if (total2 < y) {
-					ten = n - i;
-					five = i - 1;
-					total2 = y - total2;
-				}
-			}
-
-			if (total2 % 1000 == 0) {
-				one = total2 / 1000;
-				string str = $"{ten} {five} {one}";
-				Console.WriteLine(str);
-				Console.ReadLine();
-				return;
-			} else {
-				string str = $"{ten} {five} {one}";
-				Console.WriteLine(str);
-				Console.ReadLine();
-				return;
-			}
+			string str = $"{ten} {five} {one}";
+			Console.WriteLine(str);
+			Console.Out.Flush();
+			Console.ReadLine();
 		}
 	}
 }
