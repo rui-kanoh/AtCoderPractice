@@ -8,59 +8,167 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new SS();
+			var Instance = new Otoshidama();
 			Instance.Exec();
 		}
 	}
 
-	public class SS
+	public class Otoshidama
 	{
 		public void Exec()
 		{
-			string s = Console.ReadLine();
-			string gu = s;
-			bool isGu = false;
-			int max = 0;
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long n = array[0];
+			long y = array[1];
+			long ten = -1;
+			long five = -1;
+			long one = -1;
 
-			Console.WriteLine($"{s.Length}");
+			long ans = y / n;
+			long amari = y % n;
+			if (amari == 0) {
+				if (ans > 10000) {
+					string str = $"{ten} {five} {one}";
+					Console.WriteLine(str);
+					Console.ReadLine();
+					return;
+				}
 
-			for (var i = 0; i < s.Length / 2; ++i) {
-				int pivot = new Random().Next(gu.Length);
-				gu = s.Remove(pivot, 1);
-				pivot = new Random().Next(gu.Length);
-				gu = gu.Remove(pivot, 1);
-				string sub = gu.Substring(0, gu.Length / 2);
-				if (gu.Contains(sub)) {
-					isGu = true;
+				if (ans == 10000) {
+					ten = n;
+					five = 0;
+					one = 0;
+
+					string str = $"{ten} {five} {one}";
+					Console.WriteLine(str);
+					Console.ReadLine();
+					return;
+				} else if (ans == 5000) {
+					ten = 0;
+					five = n;
+					one = 0;
+
+					string str = $"{ten} {five} {one}";
+					Console.WriteLine(str);
+					Console.ReadLine();
+					return;
+				} else if (ans == 1000) {
+					ten = 0;
+					five = 0;
+					one = n;
+
+					string str = $"{ten} {five} {one}";
+					Console.WriteLine(str);
+					Console.ReadLine();
+					return;
 				} else {
-					pivot = new Random().Next(gu.Length);
-					gu = s.Remove(pivot, 1);
-					pivot = new Random().Next(gu.Length);
-					gu = gu.Remove(pivot, 1);
-					sub = gu.Substring(0, gu.Length / 2);
-
-					if (gu.Contains(sub)) {
-						isGu = true;
-					}
+					string str = $"{ten} {five} {one}";
+					Console.WriteLine(str);
+					Console.ReadLine();
+					return;
 				}
-
-				if (isGu && max < gu.Length) {
-					max = gu.Length;
-				}
-
-				Console.WriteLine($"{i}, {max}, {gu}, {sub}");
 			}
 
-			Console.WriteLine($"{max}");
+			long total = 10000 * n;// + 5000 * j + 1000 * k;
+			long total2 = total;
+			for (int i = 1; i < n; ++i) {
+				total2 -= 10000 + 5000;
+				if (total2 < y) {
+					ten = n - i;
+					five = i - 1;
+					total2 = y - total2;
+				}
+			}
+
+			if (total2 % 1000 == 0) {
+				one = total2 / 1000;
+				string str = $"{ten} {five} {one}";
+				Console.WriteLine(str);
+				Console.ReadLine();
+				return;
+			} else {
+				string str = $"{ten} {five} {one}";
+				Console.WriteLine(str);
+				Console.ReadLine();
+				return;
+			}
+		}
+	}
+}
+
+namespace Temp {
+	public class Minesweeper
+	{
+		public void Exec()
+		{
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long h = array[0];
+			long w = array[1];
+			List<string> slist = new List<string>();
+			List<List<bool>> ismines = new List<List<bool>>();
+			for (int i = 0; i < h; ++i) {
+				string str = Console.ReadLine();
+				slist.Add(str);
+
+				List<bool> ismine = new List<bool>();
+				for (int j = 0; j < str.Length; ++j) {
+					ismine.Add(str[j] == '#');
+				}
+				ismines.Add(ismine);
+			}
+
+			for (int i = 1; i < slist.Count; ++i) {
+				//Console.WriteLine(slist[i]);
+				for (int j = 0; j < slist[i].Length; ++j) {
+				}
+			}
+
+			foreach (var items in ismines) {
+				foreach (var item in items) {
+					//Console.Write(item.ToString());
+				}
+				Console.WriteLine("");
+			}
 
 			Console.Out.Flush();
 
 			Console.ReadLine();
 		}
 	}
-}
 
-namespace Temp {
+	public class QuestionA
+	{
+		public void Exec()
+		{
+			long n = long.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			Console.Out.Flush();
+
+			Console.ReadLine();
+		}
+	}
+
+	public class PlacingMarbles
+	{
+		public void Exec()
+		{
+			string s = Console.ReadLine();
+			List<bool> slist = new List<bool>() { s[0] == '1', s[1] == '1', s[2] == '1' };
+			int count = 0;
+			foreach (var item in slist) {
+				if (item) {
+					++count;
+				}
+			}
+
+			Console.WriteLine(count.ToString());
+
+			Console.Out.Flush();
+
+			Console.ReadLine();
+		}
+	}
 
 	public class Bridge
 	{
@@ -148,7 +256,53 @@ namespace Temp {
 		}
 	}
 
-	public class QuestionA
+	public class SS
+	{
+		public void Exec()
+		{
+			string s = Console.ReadLine();
+			string gu = s;
+			bool isGu = false;
+			int max = 0;
+
+			Console.WriteLine($"{s.Length}");
+
+			for (var i = 0; i < s.Length / 2; ++i) {
+				int pivot = new Random().Next(gu.Length);
+				gu = s.Remove(pivot, 1);
+				pivot = new Random().Next(gu.Length);
+				gu = gu.Remove(pivot, 1);
+				string sub = gu.Substring(0, gu.Length / 2);
+				if (gu.Contains(sub)) {
+					isGu = true;
+				} else {
+					pivot = new Random().Next(gu.Length);
+					gu = s.Remove(pivot, 1);
+					pivot = new Random().Next(gu.Length);
+					gu = gu.Remove(pivot, 1);
+					sub = gu.Substring(0, gu.Length / 2);
+
+					if (gu.Contains(sub)) {
+						isGu = true;
+					}
+				}
+
+				if (isGu && max < gu.Length) {
+					max = gu.Length;
+				}
+
+				Console.WriteLine($"{i}, {max}, {gu}, {sub}");
+			}
+
+			Console.WriteLine($"{max}");
+
+			Console.Out.Flush();
+
+			Console.ReadLine();
+		}
+	}
+
+	public class QuestionAA
 	{
 		public void Exec()
 		{
