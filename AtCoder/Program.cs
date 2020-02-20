@@ -8,8 +8,75 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new Otoshidama();
+			var Instance = new Minesweeper();
 			Instance.Exec();
+		}
+	}
+
+	public class Minesweeper
+	{
+		public int CharToInt(char c)
+		{
+			return c == '#' ? 1 : 0;
+		}
+
+		public void Exec()
+		{
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long h = array[0];
+			long w = array[1];
+			List<string> slist = new List<string>();
+
+			string dummyStr = new string('-', (int)w + 2);
+			slist.Add(dummyStr);
+			for (int i = 0; i < h; ++i) {
+				string str = "-" + Console.ReadLine() + "-";
+				slist.Add(str);
+			}
+			slist.Add(dummyStr);
+
+			for (int i = 1; i <= h; ++i) {
+				for (int j = 1; j <= w; ++j) {
+					int total = -1;
+					if (CharToInt(slist[i][j]) == 1) {
+						Console.Write("#");
+					} else {
+						total = CharToInt(slist[i - 1][j - 1])
+							+ CharToInt(slist[i][j - 1])
+							+ CharToInt(slist[i + 1][j - 1])
+							+ CharToInt(slist[i - 1][j])
+							+ CharToInt(slist[i + 1][j])
+							+ CharToInt(slist[i - 1][j + 1])
+							+ CharToInt(slist[i][j + 1])
+							+ CharToInt(slist[i + 1][j + 1]);
+						if (total < 0) {
+							Console.Write("#");
+						} else {
+							Console.Write(total.ToString());
+						}
+					}
+				}
+				Console.WriteLine("");
+			}
+
+			Console.Out.Flush();
+
+			Console.ReadKey();
+		}
+	}
+}
+
+namespace Temp {
+	public class QuestionA
+	{
+		public void Exec()
+		{
+			long n = long.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			Console.Out.Flush();
+
+			Console.ReadLine();
 		}
 	}
 
@@ -45,60 +112,6 @@ namespace AtCoder
 			string str = $"{ten} {five} {one}";
 			Console.WriteLine(str);
 			Console.Out.Flush();
-			Console.ReadLine();
-		}
-	}
-}
-
-namespace Temp {
-	public class Minesweeper
-	{
-		public void Exec()
-		{
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long h = array[0];
-			long w = array[1];
-			List<string> slist = new List<string>();
-			List<List<bool>> ismines = new List<List<bool>>();
-			for (int i = 0; i < h; ++i) {
-				string str = Console.ReadLine();
-				slist.Add(str);
-
-				List<bool> ismine = new List<bool>();
-				for (int j = 0; j < str.Length; ++j) {
-					ismine.Add(str[j] == '#');
-				}
-				ismines.Add(ismine);
-			}
-
-			for (int i = 1; i < slist.Count; ++i) {
-				//Console.WriteLine(slist[i]);
-				for (int j = 0; j < slist[i].Length; ++j) {
-				}
-			}
-
-			foreach (var items in ismines) {
-				foreach (var item in items) {
-					//Console.Write(item.ToString());
-				}
-				Console.WriteLine("");
-			}
-
-			Console.Out.Flush();
-
-			Console.ReadLine();
-		}
-	}
-
-	public class QuestionA
-	{
-		public void Exec()
-		{
-			long n = long.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-
-			Console.Out.Flush();
-
 			Console.ReadLine();
 		}
 	}
