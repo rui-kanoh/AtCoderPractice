@@ -8,8 +8,39 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new Minesweeper();
+			var Instance = new Question();
 			Instance.Exec();
+		}
+	}
+
+	public class Question
+	{
+		public void Exec()
+		{
+			long time_sec = long.Parse(Console.ReadLine());
+			long sec = time_sec % 60;
+			long min = time_sec / 60;
+			long hour = min / 60;
+			min = min % 60;
+
+			Console.WriteLine($"{hour}:{min}:{sec}");
+			Console.Out.Flush();
+			Console.ReadKey();
+		}
+	}
+}
+
+namespace Temp {
+	public class QuestionA
+	{
+		public void Exec()
+		{
+			long n = long.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			Console.Out.Flush();
+
+			Console.ReadLine();
 		}
 	}
 
@@ -62,21 +93,6 @@ namespace AtCoder
 			Console.Out.Flush();
 
 			Console.ReadKey();
-		}
-	}
-}
-
-namespace Temp {
-	public class QuestionA
-	{
-		public void Exec()
-		{
-			long n = long.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-
-			Console.Out.Flush();
-
-			Console.ReadLine();
 		}
 	}
 
