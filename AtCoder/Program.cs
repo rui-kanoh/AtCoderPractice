@@ -8,27 +8,33 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new RemainingTime();
+			var Instance = new ChooseIntegers();
 			Instance.Exec();
 		}
 	}
 
-	public class RemainingTime
+	public class ChooseIntegers
 	{
 		public void Exec()
 		{
-			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
-			Console.SetOut(sw);
-
 			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			int a = (int)inputLongArray[0];
-			int b = (int)inputLongArray[1];
+			long a = inputLongArray[0];
+			long b = inputLongArray[1];
+			long c = inputLongArray[2];
 
-			int time = a + b;
-			time = time > 23 ? time - 24 : time;
-			string result = $"{time}";
+			long total = 0;
+			for (long i = 1; i < 1000000; ++i) {
+				total = a * i;
 
-			Console.WriteLine(result);
+				//Console.WriteLine($"{total}");
+				if (total % b == c) {
+					Console.WriteLine("YES");
+					Console.ReadKey();
+					return;
+				}
+			}
+
+			Console.WriteLine("NO");
 
 			Console.Out.Flush();
 
