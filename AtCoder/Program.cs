@@ -8,31 +8,31 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new Question();
+			var Instance = new RemainingTime();
 			Instance.Exec();
 		}
 	}
 
-	public class Question
+	public class RemainingTime
 	{
 		public void Exec()
 		{
 			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
 			Console.SetOut(sw);
 
-			string s = Console.ReadLine();
-
-			long n = long.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(' ');
-
 			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			int a = (int)inputLongArray[0];
+			int b = (int)inputLongArray[1];
 
-			string result = "";
+			int time = a + b;
+			time = time > 23 ? time - 24 : time;
+			string result = $"{time}";
 
 			Console.WriteLine(result);
 
 			Console.Out.Flush();
+
+			Console.ReadKey();
 		}
 	}
 }
@@ -58,6 +58,8 @@ namespace Temp {
 			Console.WriteLine(result);
 
 			Console.Out.Flush();
+
+			Console.ReadKey();
 		}
 	}
 
