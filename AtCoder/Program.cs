@@ -20,30 +20,24 @@ namespace AtCoder
 			var nm = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
 			int n = nm[0];
 			int m = nm[1];
-			List<int> alist = new List<int>();
-			List<int> blist = new List<int>();
+			HashSet<int> ahash = new HashSet<int>();
+			HashSet<int> bhash = new HashSet<int>();
 			for (var j = 1; j <= m; ++j) {
 				var ab = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-				alist.Add(ab[0]);
-				blist.Add(ab[1]);
+				if (ab[0] == 1) {
+					ahash.Add(ab[1]);
+				}
+
+				if (ab[1] == n) {
+					bhash.Add(ab[0]);
+				}
 			}
 
 			bool canVoyage = false;
 
-			for (var j = 0; j < m; ++j) {
-				if (alist[j] == 1) {
-					int next = blist[j];
-					for (var k = 0; k < m; ++k) {
-						if (k == j) {
-							continue;
-						}
-
-						if (alist[k] == next) {
-							if (blist[k] == n) {
-								canVoyage = true;
-							}
-						}
-					}
+			foreach (var a in ahash) {
+				if (bhash.Contains(a)) {
+					canVoyage = true;
 				}
 			}
 
