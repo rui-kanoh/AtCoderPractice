@@ -8,36 +8,48 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new ChooseIntegers();
+			var Instance = new CatSnukeVoyage();
 			Instance.Exec();
 		}
 	}
 
-	public class ChooseIntegers
+	public class CatSnukeVoyage
 	{
 		public void Exec()
 		{
-			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long a = inputLongArray[0];
-			long b = inputLongArray[1];
-			long c = inputLongArray[2];
+			var nm = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int n = nm[0];
+			int m = nm[1];
+			List<int> alist = new List<int>();
+			List<int> blist = new List<int>();
+			for (var j = 1; j <= m; ++j) {
+				var ab = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+				alist.Add(ab[0]);
+				blist.Add(ab[1]);
+			}
 
-			long total = 0;
-			for (long i = 1; i < 1000000; ++i) {
-				total = a * i;
+			bool canVoyage = false;
 
-				//Console.WriteLine($"{total}");
-				if (total % b == c) {
-					Console.WriteLine("YES");
-					Console.ReadKey();
-					return;
+			for (var j = 0; j < m; ++j) {
+				if (alist[j] == 1) {
+					int next = blist[j];
+					for (var k = 0; k < m; ++k) {
+						if (k == j) {
+							continue;
+						}
+
+						if (alist[k] == next) {
+							if (blist[k] == n) {
+								canVoyage = true;
+							}
+						}
+					}
 				}
 			}
 
-			Console.WriteLine("NO");
-
+			string result = canVoyage ? "POSSIBLE" : "IMPOSSIBLE";
+			Console.WriteLine(result);
 			Console.Out.Flush();
-
 			Console.ReadKey();
 		}
 	}
@@ -62,6 +74,36 @@ namespace Temp {
 			string result = "";
 
 			Console.WriteLine(result);
+
+			Console.Out.Flush();
+
+			Console.ReadKey();
+		}
+	}
+
+
+	public class ChooseIntegers
+	{
+		public void Exec()
+		{
+			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long a = inputLongArray[0];
+			long b = inputLongArray[1];
+			long c = inputLongArray[2];
+
+			long total = 0;
+			for (long i = 1; i < 1000000; ++i) {
+				total = a * i;
+
+				//Console.WriteLine($"{total}");
+				if (total % b == c) {
+					Console.WriteLine("YES");
+					Console.ReadKey();
+					return;
+				}
+			}
+
+			Console.WriteLine("NO");
 
 			Console.Out.Flush();
 
