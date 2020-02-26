@@ -17,21 +17,51 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
-			long time_sec = long.Parse(Console.ReadLine());
-			long sec = time_sec % 60;
-			long min = time_sec / 60;
-			long hour = min / 60;
-			min = min % 60;
+			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
+			Console.SetOut(sw);
 
-			Console.WriteLine($"{hour}:{min}:{sec}");
+			string s = Console.ReadLine();
+
+			long n = long.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(' ');
+
+			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			string result = "";
+
+			Console.WriteLine(result);
+
 			Console.Out.Flush();
-			Console.ReadKey();
 		}
 	}
 }
 
 namespace Temp {
-	public class QuestionA
+	public class Question
+	{
+		public void Exec()
+		{
+			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
+			Console.SetOut(sw);
+
+			string s = Console.ReadLine();
+
+			long n = long.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(' ');
+
+			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			string result = "";
+
+			Console.WriteLine(result);
+
+			Console.Out.Flush();
+		}
+	}
+
+	public class QuestionAAAA
 	{
 		public void Exec()
 		{
