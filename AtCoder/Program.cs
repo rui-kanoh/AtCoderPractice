@@ -17,6 +17,10 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
+			string c1 = Console.ReadLine();
+			string c2 = Console.ReadLine();
+			string c3 = Console.ReadLine();
+
 			//Console.WriteLine(result);
 			Console.Out.Flush();
 			Console.ReadKey();
