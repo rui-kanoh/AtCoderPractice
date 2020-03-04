@@ -17,39 +17,25 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
-			long N = long.Parse(Console.ReadLine());
-			List<string> nlist = new List<string>();
-			for (int i = 0; i < N; ++i) {
-				nlist.Add(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+			List<int> nlist = new List<int>();
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			for (int i = 0; i < n; ++i) {
+				nlist.Add(array[i]);
 			}
 
-			long M = long.Parse(Console.ReadLine());
-			List<string> mlist = new List<string>();
-			for (int i = 0; i < M; ++i) {
-				mlist.Add(Console.ReadLine());
-			}
 
-			int max = 0;
-			for (int i = 0; i < nlist.Count; ++i) {
-				int total = 0;
-				for (int j = 0; j < nlist.Count; ++j) {
-					if (nlist[i] == nlist[j]) {
-						++total;
-					}
-				}
-
-				for (int j = 0; j < mlist.Count; ++j) {
-					if (nlist[i] == mlist[j]) {
-						--total;
-					}
-				}
-
-				if (max < total) {
-					max = total;
+			nlist.Sort();
+			int index = n > 2 ? n / 2 : 1;
+			int median = nlist[index];
+			for (int i = 0; i < n; ++i) {
+				if (array[i] < median) {
+					Console.WriteLine($"{median}");
+				} else {
+					Console.WriteLine($"{nlist[index - 1]}");
 				}
 			}
 
-			Console.WriteLine($"{max}");
 			Console.Out.Flush();
 			Console.ReadKey();
 		}
