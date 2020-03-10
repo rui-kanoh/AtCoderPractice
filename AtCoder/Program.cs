@@ -17,26 +17,6 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			List<int> nlist = new List<int>();
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			for (int i = 0; i < n; ++i) {
-				nlist.Add(array[i]);
-			}
-
-
-			nlist.Sort();
-			int index = n > 2 ? n / 2 : 1;
-			int median = nlist[index];
-			for (int i = 0; i < n; ++i) {
-				if (array[i] < median) {
-					Console.WriteLine($"{median}");
-				} else {
-					Console.WriteLine($"{nlist[index - 1]}");
-				}
-			}
-
-			Console.Out.Flush();
 			Console.ReadKey();
 		}
 	}
