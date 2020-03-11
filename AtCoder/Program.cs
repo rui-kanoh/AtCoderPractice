@@ -17,39 +17,30 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
+			int n = int.Parse(Console.ReadLine());
 			string dirs = Console.ReadLine();
-			bool isConnected = false;
 
-			int ncount = 0;
-			int scount = 0;
-			int wcount = 0;
-			int ecount = 0;
-			for (int i = 0; i < dirs.Length; ++i) {
-				switch (dirs[i]) {
-					case 'N':
-					default:
-						++ncount;
-						break;
-					case 'W':
-						++wcount;
-						break;
-					case 'S':
-						++scount;
-						break;
-					case 'E':
-						++ecount;
-						break;
+			int max = 0;
+
+			for (int i = 1; i < dirs.Length - 1; ++i) {
+				string a = dirs.Substring(0, i);
+				a = new string(a.Distinct().ToArray());
+				string b = dirs.Substring(i, dirs.Length - i);
+				b = new string(b.Distinct().ToArray());
+
+				int count = 0;
+				for (int j = 0; j < a.Length; ++j) {
+					if (b.Contains(a[j])) {
+						++count;
+					}
+				}
+
+				if (max < count) {
+					max = count;
 				}
 			}
 
-			if ((scount > 0 && ncount > 0 && ecount > 0 && wcount > 0)
-				|| (scount == 0 && ncount == 0 && ecount > 0 && wcount > 0)
-				|| (scount > 0 && ncount > 0 && ecount == 0 && wcount == 0)) {
-				isConnected = true;
-			}
-
-			string str = isConnected ? "Yes" : "No";
-			Console.WriteLine($"{str}");
+			Console.WriteLine($"{max}");
 			Console.ReadKey();
 		}
 	}
