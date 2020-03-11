@@ -17,18 +17,38 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int a = array[0];
-			int b = array[1];
-			int c = array[2];
-			int d = array[3];
-			bool isConneceted = false;
-			if (Math.Abs(a - c) <= d
-				|| (Math.Abs(a - b) <= d && Math.Abs(b - c) <= d)) {
-				isConneceted = true;
+			string dirs = Console.ReadLine();
+			bool isConnected = false;
+
+			int ncount = 0;
+			int scount = 0;
+			int wcount = 0;
+			int ecount = 0;
+			for (int i = 0; i < dirs.Length; ++i) {
+				switch (dirs[i]) {
+					case 'N':
+					default:
+						++ncount;
+						break;
+					case 'W':
+						++wcount;
+						break;
+					case 'S':
+						++scount;
+						break;
+					case 'E':
+						++ecount;
+						break;
+				}
 			}
 
-			string str = isConneceted ? "Yes" : "No";
+			if ((scount > 0 && ncount > 0 && ecount > 0 && wcount > 0)
+				|| (scount == 0 && ncount == 0 && ecount > 0 && wcount > 0)
+				|| (scount > 0 && ncount > 0 && ecount == 0 && wcount == 0)) {
+				isConnected = true;
+			}
+
+			string str = isConnected ? "Yes" : "No";
 			Console.WriteLine($"{str}");
 			Console.ReadKey();
 		}
