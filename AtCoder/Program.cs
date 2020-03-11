@@ -17,6 +17,19 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int a = array[0];
+			int b = array[1];
+			int c = array[2];
+			int d = array[3];
+			bool isConneceted = false;
+			if (Math.Abs(a - c) <= d
+				|| (Math.Abs(a - b) <= d && Math.Abs(b - c) <= d)) {
+				isConneceted = true;
+			}
+
+			string str = isConneceted ? "Yes" : "No";
+			Console.WriteLine($"{str}");
 			Console.ReadKey();
 		}
 	}
