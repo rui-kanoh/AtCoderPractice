@@ -31,6 +31,9 @@ namespace AtCoder
 				}
 			};
 
+			int[] P = { 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+			int[] Q = { 1, 1, 1, 2, 2, 3, 2, 2, 3, 3 };
+			int[] R = { 2, 3, 4, 3, 4, 4, 3, 4, 4, 4 };
 
 			Func<char, char, char, bool> checker2 = (c0, c1, c2) => {
 				bool ok = checker(c0) && checker(c1) && checker(c2);
