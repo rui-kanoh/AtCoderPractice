@@ -32,18 +32,17 @@ namespace AtCoder
 			};
 
 
-			Func<List<char>, bool> checker2 = c2 => {
-				bool ok = checker(c2[0]) && checker(c2[1]) && checker(c2[2]);
-				ok = ok && (c2[0] != c2[1] && c2[0] != c2[2]);
+			Func<char, char, char, bool> checker2 = (c0, c1, c2) => {
+				bool ok = checker(c0) && checker(c1) && checker(c2);
+				ok = ok && c0 != c1 && c0 != c2 && c1 != c2;
 				return ok;
 			};
 
 			int count = 0;
 			for (var i = 0; i < names.Count; ++i) {
-				for (var j = i; j < names.Count; ++j) {
-					for (var k = j; k < names.Count; ++k) {
-						List<char> chars = new List<char>() { names[i][0], names[j][0], names[k][0] };
-						if (checker2(chars)) {
+				for (var j = i + 1; j < names.Count; ++j) {
+					for (var k = j + 1; k < names.Count; ++k) {
+						if (checker2(names[i][0], names[j][0], names[k][0])) {
 							++count;
 						}
 					}
