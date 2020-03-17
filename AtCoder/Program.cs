@@ -17,6 +17,11 @@ namespace AtCoder
 	{
 		public void Exec()
 		{
+			string s = Console.ReadLine();
+			int n = int.Parse(Console.ReadLine());
+			string[] strs = Console.ReadLine().Split(' ');
+			var array = Console.ReadLine().Split(' ').Select(iii => int.Parse(iii)).ToArray();
+
 			//Console.WriteLine($"{count}");
 			Console.ReadKey();
 		}
