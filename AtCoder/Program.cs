@@ -19,25 +19,27 @@ namespace AtCoder
 		{
 			//string s = Console.ReadLine();
 			int n = int.Parse(Console.ReadLine());
-			//var array = Console.ReadLine().Split(' ').Select(iii => int.Parse(iii)).ToArray();
-			string name = "atcoder";
-			Dictionary<string, int> pop = new Dictionary<string, int>();
-			int total = 0;
-			for (var i = 0; i < n; ++i) {
-				string[] strs = Console.ReadLine().Split(' ');
-				int num = int.Parse(strs[1]);
-				pop.Add(strs[0], num);
-				total += num;
-			}
+			var array = Console.ReadLine().Split(' ').Select(iii => int.Parse(iii)).ToArray();
 
-			foreach (var item in pop) {
-				if (item.Value > total / 2) {
-					name = item.Key;
-					break;
+			int flowers = 0;
+			for (var i = 0; i < n; ++i) {
+				while (array[i] % 2 == 0
+					|| array[i] % 3 == 2) {
+					if (array[i] % 2 == 0) {
+						--array[i];
+						++flowers;
+					}
+
+					if (array[i] % 3 == 2) {
+						--array[i];
+						++flowers;
+					}
 				}
 			}
 
-			Console.WriteLine($"{name}");
+			Console.WriteLine($"{flowers}");
+
+
 			Console.ReadKey();
 		}
 	}
