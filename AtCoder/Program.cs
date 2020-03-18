@@ -9,33 +9,26 @@ namespace AtCoder
 	{
 		static void Main(string[] args)
 		{
-			var Instance = new Question();
-			Instance.Exec();
+			Question.Exec();
 		}
 	}
 
-	public class Question
+	public static class Question
 	{
-		void DFS(int max, List<char> pass)
-		{
-			if (pass.Count == max) {
-				Console.WriteLine(new string(pass.ToArray()));
-				return;
-			}
-
-			for (int i = 0; i < 3; i++) {
-				pass.Add((char)('a' + i));
-				DFS(max, pass);
-				pass.RemoveAt(pass.Count - 1);
-			}
-		}
-
-		public void Exec()
+		public static void Exec()
 		{
 			int n = int.Parse(Console.ReadLine());
-			char[] passwords = { 'a', 'b', 'c' };
-			var pass = new List<char>();
-			DFS(n, pass);
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var dp = new long[n];
+			dp[0] = 0;
+			dp[1] = Math.Abs(array[1] - array[0]);
+			for (int i = 2; i < n; ++i) {
+				dp[i] = Math.Min(
+					dp[i - 1] + Math.Abs(array[i] - array[i - 1]),
+					dp[i - 2] + Math.Abs(array[i] - array[i - 2]));
+			}
+
+			Console.WriteLine($"{dp[n - 1]}");
 
 			Console.ReadKey();
 		}
