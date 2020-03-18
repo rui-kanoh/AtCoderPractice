@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AtCoder
 {
@@ -15,30 +16,26 @@ namespace AtCoder
 
 	public class Question
 	{
-		public void Exec()
+		void DFS(int max, List<char> pass)
 		{
-			//string s = Console.ReadLine();
-			int n = int.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(iii => int.Parse(iii)).ToArray();
-
-			int flowers = 0;
-			for (var i = 0; i < n; ++i) {
-				while (array[i] % 2 == 0
-					|| array[i] % 3 == 2) {
-					if (array[i] % 2 == 0) {
-						--array[i];
-						++flowers;
-					}
-
-					if (array[i] % 3 == 2) {
-						--array[i];
-						++flowers;
-					}
-				}
+			if (pass.Count == max) {
+				Console.WriteLine(new string(pass.ToArray()));
+				return;
 			}
 
-			Console.WriteLine($"{flowers}");
+			for (int i = 0; i < 3; i++) {
+				pass.Add((char)('a' + i));
+				DFS(max, pass);
+				pass.RemoveAt(pass.Count - 1);
+			}
+		}
 
+		public void Exec()
+		{
+			int n = int.Parse(Console.ReadLine());
+			char[] passwords = { 'a', 'b', 'c' };
+			var pass = new List<char>();
+			DFS(n, pass);
 
 			Console.ReadKey();
 		}
