@@ -13,22 +13,69 @@ namespace AtCoder
 		}
 	}
 
+	public class Node<T>
+	{
+		public bool IsVisited { get; set; } = false;
+		public int Length { get; set; } = 0;
+		public int Id { get; set; }
+		public int ParentId { get; set; }
+		public T Value { get; set; }
+		public List<Node<T>> Children { get; } = new List<Node<T>>();
+
+		public void AddChild(Node<T> child)
+		{
+			child.ParentId = Id;
+			Children.Add(child);
+		}
+	}
+
 	public static class Question
 	{
+		public static int id = 2;
+		public static char[] chars = { 'a', 'b', 'c' };
+
+		public static void MakeTree(int max, Node<char> tree)
+		{
+			if (tree)
+
+			foreach (var c in chars) {
+				var node = new Node<char>() {
+					Id = id,
+					Value = c,
+				};
+				tree.AddChild(node);
+				++id;
+			}
+		}
+
 		public static void Exec()
 		{
 			int n = int.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			var dp = new long[n];
-			dp[0] = 0;
-			dp[1] = Math.Abs(array[1] - array[0]);
-			for (int i = 2; i < n; ++i) {
-				dp[i] = Math.Min(
-					dp[i - 1] + Math.Abs(array[i] - array[i - 1]),
-					dp[i - 2] + Math.Abs(array[i] - array[i - 2]));
+
+			var tree = new Node<char>() {
+				Id = 1,
+				ParentId = -1,
+				Value = ' ',
+			};
+
+			
+
+			for (var i = 0; i < n; ++i) {
+				
 			}
 
-			Console.WriteLine($"{dp[n - 1]}");
+			var pass = new List<char>();
+			pass.Add(' ');
+
+			while (pass.Count != 0) {
+				foreach (var c in chars) {
+					pass.Add(c);
+					foreach (var c1 in chars) {
+						pass.Add(c1);
+					}
+				}
+			}
+
 
 			Console.ReadKey();
 		}
