@@ -32,11 +32,13 @@ namespace Temp {
 
 			string s = Console.ReadLine();
 
-			long n = long.Parse(Console.ReadLine());
+			long ln = long.Parse(Console.ReadLine());
+			long n = int.Parse(Console.ReadLine());
 
 			string[] inputStrArray = Console.ReadLine().Split(' ');
 
-			var inputLongArray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
 
 			string result = "";
 
