@@ -17,6 +17,17 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int n = array[0];
+			int m = array[1];
+
+			for (var i = 1; i <= n; ++i) {
+				if (i != m) {
+					Console.WriteLine($"{i}");
+					break;
+				}
+			}
+
 			Console.ReadKey();
 		}
 	}
