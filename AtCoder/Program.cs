@@ -17,50 +17,18 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int[] es = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int b = int.Parse(Console.ReadLine());
-			int[] ls = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int answer = 0;
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int m = array[0];
+			int n = array[1];
+			int N = array[2];
 
-			int count = 0;
-			bool bou = false;
-			for (var i = 0; i < 6; ++i) {
+			int total = N;
+			int answer = N;
 
-				for (var j = 0; j < 6; ++j) {
-					if (es[i] == ls[j]) {
-						++count;
-					}
-				}
-
-				if (ls[i] == b) {
-					bou = true;
-				}
-			}
-
-			switch (count) {
-				case 6:
-					answer = 1;
-					break;
-
-				case 5:
-					if (bou) {
-						answer = 2;
-					} else {
-						answer = 3;
-					}
-					break;
-
-				case 4:
-					answer = 4;
-					break;
-
-				case 3:
-					answer = 5;
-					break;
-
-				default:
-					answer = 0;
-					break;
+			while (total >= m) {
+				answer += total / m * n;
+				total = total / m * n + total % m;
+				//Console.WriteLine($"{total} {answer}");
 			}
 
 			Console.WriteLine($"{answer}");
