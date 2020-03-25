@@ -24,47 +24,19 @@ namespace AtCoder
 			}
 
 			int min = int.MaxValue;
-			int total = 0;
+			int total = tlist.Sum();
 
-			for (var i = 0; i < n; ++i) {
-				total += tlist[i];
-			}
-
-			for (var i = 0; i < n; ++i) {
-				int yaki1 = 0;
-				int yaki2 = 0;
-
-				yaki1 = tlist[i];
-				yaki2 = total - yaki1;
-
-				int yaki = Math.Max(yaki1, yaki2);
-				//Console.WriteLine($"{yaki1} {yaki2}");
-				min = Math.Min(yaki, min);
-			}
-
-			if (n > 2) {
-				for (var i = 1; i < n; ++i) {
-					int yaki1 = 0;
-					int yaki2 = 0;
-
-					yaki1 = tlist[0] + tlist[i];
-					yaki2 = total - yaki1;
-
-					int yaki = Math.Max(yaki1, yaki2);
-					//Console.WriteLine($"{yaki1} {yaki2}");
-					min = Math.Min(yaki, min);
+			for (var i = 0; i < (1 << n); ++i) {
+				int time = 0;
+				for (var j = 0; j < n; ++j) {
+					if (((1 << j) & i) != 0) {
+						time += tlist[j];
+					}
 				}
-			}
 
-			if (n > 3) {
-				int yaki2 = tlist[n - 1];
-				int yaki1 = total - yaki2;
-
-				int yaki = Math.Max(yaki1, yaki2);
-				//Console.WriteLine($"{yaki1} {yaki2}");
+				int yaki = Math.Max(time, total - time);
 				min = Math.Min(yaki, min);
 			}
-
 
 			int answer = min;
 
