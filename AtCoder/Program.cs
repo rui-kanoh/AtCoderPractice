@@ -17,25 +17,34 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			List<int> tlist = new List<int>();
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int n = array[0];
+			int c = array[1];
+			var alist = new List<int>();
 			for (var i = 0; i < n; ++i) {
-				tlist.Add(int.Parse(Console.ReadLine()));
+				alist.Add(int.Parse(Console.ReadLine()) - 1);
 			}
 
 			int min = int.MaxValue;
-			int total = tlist.Sum();
 
-			for (var i = 0; i < (1 << n); ++i) {
-				int time = 0;
-				for (var j = 0; j < n; ++j) {
-					if (((1 << j) & i) != 0) {
-						time += tlist[j];
+			int total = 0;
+			for (var i = 0; i < 10; ++i) {
+				for (var j = 0; j < 10; ++j) {
+					if (i == j) {
+						continue;
 					}
-				}
 
-				int yaki = Math.Max(time, total - time);
-				min = Math.Min(yaki, min);
+					total = 0;
+					for (var k = 0; k < n; ++k) {
+						if (k % 2 == 0 && alist[k] != i) {
+							total += c;
+						} else if (k % 2 == 1 && alist[k] != j) {
+							total += c;
+						}
+					}
+
+					min = Math.Min(min, total);
+				}
 			}
 
 			int answer = min;
