@@ -15,35 +15,20 @@ namespace AtCoder
 
 	public static class Question
 	{
-		public static void Turn(bool[,] mat, int k, int l)
-		{
-			for (var i = 0; i < 3; ++i) {
-				for (var j = 0; j < 3; ++j) {
-					mat[k - 1 + i, l - 1 + j] = !mat[k - 1 + i, l - 1 + j];
-				}
-			}
-		}
-
 		public static void Exec()
 		{
 			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
 			long n = array[0];
 			long m = array[1];
-			bool[,] matrix = new bool[n + 2, m + 2];
-
-			for (var i = 0; i < n; ++i) {
-				for (var j = 0; j < m; ++j) {
-					Turn(matrix, i + 1, j + 1);
-				}
-			}
-
-			int count = 0;
-			for (var i = 0; i < n; ++i) {
-				for (var j = 0; j < m; ++j) {
-					if (matrix[i + 1, j + 1]) {
-						++count;
-					}
-				}
+			long count = 0;
+			if (n == 1 && m == 1) {
+				count = 1;
+			} else if (n == 1) {
+				count = m - 2;
+			} else if (m == 1) {
+				count = n - 2;
+			} else {
+				count = (n - 2) * (m - 2);
 			}
 
 			Console.WriteLine($"{count}");
