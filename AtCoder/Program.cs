@@ -17,22 +17,36 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int a = array[0];
-			int b = array[1];
-			for (var i = 1; i <= 3; ++i) {
-				if ((a * b * i) % 2 == 1) {
-					Console.WriteLine("Yes");
+			long n = int.Parse(Console.ReadLine());
+			string answer = "No";
+			List<string> list = new List<string>();
 
-					Console.ReadKey();
+			for (var i = 0; i < n; ++i) {
+				list.Add(Console.ReadLine());
+			}
+
+			for (var i = 0; i < n; ++i) {
+				if (i > 0 && list[i - 1][list[i - 1].Length - 1] != list[i][0]) {
+					Console.WriteLine("No");
+					Console.ReadLine();
 					return;
+				}
+
+				for (var j = 0; j < i; ++j) {
+					if (list[j] == list[i]) {
+						Console.WriteLine("No");
+						Console.ReadLine();
+						return;
+					}
+				}
+
+				if (i == n - 1) {
+					answer = "Yes";
+					Console.WriteLine($"{answer}");
 				}
 			}
 
-			Console.WriteLine("No");
-
-			//Console.WriteLine($"{answer}");
-			Console.ReadKey();
+			Console.ReadLine();
 		}
 	}
 }
