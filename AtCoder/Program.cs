@@ -18,38 +18,8 @@ namespace AtCoder
 		public static void Exec()
 		{
 			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int n = array[0];
-			int c = array[1];
-			var alist = new List<int>();
-			for (var i = 0; i < n; ++i) {
-				alist.Add(int.Parse(Console.ReadLine()) - 1);
-			}
-
-			int min = int.MaxValue;
-
-			int total = 0;
-			for (var i = 0; i < 10; ++i) {
-				for (var j = 0; j < 10; ++j) {
-					if (i == j) {
-						continue;
-					}
-
-					total = 0;
-					for (var k = 0; k < n; ++k) {
-						if (k % 2 == 0 && alist[k] != i) {
-							total += c;
-						} else if (k % 2 == 1 && alist[k] != j) {
-							total += c;
-						}
-					}
-
-					min = Math.Min(min, total);
-				}
-			}
-
-			int answer = min;
-
-			Console.WriteLine($"{answer}");
+			
+			//Console.WriteLine($"{answer}");
 			Console.ReadKey();
 		}
 	}
