@@ -18,7 +18,19 @@ namespace AtCoder
 		public static void Exec()
 		{
 			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			
+			int a = array[0];
+			int b = array[1];
+			for (var i = 1; i <= 3; ++i) {
+				if ((a * b * i) % 2 == 1) {
+					Console.WriteLine("Yes");
+
+					Console.ReadKey();
+					return;
+				}
+			}
+
+			Console.WriteLine("No");
+
 			//Console.WriteLine($"{answer}");
 			Console.ReadKey();
 		}
