@@ -17,35 +17,30 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			long n = int.Parse(Console.ReadLine());
-			string answer = "No";
-			List<string> list = new List<string>();
+			var array = Console.ReadLine().Split(' ').Select(i => double.Parse(i)).ToArray();
+			var x = new double[4];
+			var y = new double[4];
+			x[0] = array[0];
+			y[0] = array[1];
+			x[1] = array[2];
+			y[1] = array[3];
+			double[] vx1 = { x[1] - x[0], y[1] - y[0] };
 
-			for (var i = 0; i < n; ++i) {
-				list.Add(Console.ReadLine());
-			}
+			double[] vx2 = new double[2];
+			double theta = 45.0 / 180.0 * Math.PI;
+			vx2[0] = Math.Round((vx1[0] * Math.Cos(theta) - vx1[1] * Math.Sin(theta)) * Math.Sqrt(2));
+			vx2[1] = Math.Round((vx1[0] * Math.Sin(theta) + vx1[1] * Math.Cos(theta)) * Math.Sqrt(2));
+			x[2] = vx2[0] + x[0];
+			y[2] = vx2[1] + y[0];
 
-			for (var i = 0; i < n; ++i) {
-				if (i > 0 && list[i - 1][list[i - 1].Length - 1] != list[i][0]) {
-					Console.WriteLine("No");
-					Console.ReadLine();
-					return;
-				}
+			theta = 90.0 / 180.0 * Math.PI;
+			vx2[0] = Math.Round(vx1[0] * Math.Cos(theta) - vx1[1] * Math.Sin(theta));
+			vx2[1] = Math.Round(vx1[0] * Math.Sin(theta) + vx1[1] * Math.Cos(theta));
+			x[3] = vx2[0] + x[0];
+			y[3] = vx2[1] + y[0];
 
-				for (var j = 0; j < i; ++j) {
-					if (list[j] == list[i]) {
-						Console.WriteLine("No");
-						Console.ReadLine();
-						return;
-					}
-				}
-
-				if (i == n - 1) {
-					answer = "Yes";
-					Console.WriteLine($"{answer}");
-				}
-			}
-
+			//string answer = "No";
+			Console.WriteLine($"{x[2]:f0} {y[2]:f0} {x[3]:f0} {y[3]:f0}");
 			Console.ReadLine();
 		}
 	}
