@@ -15,32 +15,39 @@ namespace AtCoder
 
 	public static class Question
 	{
+		public static void Turn(bool[,] mat, int k, int l)
+		{
+			for (var i = 0; i < 3; ++i) {
+				for (var j = 0; j < 3; ++j) {
+					mat[k - 1 + i, l - 1 + j] = !mat[k - 1 + i, l - 1 + j];
+				}
+			}
+		}
+
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => double.Parse(i)).ToArray();
-			var x = new double[4];
-			var y = new double[4];
-			x[0] = array[0];
-			y[0] = array[1];
-			x[1] = array[2];
-			y[1] = array[3];
-			double[] vx1 = { x[1] - x[0], y[1] - y[0] };
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long n = array[0];
+			long m = array[1];
+			bool[,] matrix = new bool[n + 2, m + 2];
 
-			double[] vx2 = new double[2];
-			double theta = 45.0 / 180.0 * Math.PI;
-			vx2[0] = Math.Round((vx1[0] * Math.Cos(theta) - vx1[1] * Math.Sin(theta)) * Math.Sqrt(2));
-			vx2[1] = Math.Round((vx1[0] * Math.Sin(theta) + vx1[1] * Math.Cos(theta)) * Math.Sqrt(2));
-			x[2] = vx2[0] + x[0];
-			y[2] = vx2[1] + y[0];
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < m; ++j) {
+					Turn(matrix, i + 1, j + 1);
+				}
+			}
 
-			theta = 90.0 / 180.0 * Math.PI;
-			vx2[0] = Math.Round(vx1[0] * Math.Cos(theta) - vx1[1] * Math.Sin(theta));
-			vx2[1] = Math.Round(vx1[0] * Math.Sin(theta) + vx1[1] * Math.Cos(theta));
-			x[3] = vx2[0] + x[0];
-			y[3] = vx2[1] + y[0];
+			int count = 0;
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < m; ++j) {
+					if (matrix[i + 1, j + 1]) {
+						++count;
+					}
+				}
+			}
 
-			//string answer = "No";
-			Console.WriteLine($"{x[2]:f0} {y[2]:f0} {x[3]:f0} {y[3]:f0}");
+			Console.WriteLine($"{count}");
+
 			Console.ReadLine();
 		}
 	}
