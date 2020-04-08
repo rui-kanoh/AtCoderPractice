@@ -17,23 +17,13 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long n = array[0];
-			long m = array[1];
-			long count = 0;
-			if (n == 1 && m == 1) {
-				count = 1;
-			} else if (n == 1) {
-				count = m - 2;
-			} else if (m == 1) {
-				count = n - 2;
-			} else {
-				count = (n - 2) * (m - 2);
-			}
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int a = array[0];
+			int b = array[1];
+			double x = ((double)a + b) / 2.0;
+			Console.WriteLine($"{(int)Math.Ceiling(x)}");
 
-			Console.WriteLine($"{count}");
-
-			Console.ReadLine();
+			Console.ReadKey();
 		}
 	}
 }
