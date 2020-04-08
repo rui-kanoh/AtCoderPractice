@@ -25,17 +25,27 @@ namespace AtCoder
 		public static void Exec()
 		{
 			long n = int.Parse(Console.ReadLine());
-			List<Plane> list = new List<Plane>();
-			for (var j = 0; j < n; ++j) {
-				var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-				var plane = new Plane();
-				plane.Time = array[0];
-				plane.X = array[1];
-				plane.Y = array[2];
-				list.Add(plane);
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			var dict = new Dictionary<long, long>();
+			for (var i = 0; i < n; ++i) {
+				if (dict.ContainsKey(array[i]) == false) {
+					dict.Add(array[i], 1);
+				} else {
+					++dict[array[i]];
+				}
 			}
 
-			//Console.WriteLine($"{total}");
+			long total = 0;
+			foreach (var item in dict) {
+				if (item.Key < item.Value) {
+					total += item.Value - item.Key;
+				} else if (item.Key > item.Value) {
+					total += item.Value;
+				}
+			}
+
+			Console.WriteLine($"{total}");
 
 			Console.ReadKey();
 		}
