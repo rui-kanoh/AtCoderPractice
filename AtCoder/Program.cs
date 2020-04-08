@@ -33,7 +33,7 @@ namespace AtCoder
 			list.Add(p);
 
 			for (var j = 0; j < n; ++j) {
-				var array= Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+				var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
 				var plane = new Plane();
 				plane.Time = array[0];
 				plane.X = array[1];
@@ -44,8 +44,8 @@ namespace AtCoder
 			string answer = "Yes";
 			for (var j = 1; j <= n; ++j) {
 				long time = list[j].Time - list[j - 1].Time;
-				long x = list[j].X - list[j - 1].X;
-				long y = list[j].Y - list[j - 1].Y;
+				long x = Math.Abs(list[j].X - list[j - 1].X);
+				long y = Math.Abs(list[j].Y - list[j - 1].Y);
 				if (x + y > time) {
 					answer = "No";
 					break;
