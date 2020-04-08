@@ -15,13 +15,42 @@ namespace AtCoder
 
 	public static class Question
 	{
+		public static int Calc(int value)
+		{
+			int total = 0;
+			int ans = value / 10000;
+			total += ans;
+			value -= 10000 * ans;
+			ans = value / 1000;
+			total += ans;
+			value -= 1000 * ans;
+			ans = value / 100;
+			total += ans;
+			value -= 100 * ans;
+			ans = value / 10;
+			total += ans;
+			value -= 10 * ans;
+			total += value;
+
+			return total;
+		}
+		
 		public static void Exec()
 		{
 			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int a = array[0];
-			int b = array[1];
-			double x = ((double)a + b) / 2.0;
-			Console.WriteLine($"{(int)Math.Ceiling(x)}");
+			int n = array[0];
+			int a = array[1];
+			int b = array[2];
+
+			int total = 0;
+			for (var i = 1; i <= n; ++i) {
+				int answer = Calc(i);
+				if (a <= answer && answer <= b) {
+					total += i;
+				}
+			}
+
+			Console.WriteLine($"{total}");
 
 			Console.ReadKey();
 		}
