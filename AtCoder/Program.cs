@@ -13,44 +13,29 @@ namespace AtCoder
 		}
 	}
 
+	public class Plane
+	{
+		public long Time;
+		public long X;
+		public long Y;
+	}
+
 	public static class Question
 	{
-		public static int Calc(int value)
-		{
-			int total = 0;
-			int ans = value / 10000;
-			total += ans;
-			value -= 10000 * ans;
-			ans = value / 1000;
-			total += ans;
-			value -= 1000 * ans;
-			ans = value / 100;
-			total += ans;
-			value -= 100 * ans;
-			ans = value / 10;
-			total += ans;
-			value -= 10 * ans;
-			total += value;
-
-			return total;
-		}
-		
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int n = array[0];
-			int a = array[1];
-			int b = array[2];
-
-			int total = 0;
-			for (var i = 1; i <= n; ++i) {
-				int answer = Calc(i);
-				if (a <= answer && answer <= b) {
-					total += i;
-				}
+			long n = int.Parse(Console.ReadLine());
+			List<Plane> list = new List<Plane>();
+			for (var j = 0; j < n; ++j) {
+				var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+				var plane = new Plane();
+				plane.Time = array[0];
+				plane.X = array[1];
+				plane.Y = array[2];
+				list.Add(plane);
 			}
 
-			Console.WriteLine($"{total}");
+			//Console.WriteLine($"{total}");
 
 			Console.ReadKey();
 		}
