@@ -17,9 +17,18 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			long n = long.Parse(Console.ReadLine());
+			string[] array = Console.ReadLine().Split(' ');
+			char X = array[0][0];
+			char Y = array[1][0];
 
-			//Console.WriteLine($"{answer}");
+			if (X < Y) {
+				Console.WriteLine($"<");
+			} else if (X > Y) {
+				Console.WriteLine($">");
+			} else {
+				Console.WriteLine($"=");
+			}
+			
 
 			Console.ReadKey();
 		}
