@@ -15,26 +15,33 @@ namespace AtCoder
 
 	public static class Question
 	{
+		public static long Gcd(long a, long b)
+		{
+			if (b == 0) {
+				return a;
+			}
+
+			return Gcd(b, a % b);
+		}
+
+		public static long Lcm(long a, long b)
+		{
+			long g = Gcd(a, b);
+			return a / g * b;
+		}
+
 		public static void Exec()
 		{
 			long n = long.Parse(Console.ReadLine());
-			long min = n.ToString().Length;
+			var array = new long[n];
 
-			if (n % 2 == 0) {
-				for (long i = 2; i * i <= n; ++i) {
-					if (n % i != 0) {
-						continue;
-					}
-
-					var a = n / i;
-					var ans = Math.Max(i.ToString().Length, a.ToString().Length);
-					if (ans < min) {
-						min = ans;
-					}
-				}
+			long answer = 1;
+			for (var i = 1; i <= n; ++i) {
+				long time = long.Parse(Console.ReadLine());
+				answer = Lcm(answer, time);
 			}
 
-			Console.WriteLine($"{min}");
+			Console.WriteLine($"{answer}");
 
 			Console.ReadKey();
 		}
