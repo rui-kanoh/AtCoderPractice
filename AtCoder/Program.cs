@@ -17,17 +17,19 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			string[] array = Console.ReadLine().Split(' ');
-			char X = array[0][0];
-			char Y = array[1][0];
+			long ln = long.Parse(Console.ReadLine());
 
-			if (X < Y) {
-				Console.WriteLine($"<");
-			} else if (X > Y) {
-				Console.WriteLine($">");
-			} else {
-				Console.WriteLine($"=");
+			long answer = 0;
+			long[] array = new long[ln + 1];
+			array[0] = 2;
+			array[1] = 1;
+			for (var i = 2; i <= ln; ++i) {
+				array[i] = array[i - 1] + array[i - 2];
 			}
+
+			answer = array[ln];
+
+			Console.WriteLine($"{answer}");
 			
 
 			Console.ReadKey();
