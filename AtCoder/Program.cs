@@ -17,44 +17,22 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var larray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long N = long.Parse(Console.ReadLine());
-			long Q = larray[0];
-			long H = larray[1];
-			long S = larray[2];
-			long D = larray[3];
-			var dict = new Dictionary<double, long>();
-			dict.Add(0.25, Q);
-			dict.Add(0.5, H);
-			dict.Add(1.0, S);
-			dict.Add(2.0, D);
-
-			long answer = 0;
+			long n = long.Parse(Console.ReadLine());
 			long min = long.MaxValue;
 
-			for (var i = 0; i <= N / 2; ++i) {
-				for (var j = 0; j <= N; ++j) {
-					for (var k = 0; k <= N * 2; ++k) {
-						double q = 2.0 * i + 1.0 * j + 0.5 * k;
-						var ans = dict[2.0] * i + dict[1.0] * j + dict[0.5] * k;
-						if (N < q) {
-							continue;
-						}
+			for (var i = 1; i < n; ++i) {
+				if (n % i != 0) {
+					continue;
+				}
 
-						if (N - q > 0) {
-							ans += (long)((N - q) / 0.25 * dict[0.25]);
-						}
-
-						if (min > ans) {
-							min = ans;
-						}
-					}
+				var ans = Math.Max(i.ToString().Length, (n / i).ToString().Length);
+				if (ans < min) {
+					min = ans;
 				}
 			}
 
-			answer = min;
+			Console.WriteLine($"{min}");
 
-			Console.WriteLine($"{answer}");
 			Console.ReadKey();
 		}
 	}
@@ -63,20 +41,6 @@ namespace AtCoder
 namespace Temp {
 	public class Question
 	{
-		void DFS(int max, List<char> pass)
-		{
-			if (pass.Count == max) {
-				Console.WriteLine(new string(pass.ToArray()));
-				return;
-			}
-
-			for (int i = 0; i < 3; i++) {
-				pass.Add((char)('a' + i));
-				DFS(max, pass);
-				pass.RemoveAt(pass.Count - 1);
-			}
-		}
-
 		public void Exec()
 		{
 			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
@@ -99,6 +63,39 @@ namespace Temp {
 			Console.Out.Flush();
 
 			Console.ReadKey();
+		}
+
+		void WrongAnswer()
+		{
+			var larray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long N = long.Parse(Console.ReadLine());
+			long Q = larray[0];
+			long H = larray[1];
+			long S = larray[2];
+			long D = larray[3];
+			var dict = new Dictionary<double, long>();
+			dict.Add(0.25, Q);
+			dict.Add(0.5, H);
+			dict.Add(1.0, S);
+			dict.Add(2.0, D);
+
+			long answer = 0;
+
+			long min = long.MaxValue;
+
+			if (N > 1) {
+				if (N % 2 == 0) {
+					answer = (N / 2) * D;
+				} else {
+					answer = (N / 2) * D + (N % 2) * S;
+				}
+			} else {
+				answer = N * S;
+			}
+
+			if (min > answer) {
+				min = answer;
+			}
 		}
 	}
 }
