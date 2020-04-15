@@ -17,33 +17,21 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long N = long.Parse(Console.ReadLine());
-			long Q = array[0];
-			long H = Math.Min(array[1], 2 * Q);
-			long S = Math.Min(array[2] , 2 * H);
-			long D = array[3];
-			var dict = new Dictionary<double, long>();
+			long n = long.Parse(Console.ReadLine());
+			long min = n.ToString().Length;
 
-			long answer = 0;
-			long min = long.MaxValue;
+			if (n % 2 == 0) {
+				for (long i = 2; i * i <= n; ++i) {
+					if (n % i != 0) {
+						continue;
+					}
 
-			if (N > 1) {
-				if (2 * S <= D) {
-					answer = N * S;
-				} else {
-					if (N % 2 == 0) {
-						answer = (N / 2) * D;
-					} else {
-						answer = (N / 2) * D + (N % 2) * S;
+					var a = n / i;
+					var ans = Math.Max(i.ToString().Length, a.ToString().Length);
+					if (ans < min) {
+						min = ans;
 					}
 				}
-			} else {
-				answer = N * S;
-			}
-
-			if (min > answer) {
-				min = answer;
 			}
 
 			Console.WriteLine($"{min}");
