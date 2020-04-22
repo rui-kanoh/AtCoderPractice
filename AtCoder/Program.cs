@@ -30,11 +30,26 @@ namespace AtCoder
 			var oddList = list.Where(x => IsOdd(x)).ToList();
 			var noOddList = list.Where(x => IsOdd(x) == false).ToList();
 
-			bool isOK = IsOdd(oddList.Count) == false;
+			bool isOK = false;
+			if (oddList.Count == 0)
+			{
+				isOK = true;
+			} else if (oddList.Count - 1 <= noOddList.Count)
+			{
+				var list4 = noOddList.Where(x => x % 4 == 0).ToList();
+				if (noOddList.Count - list4.Count == 0 && oddList.Count <= list4.Count + 1)
+				{
+					isOK = true;
+				} else if (oddList.Count <= list4.Count)
+				{
+					isOK = true;
+				}
+			}
+
 			if (isOK) {
-				Console.WriteLine($"YES");
+				Console.WriteLine($"Yes");
 			} else {
-				Console.WriteLine($"NO");
+				Console.WriteLine($"No");
 			}
 
 			Console.ReadKey();
