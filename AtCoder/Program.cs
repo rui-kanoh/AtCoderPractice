@@ -24,40 +24,19 @@ namespace AtCoder
 
 		public static void Exec()
 		{
-			var scaner = new Scanner2();
-			var n = scaner.Long();
-			var array = scaner.ArrayLong((int)n);
-			var list = array.ToList();
-
-			var oddList = list.Where(x => IsOdd(x)).ToList();
-			var noOddList = list.Where(x => IsOdd(x) == false).ToList();
-
-			bool isOK = false;
-			if (oddList.Count == 0)
-			{
-				isOK = true;
-			} else if (oddList.Count - 1 <= noOddList.Count)
-			{
-				var list4 = noOddList.Where(x => x % 4 == 0).ToList();
-				if (noOddList.Count - list4.Count == 0 && oddList.Count <= list4.Count + 1)
-				{
-					isOK = true;
-				} else if (oddList.Count <= list4.Count)
-				{
-					isOK = true;
-				}
-			}
-
+			var scaner = new SaitoScanner();
+			/*
 			if (isOK) {
 				Console.WriteLine($"Yes");
 			} else {
 				Console.WriteLine($"No");
 			}
+			*/
 
 			Console.ReadKey();
 		}
 
-		public class Scanner2
+		public class SaitoScanner
 		{
 			private readonly char[] delimiter_ = new char[] { ' ' };
 			private readonly string filePath_;
@@ -65,7 +44,7 @@ namespace AtCoder
 			private string[] buf_;
 			private int index_;
 
-			public Scanner2(string file = "")
+			public SaitoScanner(string file = "")
 			{
 				if (string.IsNullOrWhiteSpace(file))
 				{
