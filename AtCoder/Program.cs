@@ -17,18 +17,15 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			var r = array[0];
-			var g = array[1];
-			var b = array[2];
-			var answer = r * 100 + g * 10 + b;
-
-			if (answer % 4 == 0)
+			string s = Console.ReadLine();
+			char[] chars = s.ToArray();
+			var chars2 = chars.Distinct().ToArray();
+			if (chars.Length == chars2.Length)
 			{
-				Console.WriteLine($"YES");
+				Console.WriteLine($"yes");
 			} else
 			{
-				Console.WriteLine($"NO");
+				Console.WriteLine($"no");
 			}
 
 			Console.ReadKey();
