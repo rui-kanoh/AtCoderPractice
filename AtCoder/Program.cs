@@ -15,17 +15,26 @@ namespace AtCoder
 
 	public static class Question
 	{
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = n % 2 == 1;
+			return isOdd;
+		}
+
 		public static void Exec()
 		{
-			string s = Console.ReadLine();
-			char[] chars = s.ToArray();
-			var chars2 = chars.Distinct().ToArray();
-			if (chars.Length == chars2.Length)
-			{
-				Console.WriteLine($"yes");
-			} else
-			{
-				Console.WriteLine($"no");
+			var n = long.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var list = array.ToList();
+
+			var oddList = list.Where(x => IsOdd(x)).ToList();
+			var noOddList = list.Where(x => IsOdd(x) == false).ToList();
+
+			bool isOK = IsOdd(oddList.Count) == false;
+			if (isOK) {
+				Console.WriteLine($"YES");
+			} else {
+				Console.WriteLine($"NO");
 			}
 
 			Console.ReadKey();
