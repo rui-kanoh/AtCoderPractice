@@ -17,8 +17,19 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			long n = long.Parse(Console.ReadLine());
-			//Console.WriteLine($"{answer}");
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			var r = array[0];
+			var g = array[1];
+			var b = array[2];
+			var answer = r * 100 + g * 10 + b;
+
+			if (answer % 4 == 0)
+			{
+				Console.WriteLine($"YES");
+			} else
+			{
+				Console.WriteLine($"NO");
+			}
 
 			Console.ReadKey();
 		}
