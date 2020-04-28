@@ -24,98 +24,37 @@ namespace AtCoder
 
 		public static void Exec()
 		{
-			var scaner = new Scanner();
-			/*
-			if (isOK) {
-				Console.WriteLine($"Yes");
-			} else {
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int a = array[0];
+			int b = array[1];
+			string s = Console.ReadLine();
+
+			if (s.Length != a + b + 1) {
 				Console.WriteLine($"No");
+				Console.ReadKey();
+				return;
 			}
-			*/
+
+			if (s[a] != '-') {
+				Console.WriteLine($"No");
+				Console.ReadKey();
+				return;
+			}
+
+			string astr = s.Substring(0, a);
+			string bstr = s.Substring(a + 1, b);
+			try {
+				int.Parse(astr);
+				int.Parse(bstr);
+			} catch {
+				Console.WriteLine($"No");
+				Console.ReadKey();
+				return;
+			}
+
+			Console.WriteLine($"Yes");
 
 			Console.ReadKey();
-		}
-
-		public class Scanner
-		{
-			private readonly char[] delimiter_ = new char[] { ' ' };
-			private readonly string filePath_;
-			private readonly Func<string> reader_;
-			private string[] buf_;
-			private int index_;
-
-			public Scanner(string file = "")
-			{
-				if (string.IsNullOrWhiteSpace(file))
-				{
-					reader_ = Console.ReadLine;
-				}
-				else
-				{
-					filePath_ = file;
-					var fs = new StreamReader(file);
-					reader_ = fs.ReadLine;
-				}
-				buf_ = new string[0];
-				index_ = 0;
-			}
-
-			public string Next()
-			{
-				if (index_ < buf_.Length)
-				{
-					return buf_[index_++];
-				}
-
-				string st = reader_();
-				while (st == "")
-				{
-					st = reader_();
-				}
-
-				buf_ = st.Split(delimiter_, StringSplitOptions.RemoveEmptyEntries);
-				if (buf_.Length == 0)
-				{
-					return Next();
-				}
-
-				index_ = 0;
-				return buf_[index_++];
-			}
-
-			public int Int() => int.Parse(Next());
-			public long Long() => long.Parse(Next());
-			public double Double() => double.Parse(Next());
-
-			public int[] ArrayInt(int N, int add = 0)
-			{
-				int[] Array = new int[N];
-				for (int i = 0; i < N; i++)
-				{
-					Array[i] = Int() + add;
-				}
-				return Array;
-			}
-
-			public long[] ArrayLong(int N, long add = 0)
-			{
-				long[] Array = new long[N];
-				for (int i = 0; i < N; i++)
-				{
-					Array[i] = Long() + add;
-				}
-				return Array;
-			}
-
-			public double[] ArrayDouble(int N, double add = 0)
-			{
-				double[] Array = new double[N];
-				for (int i = 0; i < N; i++)
-				{
-					Array[i] = Double() + add;
-				}
-				return Array;
-			}
 		}
 	}
 }
