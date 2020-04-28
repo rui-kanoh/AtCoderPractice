@@ -24,7 +24,7 @@ namespace AtCoder
 
 		public static void Exec()
 		{
-			var scaner = new SaitoScanner();
+			var scaner = new Scanner();
 			/*
 			if (isOK) {
 				Console.WriteLine($"Yes");
@@ -36,7 +36,7 @@ namespace AtCoder
 			Console.ReadKey();
 		}
 
-		public class SaitoScanner
+		public class Scanner
 		{
 			private readonly char[] delimiter_ = new char[] { ' ' };
 			private readonly string filePath_;
@@ -44,7 +44,7 @@ namespace AtCoder
 			private string[] buf_;
 			private int index_;
 
-			public SaitoScanner(string file = "")
+			public Scanner(string file = "")
 			{
 				if (string.IsNullOrWhiteSpace(file))
 				{
