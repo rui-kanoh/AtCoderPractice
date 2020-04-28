@@ -28,19 +28,27 @@ namespace AtCoder
 			long n = array[0];
 			long x = array[1];
 			var a = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var totals = new long[n - 1];
+			for (int i = 0; i < n - 1; ++i) {
+				totals[i] = a[i] + a[i + 1];
+			}
 
 			long count = 0;
 			if (a[0] > x) {
 				long diff = a[0] - x;
 				count += diff;
 				a[0] -= diff;
+				totals[0] -= diff;
 			}
 
 			for (int i = 0; i < n - 1; ++i) {
-				if (a[i] + a[i + 1] > x) {
-					long diff = (a[i] + a[i + 1]) - x;
+				if (totals[i] > x) {
+					long diff = totals[i] - x;
 					count += diff;
-					a[i + 1] -= diff;
+
+					if (i < n - 2) {
+						totals[i + 1] -= diff;
+					}
 				}
 			}
 
