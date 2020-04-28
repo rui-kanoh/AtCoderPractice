@@ -24,35 +24,41 @@ namespace AtCoder
 
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int a = array[0];
-			int b = array[1];
 			string s = Console.ReadLine();
-
-			if (s.Length != a + b + 1) {
+			string t = Console.ReadLine();
+			if (s == t) {
 				Console.WriteLine($"No");
 				Console.ReadKey();
 				return;
 			}
 
-			if (s[a] != '-') {
-				Console.WriteLine($"No");
+			if (t.Contains(s) && s.Length < t.Length) {
+				Console.WriteLine($"Yes");
 				Console.ReadKey();
 				return;
 			}
 
-			string astr = s.Substring(0, a);
-			string bstr = s.Substring(a + 1, b);
-			try {
-				int.Parse(astr);
-				int.Parse(bstr);
-			} catch {
-				Console.WriteLine($"No");
-				Console.ReadKey();
-				return;
+			var slist = s.ToCharArray().ToList();
+			slist.Sort();
+			string ss = new string(slist.ToArray());
+
+			var tlist = t.ToCharArray().ToList();
+			tlist.Sort();
+			tlist.Reverse();
+			string tt = new string(tlist.ToArray());
+			bool isOK = false;
+			for (int i = 0; i < ss.Length && i < tt.Length; ++i) {
+				if (ss[i] < tt[i]) {
+					isOK = true;
+					break;
+				}
 			}
 
-			Console.WriteLine($"Yes");
+			if (isOK){
+				Console.WriteLine($"Yes");
+			} else {
+				Console.WriteLine($"No");
+			}
 
 			Console.ReadKey();
 		}
