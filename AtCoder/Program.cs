@@ -24,42 +24,27 @@ namespace AtCoder
 
 		public static void Exec()
 		{
-			string s = Console.ReadLine();
-			string t = Console.ReadLine();
-			if (s == t) {
-				Console.WriteLine($"No");
-				Console.ReadKey();
-				return;
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long n = array[0];
+			long x = array[1];
+			var a = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
+			long count = 0;
+			if (a[0] > x) {
+				long diff = a[0] - x;
+				count += diff;
+				a[0] -= diff;
 			}
 
-			if (t.Contains(s) && s.Length < t.Length) {
-				Console.WriteLine($"Yes");
-				Console.ReadKey();
-				return;
-			}
-
-			var slist = s.ToCharArray().ToList();
-			slist.Sort();
-			string ss = new string(slist.ToArray());
-
-			var tlist = t.ToCharArray().ToList();
-			tlist.Sort();
-			tlist.Reverse();
-			string tt = new string(tlist.ToArray());
-			bool isOK = false;
-			for (int i = 0; i < ss.Length && i < tt.Length; ++i) {
-				if (ss[i] < tt[i]) {
-					isOK = true;
-					break;
+			for (int i = 0; i < n - 1; ++i) {
+				if (a[i] + a[i + 1] > x) {
+					long diff = (a[i] + a[i + 1]) - x;
+					count += diff;
+					a[i + 1] -= diff;
 				}
 			}
 
-			if (isOK){
-				Console.WriteLine($"Yes");
-			} else {
-				Console.WriteLine($"No");
-			}
-
+			Console.WriteLine($"{count}");
 			Console.ReadKey();
 		}
 	}
