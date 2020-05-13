@@ -18,9 +18,10 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			int x = int.Parse(Console.ReadLine());
+			int answer = (x / 10) + (x % 10);
 
-			//Console.WriteLine($"{count}");
+			Console.WriteLine($"{answer}");
 			Console.ReadKey();
 		}
 	}
