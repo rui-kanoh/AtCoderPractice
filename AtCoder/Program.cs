@@ -18,15 +18,39 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			//int n = int.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int n = array[0];
-			int m = array[1];
-			double angleN = (n % 12) * (360.0 / 12.0) + m * (360.0 / 12.0 / 60.0);
-			double angleM = m * (360.0 / 60.0);
-			double diff = Math.Abs(angleM - angleN);
-			diff = diff >= 180.0 ? 360.0 - diff : diff;
-			Console.WriteLine($"{diff}");
+			int total = 0;
+			foreach (var item in array) {
+				total += item;
+			}
+
+			if (total % n != 0) {
+				Console.WriteLine($"{-1}");
+				Console.ReadKey();
+				return;
+			}
+
+			int average = total / n;
+
+			int count = 0;
+			int left = 0;
+			int answer = 0;
+			for (int i = 0; i < n - 1; ++i) {
+				left += array[i];
+				++count;
+
+				if (left % count != 0 || left / count != average) {
+					if (i != n - 1) {
+						++answer;
+					}
+				} else {
+					left = 0;
+					count = 0;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 
 			Console.ReadKey();
 		}
