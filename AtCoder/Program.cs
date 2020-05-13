@@ -18,36 +18,14 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int N = int.Parse(Console.ReadLine());
-			var ss = new char[N, N];
-			for (int i = 0; i < N; ++i) {
-				char[] array = Console.ReadLine().ToCharArray();
-				for (int j = 0; j < N; ++j) {
-					ss[i, j] = array[j];
-				}
-			}
-
-			/*
-			for (int i = 0; i < N; ++i) {
-				for (int j = 0; j < N; ++j) {
-					//Console.Write($"{ss[i, j]}");
-					Console.Write($"({i}, {j}) ");
-				}
-
-				Console.WriteLine($"");
-			}
-
-			Console.WriteLine($"");
-			*/
-
-			for (int j = 0; j < N; ++j) {
-				for (int i = 0; i < N; ++i) {
-					//Console.Write($"({N - i - 1}, {j}) ");
-					Console.Write($"{ss[N - i - 1, j]}");
-				}
-
-				Console.WriteLine($"");
-			}
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int n = array[0];
+			int m = array[1];
+			double angleN = (n % 12) * (360.0 / 12.0) + (360.0 / 12.0 / 60.0) * m;
+			double angleM = m * (360.0 / 60.0);
+			double diff = Math.Abs(angleM - angleN);
+			diff = diff > 180.0 ? diff - 180.0 : diff;
+			Console.WriteLine($"{Math.Round(diff, 4)}");
 
 			Console.ReadKey();
 		}
