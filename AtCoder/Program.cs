@@ -18,14 +18,15 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
+			//int n = int.Parse(Console.ReadLine());
 			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
 			int n = array[0];
 			int m = array[1];
-			double angleN = (n % 12) * (360.0 / 12.0) + (360.0 / 12.0 / 60.0) * m;
+			double angleN = (n % 12) * (360.0 / 12.0) + m * (360.0 / 12.0 / 60.0);
 			double angleM = m * (360.0 / 60.0);
 			double diff = Math.Abs(angleM - angleN);
-			diff = diff > 180.0 ? diff - 180.0 : diff;
-			Console.WriteLine($"{Math.Round(diff, 4)}");
+			diff = diff >= 180.0 ? diff - 180.0 : diff;
+			Console.WriteLine($"{diff}");
 
 			Console.ReadKey();
 		}
