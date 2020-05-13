@@ -18,10 +18,37 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int x = int.Parse(Console.ReadLine());
-			int answer = (x / 10) + (x % 10);
+			int N = int.Parse(Console.ReadLine());
+			var ss = new char[N, N];
+			for (int i = 0; i < N; ++i) {
+				char[] array = Console.ReadLine().ToCharArray();
+				for (int j = 0; j < N; ++j) {
+					ss[i, j] = array[j];
+				}
+			}
 
-			Console.WriteLine($"{answer}");
+			/*
+			for (int i = 0; i < N; ++i) {
+				for (int j = 0; j < N; ++j) {
+					//Console.Write($"{ss[i, j]}");
+					Console.Write($"({i}, {j}) ");
+				}
+
+				Console.WriteLine($"");
+			}
+
+			Console.WriteLine($"");
+			*/
+
+			for (int j = 0; j < N; ++j) {
+				for (int i = 0; i < N; ++i) {
+					//Console.Write($"({N - i - 1}, {j}) ");
+					Console.Write($"{ss[N - i - 1, j]}");
+				}
+
+				Console.WriteLine($"");
+			}
+
 			Console.ReadKey();
 		}
 	}
