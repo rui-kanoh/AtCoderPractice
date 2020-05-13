@@ -25,7 +25,7 @@ namespace AtCoder
 			double angleN = (n % 12) * (360.0 / 12.0) + m * (360.0 / 12.0 / 60.0);
 			double angleM = m * (360.0 / 60.0);
 			double diff = Math.Abs(angleM - angleN);
-			diff = diff >= 180.0 ? diff - 180.0 : diff;
+			diff = diff >= 180.0 ? 360.0 - diff : diff;
 			Console.WriteLine($"{diff}");
 
 			Console.ReadKey();
