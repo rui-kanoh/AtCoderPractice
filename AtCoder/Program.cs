@@ -18,39 +18,9 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int total = 0;
-			foreach (var item in array) {
-				total += item;
-			}
+			int n = int.Parse(Console.ReadLine());	
 
-			if (total % n != 0) {
-				Console.WriteLine($"{-1}");
-				Console.ReadKey();
-				return;
-			}
-
-			int average = total / n;
-
-			int count = 0;
-			int left = 0;
-			int answer = 0;
-			for (int i = 0; i < n - 1; ++i) {
-				left += array[i];
-				++count;
-
-				if (left % count != 0 || left / count != average) {
-					if (i != n - 1) {
-						++answer;
-					}
-				} else {
-					left = 0;
-					count = 0;
-				}
-			}
-
-			Console.WriteLine($"{answer}");
+			//Console.WriteLine($"{answer}");
 
 			Console.ReadKey();
 		}
