@@ -30,6 +30,26 @@ namespace AtCoder
 namespace Temp {
 	public class Question
 	{
+		public static void A()
+		{
+
+		}
+
+		public static void B()
+		{
+
+		}
+
+		public static void C()
+		{
+
+		}
+
+		public static void D()
+		{
+
+		}
+
 		public static bool IsOdd(long n)
 		{
 			bool isOdd = n % 2 == 1;
