@@ -19,7 +19,8 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			
+
+			Console.ReadKey();
 		}
 	}
 }
@@ -27,71 +28,6 @@ namespace AtCoder
 namespace Temp {
 	public class Question
 	{
-		public static void A()
-		{
-
-			int n = int.Parse(Console.ReadLine());
-			n -= 22;
-			string str = "";
-			switch (n) {
-				case 0:
-					str = "Christmas Eve Eve Eve";
-					break;
-				case 1:
-					str = "Christmas Eve Eve";
-					break;
-				case 2:
-					str = "Christmas Eve";
-					break;
-				case 3:
-					str = "Christmas";
-					break;
-				default:
-					break;
-			}
-
-			Console.WriteLine($"{str}");
-		}
-
-		public static void B()
-		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int height = array[0];
-			int width = array[1];
-			int area = height * width / 2;
-
-			Console.WriteLine($"{area}");
-		}
-
-		public static void C()
-		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int T = array[0];
-			int X = array[1];
-
-			Console.WriteLine($"{(double)T / X}");
-		}
-
-		public static void D()
-		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int A = array[0];
-			int B = array[1];
-			if (B % A == 0) {
-				Console.WriteLine($"{A + B}");
-			} else {
-				Console.WriteLine($"{B - A}");
-			}
-
-			Console.ReadKey();
-		}
-
-		public static bool IsOdd(long n)
-		{
-			bool isOdd = n % 2 == 1;
-			return isOdd;
-		}
-
 		public static void Exec()
 		{
 			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
@@ -114,6 +50,28 @@ namespace Temp {
 			Console.Out.Flush();
 
 			Console.ReadKey();
+		}
+
+		public static void A()
+		{
+		}
+
+		public static void B()
+		{
+		}
+
+		public static void C()
+		{
+		}
+
+		public static void D()
+		{
+		}
+
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = n % 2 == 1;
+			return isOdd;
 		}
 
 		public static long Gcd(long a, long b)
