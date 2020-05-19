@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace AtCoder
@@ -18,11 +19,7 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());	
-
-			//Console.WriteLine($"{answer}");
-
-			Console.ReadKey();
+			
 		}
 	}
 }
@@ -33,21 +30,60 @@ namespace Temp {
 		public static void A()
 		{
 
+			int n = int.Parse(Console.ReadLine());
+			n -= 22;
+			string str = "";
+			switch (n) {
+				case 0:
+					str = "Christmas Eve Eve Eve";
+					break;
+				case 1:
+					str = "Christmas Eve Eve";
+					break;
+				case 2:
+					str = "Christmas Eve";
+					break;
+				case 3:
+					str = "Christmas";
+					break;
+				default:
+					break;
+			}
+
+			Console.WriteLine($"{str}");
 		}
 
 		public static void B()
 		{
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int height = array[0];
+			int width = array[1];
+			int area = height * width / 2;
 
+			Console.WriteLine($"{area}");
 		}
 
 		public static void C()
 		{
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int T = array[0];
+			int X = array[1];
 
+			Console.WriteLine($"{(double)T / X}");
 		}
 
 		public static void D()
 		{
+			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			int A = array[0];
+			int B = array[1];
+			if (B % A == 0) {
+				Console.WriteLine($"{A + B}");
+			} else {
+				Console.WriteLine($"{B - A}");
+			}
 
+			Console.ReadKey();
 		}
 
 		public static bool IsOdd(long n)
