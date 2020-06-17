@@ -20,35 +20,7 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-			long n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			long area = 0;
 
-			var dict = new Dictionary<long, int>();
-			foreach (var item in a) {
-				if (dict.ContainsKey(item) == false) {
-					dict.Add(item, 1);
-				} else {
-					++dict[item];
-				}
-			}
-
-			var list = new List<long>();
-			foreach (var item in dict) {
-				if (item.Value >= 2) {
-					list.Add(item.Key);
-				}
-			}
-
-			if (list.Count >= 2) {
-				for (var i = 0; i < list.Count - 1; i = i + 2) {
-					area += list[i] * list[i + 1];
-				}
-			}
-
-			Console.WriteLine($"{area}");
-
-			Console.ReadKey();
 		}
 	}
 }
@@ -149,6 +121,37 @@ namespace AtCoder {
 
 		public static void C()
 		{
+			//WA
+
+			long n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			long area = 0;
+
+			var dict = new Dictionary<long, int>();
+			foreach (var item in a) {
+				if (dict.ContainsKey(item) == false) {
+					dict.Add(item, 1);
+				} else {
+					++dict[item];
+				}
+			}
+
+			var list = new List<long>();
+			foreach (var item in dict) {
+				if (item.Value >= 2) {
+					list.Add(item.Key);
+				}
+			}
+
+			if (list.Count >= 2) {
+				for (var i = 0; i < list.Count - 1; i = i + 2) {
+					area += list[i] * list[i + 1];
+				}
+			}
+
+			Console.WriteLine($"{area}");
+
+			Console.ReadKey();
 
 		}
 
