@@ -20,7 +20,7 @@ namespace AtCoder
 	{
 		public static void Exec()
 		{
-
+			
 		}
 	}
 }
@@ -54,11 +54,33 @@ namespace AtCoder {
 
 		public static void A()
 		{
+			double x = double.Parse(Console.ReadLine());
+			long n = (long)Math.Sqrt(Math.Sqrt(x));
+			Console.WriteLine($"{n}");
+			Console.ReadKey();
 		}
 
 		public static void B()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
+			var dict = new Dictionary<int, int>();
 
+			for (var i = 0; i < n; ++i) {
+				for (var j = -1; j <= 1; ++j) {
+					int b = a[i] + j;
+					if (dict.ContainsKey(b)) {
+						++dict[b];
+					} else {
+						dict.Add(b, 1);
+					}
+				}
+			}
+
+			int max = dict.Values.Max();
+
+			Console.WriteLine($"{max}");
+			Console.ReadKey();
 		}
 
 		public static void C()
