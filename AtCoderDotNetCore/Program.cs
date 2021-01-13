@@ -22,39 +22,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-			var n = array[0];
-			var m = array[1];
-			var c = new long[n];
-			for (var i = 0; i < n; ++i) {
-				c[i] = long.Parse(Console.ReadLine());
-			}
-
-			long power = Math.Abs(m - c[0]);
-			var hash = new HashSet<long>();
-			for (var i = 1; i < n; ++i) {
-				var val2 = Math.Abs(m - c[i]);
-				if (val2 == 0) {
-					continue;
-				} else {
-					hash.Add(val2);
-				}
-
-				for (var j = 0; j < i; ++j) {
-					var val = Math.Abs(c[j] - c[i]);
-					if (hash.Contains(val)) {
-						break;
-					} else {
-						hash.Add(val);
-					}
-				}
-
-				power += hash.Min();
-
-				hash.Clear();
-			}
-
-			Console.WriteLine($"{power}");
 		}
 	}
 }
