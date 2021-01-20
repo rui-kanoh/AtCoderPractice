@@ -22,57 +22,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int n = array[0];
-			int k = array[1];
-			var dlist = new List<long>();
-			for (int i = 0; i < n; ++i) {
-				dlist.Add(long.Parse(Console.ReadLine()));
-			}
-
-			var xydict = new Dictionary<int, List<int>>();
-			for (int i = 0; i < k; ++i) {
-				var xy = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-
-				if (xydict.ContainsKey(xy[0]) == false) {
-					xydict.Add(xy[0], new List<int>() { xy[1] });
-				} else {
-					xydict[xy[0]].Add(xy[1]);
-				}
-
-				if (xydict.ContainsKey(xy[1]) == false) {
-					xydict.Add(xy[1], new List<int>() { xy[0] });
-				} else {
-					xydict[xy[1]].Add(xy[0]);
-				}
-			}
-
-			static void CalculatePoint(int start, ref long ans, Dictionary<int, List<int>> dict, List<long> list, ref int count, int max)
-			{
-				ans += list[start];
-				++count;
-				if (dict.ContainsKey(start) == false
-					|| count >= max) {
-					return;
-				}
-
-				start = dict[start];
-				CalculatePoint(start, ref ans, dict, list, ref count, max);
-			}
-
-			long max = 0;
-
-			for (int i = 0; i < n; ++i) {
-				long answer = 0;
-				int count = 0;
-
-				CalculatePoint(i, ref answer, xydict, dlist, ref count, n);
-				if (answer > max) {
-					max = answer;
-				}
-			}
-
-			Console.WriteLine($"{max}");
+			//Console.WriteLine($"{max}");
 		}
 	}
 }
