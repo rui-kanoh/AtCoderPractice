@@ -22,34 +22,51 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
-
-			int answer = 0;
-			bool canDivide = true;
-			while (canDivide) {
-				for (var i = 0; i < array.Length; ++i) {
-					if (IsOdd(array[i])) {
-						canDivide = false;
-						break;
-					}
-
-					array[i] /= 2;
-				}
-
-				if (canDivide) {
-					++answer;
+			var np = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			long n = np[0];
+			long p = np[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var aa = a.Where(value => value != 1).ToList();
+			var am = new long[aa.Count];
+			for (var i = 0; i < aa.Count; ++i) {
+				if (i == 0) { 
+					am[i] =	aa[i];
+				} else {
+					am[i] = aa[i] * am[i - 1];
 				}
 			}
 
-			Console.WriteLine($"{answer}");
+			bool isOK = false;
+			for (var j = aa.Count - 1; j > 0 && isOK == false; --j) {
+				long value = am[j];
+				if (value < p) {
+					continue;
+				}
 
-		}
+				if (value == p) {
+					isOK = true;
+					break;
+				} else {
+					for (var i = 0; i < j; ++i) {
+						value /= am[i];
+						if (value < p) {
+							break;
+						}
 
-		public static bool IsOdd(long n)
-		{
-			bool isOdd = n % 2 == 1;
-			return isOdd;
+						if (value == p) {
+							isOK = true;
+							break;
+						}
+					}
+
+					if (isOK) {
+						break;
+					}
+				}
+			}
+			
+
+			Console.WriteLine(isOK ? "Yay!" : ":(");
 		}
 	}
 }
@@ -68,10 +85,10 @@ namespace AtCoderDotNetCore
 			long ln = long.Parse(Console.ReadLine());
 			long n = int.Parse(Console.ReadLine());
 
-			string[] inputStrArray = Console.ReadLine().Split(' ');
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			string result = "";
 
@@ -81,7 +98,7 @@ namespace AtCoderDotNetCore
 		public static void A()
 		{
 			int n = int.Parse(Console.ReadLine());
-			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			int answer = 0;
 			bool canDivide = true;
@@ -105,7 +122,15 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
+			string str = Console.ReadLine();
+			var deleteChars = new[] { "a", "i", "u", "e", "o" };
 
+			string answer = str;
+			for (var i = 0; i < deleteChars.Length; ++i) {
+				answer = answer.Replace(deleteChars[i], "");
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
