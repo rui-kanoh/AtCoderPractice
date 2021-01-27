@@ -22,16 +22,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
 			int answer = 0;
-			int h = n / 100;
-			int hh = h * 100 + h * 10 + h;
-			if (n <= hh) {
-				answer = hh;
-			} else {
-				hh = (h + 1) * 100 + (h + 1) * 10 + (h + 1);
-				answer = hh;
-			}
 
 			Console.WriteLine($"{answer}");
 
