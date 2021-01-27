@@ -22,10 +22,34 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
+
 			int answer = 0;
+			bool canDivide = true;
+			while (canDivide) {
+				for (var i = 0; i < array.Length; ++i) {
+					if (IsOdd(array[i])) {
+						canDivide = false;
+						break;
+					}
+
+					array[i] /= 2;
+				}
+
+				if (canDivide) {
+					++answer;
+				}
+			}
 
 			Console.WriteLine($"{answer}");
 
+		}
+
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = n % 2 == 1;
+			return isOdd;
 		}
 	}
 }
@@ -56,17 +80,24 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var array = Console.ReadLine().Split(' ').Select(i => int.Parse(i)).ToArray();
-			int h = array[0];
-			int w = array[1];
-			int answer = 0;
+			int n = int.Parse(Console.ReadLine());
+			var array = Console.ReadLine().Split(' ').Select(i => long.Parse(i)).ToArray();
 
-			if (h == 1 && w == 1) {
-				answer = 0;
-			} else if (h == 1 || w == 1) {
-				answer = h == 1 ? w - 1 : h - 1;
-			} else {
-				answer = (h - 1) * w + h * (w - 1);
+			int answer = 0;
+			bool canDivide = true;
+			while (canDivide) {
+				for (var i = 0; i < array.Length; ++i) {
+					if (IsOdd(array[i])) {
+						canDivide = false;
+						break;
+					}
+
+					array[i] /= 2;
+				}
+
+				if (canDivide) {
+					++answer;
+				}
 			}
 
 			Console.WriteLine($"{answer}");
@@ -74,47 +105,12 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
-			int a = int.Parse(Console.ReadLine());
-			int b = int.Parse(Console.ReadLine());
-			int c = int.Parse(Console.ReadLine());
 
-			var dict = new Dictionary<int, int>();
-			if (a > b && b > c) {
-				dict.Add(a, 1);
-				dict.Add(b, 2);
-				dict.Add(c, 3);
-			} else if (a > b && b < c && c < a) {
-				dict.Add(a, 1);
-				dict.Add(b, 3);
-				dict.Add(c, 2);
-			} else if (a < b && b > c && c < a) {
-				dict.Add(a, 2);
-				dict.Add(b, 1);
-				dict.Add(c, 3);
-			} else if (c > a && a > b) {
-				dict.Add(a, 2);
-				dict.Add(b, 3);
-				dict.Add(c, 1);
-			} else if (a < c && c < b) {
-				dict.Add(a, 3);
-				dict.Add(b, 1);
-				dict.Add(c, 2);
-			} else if (a < c && b < c && a < b) {
-				dict.Add(a, 3);
-				dict.Add(b, 2);
-				dict.Add(c, 1);
-			}
-
-
-			Console.WriteLine($"{dict[a]}");
-			Console.WriteLine($"{dict[b]}");
-			Console.WriteLine($"{dict[c]}");
 		}
 
 		public static void C()
 		{
-			int answer = 654231;
-			Console.WriteLine($"{answer}");
+
 		}
 
 		public static void D()
