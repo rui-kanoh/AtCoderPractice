@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
@@ -26,47 +27,36 @@ namespace AtCoderDotNetCore
 			long n = np[0];
 			long p = np[1];
 			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var aa = a.Where(value => value != 1).ToList();
-			var am = new long[aa.Count];
-			for (var i = 0; i < aa.Count; ++i) {
-				if (i == 0) { 
-					am[i] =	aa[i];
-				} else {
-					am[i] = aa[i] * am[i - 1];
-				}
-			}
 
-			bool isOK = false;
-			for (var j = aa.Count - 1; j > 0 && isOK == false; --j) {
-				long value = am[j];
-				if (value < p) {
-					continue;
+			long temp = 1;
+			int r = 0;
+			for (int l = 0; l < n;) {
+				while (r < n && temp < p) {
+					temp *= a[r];
+					++r;
 				}
 
-				if (value == p) {
-					isOK = true;
+				if (temp == p) {
+					Console.WriteLine("Yay!");
+					return;
+				}
+
+				while (l < r && temp > p) {
+					temp /= a[l];
+					++l;
+				}
+
+				if (temp == p) {
+					Console.WriteLine("Yay!");
+					return;
+				}
+
+				if (r == n) {
 					break;
-				} else {
-					for (var i = 0; i < j; ++i) {
-						value /= am[i];
-						if (value < p) {
-							break;
-						}
-
-						if (value == p) {
-							isOK = true;
-							break;
-						}
-					}
-
-					if (isOK) {
-						break;
-					}
 				}
 			}
-			
 
-			Console.WriteLine(isOK ? "Yay!" : ":(");
+			Console.WriteLine(":(");
 		}
 	}
 }
