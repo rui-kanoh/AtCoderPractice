@@ -35,9 +35,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var sw = new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
-			Console.SetOut(sw);
-
 			string s = Console.ReadLine();
 
 			long ln = long.Parse(Console.ReadLine());
@@ -73,31 +70,6 @@ namespace AtCoderDotNetCore
 		}
 
 		public static void E()
-		{
-
-		}
-
-		public static void F()
-		{
-
-		}
-
-		public static void G()
-		{
-
-		}
-
-		public static void H()
-		{
-
-		}
-
-		public static void I()
-		{
-
-		}
-
-		public static void J()
 		{
 
 		}
