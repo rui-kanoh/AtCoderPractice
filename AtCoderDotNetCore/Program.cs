@@ -23,7 +23,51 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = nk[0];
+			int k = nk[1];
+			var p = new List<string>();
+			for (var i = 0; i < n; ++i) {
+				p.Add(Console.ReadLine());
+			}
+
+			int num = n % k == 0 ? n / k : n / k + 1;
+
 			int answer = 0;
+
+			if (n < k) {
+				Console.WriteLine($"{answer}");
+				return;
+			}
+
+			while (p.Count != 0) {
+				string str = p[0];
+				p.RemoveAt(0);
+				var indexes = new int[k];
+				int count = 0;
+				for (var i = 0; i < p.Count; ++i) {
+					if (p[i][0] != str[0]) {
+						indexes[count] = i;
+						++count;
+					}
+
+					if (count == k) {
+						break;
+					}
+
+					if (i == p.Count - 1) {
+						Console.WriteLine($"{answer}");
+						return;
+					}
+				}
+
+				for (var i = count - 1; i >= 0; --i) {
+					p.RemoveAt(indexes[i]);
+				}
+
+				++answer;
+			}
+
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -38,7 +82,7 @@ namespace AtCoderDotNetCore
 			string s = Console.ReadLine();
 
 			long ln = long.Parse(Console.ReadLine());
-			long n = int.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
 			string[] inputStrArray = Console.ReadLine().Split(" ");
 
@@ -52,11 +96,22 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			
+			string s = Console.ReadLine();
+			bool isOK = s.StartsWith("YAKI");
+			string answer = isOK ? "Yes" : "No";
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			string s = Console.ReadLine();
+			string answer = s.Replace("O", "0");
+			answer = answer.Replace("D", "0");
+			answer = answer.Replace("I", "1");
+			answer = answer.Replace("Z", "2");
+			answer = answer.Replace("S", "5");
+			answer = answer.Replace("B", "8");
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
