@@ -31,24 +31,36 @@ namespace AtCoderDotNetCore
 				p.Add(Console.ReadLine());
 			}
 
-			int num = n % k == 0 ? n / k : n / k + 1;
-
 			int answer = 0;
 
-			if (n < k) {
+			if (n < k || n % k != 0) {
 				Console.WriteLine($"{answer}");
 				return;
 			}
 
 			while (p.Count != 0) {
 				string str = p[0];
+				var strs = new List<string>();
+				strs.Add(str);
 				p.RemoveAt(0);
-				var indexes = new int[k];
-				int count = 0;
+
+				var indexes = new List<int>();
+				int count = 1;
 				for (var i = 0; i < p.Count; ++i) {
-					if (p[i][0] != str[0]) {
-						indexes[count] = i;
-						++count;
+					bool isOK = true;
+					for (var j = 0; j < strs.Count; ++j) {
+						if (p[i][0] == strs[j][0]) {
+							isOK = false;
+							break;
+						}
+					}
+
+					if (isOK) {
+						indexes.Add(i);
+						strs.Add(p[i]);
+						if (k > 1) {
+							++count;
+						}
 					}
 
 					if (count == k) {
@@ -61,10 +73,20 @@ namespace AtCoderDotNetCore
 					}
 				}
 
-				for (var i = count - 1; i >= 0; --i) {
+				for (var i = indexes.Count - 1; i >= 0; --i) {
+					if (indexes.Count == 0) {
+						continue;
+					}
+
+					if (indexes[i] > p.Count - 1) {
+						continue;
+					}
+
 					p.RemoveAt(indexes[i]);
 				}
 
+				strs.Clear();
+				indexes.Clear();
 				++answer;
 			}
 
