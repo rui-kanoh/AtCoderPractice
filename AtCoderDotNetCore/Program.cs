@@ -23,74 +23,121 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int n = nk[0];
-			int k = nk[1];
-			var p = new List<string>();
-			for (var i = 0; i < n; ++i) {
-				p.Add(Console.ReadLine());
-			}
+			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			int answer = 0;
-
-			if (n < k || n % k != 0) {
-				Console.WriteLine($"{answer}");
-				return;
+			int min = int.MaxValue;
+			var coins = new Dictionary<long, int>();
+			for (var i = 0; i <= 9; ++i) {
+				coins.Add(1 * (long)Math.Pow(10, i), 0);
+				coins.Add(5 * (long)Math.Pow(10, i), 0);
 			}
 
-			while (p.Count != 0) {
-				string str = p[0];
-				var strs = new List<string>();
-				strs.Add(str);
-				p.RemoveAt(0);
+			var dfs = new DFS();
 
-				var indexes = new List<int>();
-				int count = 1;
-				for (var i = 0; i < p.Count; ++i) {
-					bool isOK = true;
-					for (var j = 0; j < strs.Count; ++j) {
-						if (p[i][0] == strs[j][0]) {
-							isOK = false;
-							break;
-						}
-					}
+			var root = new Node();
+			AddChild(root, k, n, a, 0);
 
-					if (isOK) {
-						indexes.Add(i);
-						strs.Add(p[i]);
-						if (k > 1) {
-							++count;
-						}
-					}
-
-					if (count == k) {
-						break;
-					}
-
-					if (i == p.Count - 1) {
-						Console.WriteLine($"{answer}");
-						return;
-					}
+			static void AddChild(Node node, long depth, long n, long[] a, int depthCount)
+			{
+				if (depth == depthCount) {
+					return;
 				}
 
-				for (var i = indexes.Count - 1; i >= 0; --i) {
-					if (indexes.Count == 0) {
+				for (var j = 0; j < n; ++j) {
+					if (node.Index == j) {
 						continue;
 					}
 
-					if (indexes[i] > p.Count - 1) {
-						continue;
-					}
+					var child = new Node {
+						Value = a[j],
+						Index = j,
+					};
 
-					p.RemoveAt(indexes[i]);
+					AddChild(child, depth, n, a, ++depthCount);
+					node.Children.Add(child);
 				}
-
-				strs.Clear();
-				indexes.Clear();
-				++answer;
 			}
+
+			DFS.Search(root);
+			Console.WriteLine($"{DFS.Total}");
+			DFS.Total = 0;
 
 			Console.WriteLine($"{answer}");
+		}
+
+		public class DFS
+		{
+			public static long Total { get; set; } = 0;
+
+			public static void Search(Node root)
+			{
+				if (root == null) {
+					return;
+				}
+
+				Visit(root);
+				if (root.Children != null) {
+					foreach (var node in root.Children) {
+						if (!node.Visited) {
+							Search(node);
+						}
+					}
+				}
+			}
+
+			private static void Visit(Node node)
+			{
+				node.Visited = true;
+				Total += node.Value;
+			}
+		}
+
+		public class BFS
+		{
+			public static void Search(Node root)
+			{
+				var queue = new Queue<Node>();
+				Visit(root);
+				queue.Enqueue(root);
+
+				while (queue.Count != 0) {
+					var current_node = queue.Dequeue();
+					if (current_node.Children != null) {
+						foreach (var node in current_node.Children) {
+							if (!node.Visited) {
+								Visit(node);
+								queue.Enqueue(node);
+							}
+						}
+					}
+				}
+			}
+
+			private static void Visit(Node root)
+			{
+				root.Visited = true;
+			}
+		}
+
+		public class Node
+		{
+			public bool Visited { get; set; }
+
+			public List<Node> Children { get; set; } = new List<Node>();
+
+			public long Value { get; set; } = 0;
+
+			public int Index { get; set; } = -1;
+		}
+
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = n % 2 == 1;
+			return isOdd;
 		}
 	}
 }
@@ -118,22 +165,29 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			string s = Console.ReadLine();
-			bool isOK = s.StartsWith("YAKI");
-			string answer = isOK ? "Yes" : "No";
-			Console.WriteLine($"{answer}");
+			string str = Console.ReadLine();
+			bool isOK = true;
+
+			int length = IsOdd(str.Length) ? str.Length / 2 : str.Length / 2 + 1;
+			for (var i = 0; i < length; ++i) {
+				if (str[i] != str[str.Length - i - 1]
+					&& str[i] != '*'
+					&& str[str.Length - i - 1] != '*') {
+					isOK = false;
+					break;
+				}
+			}
+
+			Console.WriteLine(isOK ? "YES" : "NO");
 		}
 
 		public static void B()
 		{
-			string s = Console.ReadLine();
-			string answer = s.Replace("O", "0");
-			answer = answer.Replace("D", "0");
-			answer = answer.Replace("I", "1");
-			answer = answer.Replace("Z", "2");
-			answer = answer.Replace("S", "5");
-			answer = answer.Replace("B", "8");
-			Console.WriteLine($"{answer}");
+			string str = Console.ReadLine();
+			str = str.Replace("Left", "<")
+				.Replace("Right", ">")
+				.Replace("AtCoder", "A");
+			Console.WriteLine($"{str}");
 		}
 
 		public static void C()
