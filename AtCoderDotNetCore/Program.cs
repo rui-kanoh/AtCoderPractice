@@ -23,50 +23,53 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var n = nk[0];
 			var k = nk[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
-			int answer = 0;
-			int min = int.MaxValue;
-			var coins = new Dictionary<long, int>();
-			for (var i = 0; i <= 9; ++i) {
-				coins.Add(1 * (long)Math.Pow(10, i), 0);
-				coins.Add(5 * (long)Math.Pow(10, i), 0);
-			}
+			int ans = int.MaxValue;
 
-			var dfs = new DFS();
-
-			var root = new Node();
-			AddChild(root, k, n, a, 0);
-
-			static void AddChild(Node node, long depth, long n, long[] a, int depthCount)
+			void Dfs(List<int> items, int last)
 			{
-				if (depth == depthCount) {
+				if (items.Count == k) {
+					int price = 0;
+					for (int i = 0; i < k; i++) {
+						price += a[items[i]];
+					}
+
+					int count = 0;
+					while (price > 0) {
+						int temp = price % 10;
+						if (temp >= 5) {
+							count += (temp - 5) + 1;
+						} else {
+							count += temp;
+						}
+
+						price /= 10;
+					}
+
+					if (ans > count) {
+						ans = count;
+					}
+
 					return;
 				}
 
-				for (var j = 0; j < n; ++j) {
-					if (node.Index == j) {
-						continue;
-					}
+				// 重複を防ぐために自分のindexより大きいものだけを選ぶ
+				int start = last + 1;
 
-					var child = new Node {
-						Value = a[j],
-						Index = j,
-					};
-
-					AddChild(child, depth, n, a, ++depthCount);
-					node.Children.Add(child);
+				for (int i = start; i < n; i++) {
+					items.Add(i);
+					Dfs(items, i);
+					items.RemoveAt(items.Count - 1);
 				}
 			}
 
-			DFS.Search(root);
-			Console.WriteLine($"{DFS.Total}");
-			DFS.Total = 0;
+			Dfs(new List<int>(), -1);
 
-			Console.WriteLine($"{answer}");
+			Console.WriteLine($"{ans}");
 		}
 
 		public class DFS
