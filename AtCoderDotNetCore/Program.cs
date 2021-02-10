@@ -33,22 +33,9 @@ namespace AtCoderDotNetCore
 			void Dfs(List<int> items, int last)
 			{
 				if (items.Count == k) {
-					int price = 0;
-					for (int i = 0; i < k; i++) {
-						price += a[items[i]];
-					}
-
 					int count = 0;
-					while (price > 0) {
-						int temp = price % 10;
-						if (temp >= 5) {
-							count += (temp - 5) + 1;
-						} else {
-							count += temp;
-						}
 
-						price /= 10;
-					}
+					// 計算ロジック
 
 					if (ans > count) {
 						ans = count;
@@ -227,6 +214,44 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void SaitoDfs()
+		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+
+			int ans = int.MaxValue;
+
+			void Dfs(List<int> items, int last)
+			{
+				if (items.Count == k) {
+					int count = 0;
+
+					// 計算ロジック
+
+					if (ans > count) {
+						ans = count;
+					}
+
+					return;
+				}
+
+				// 重複を防ぐために自分のindexより大きいものだけを選ぶ
+				int start = last + 1;
+
+				for (int i = start; i < n; i++) {
+					items.Add(i);
+					Dfs(items, i);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), -1);
+
+			Console.WriteLine($"{ans}");
 		}
 	}
 }
