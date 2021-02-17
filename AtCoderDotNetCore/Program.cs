@@ -23,6 +23,39 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = nm[0];
+			int m = nm[1];
+			var gate = new List<List<long>>();
+			for (var i = 0; i < n; ++i) {
+				gate.Add(Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList());
+			}
+
+			var time = new List<List<long>>();
+			for (var i = 0; i < n; ++i) {
+				time.Add(Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList());
+			}
+
+			long ans = 0;
+			for (int i = 0; i < n; i++) {
+				long cur = ans;
+				long min = long.MaxValue;
+				for (int j = 0; j < m; j++) {
+					long gate2 = gate[i][j];
+					long time2 = time[i][j];
+					long wait = cur % gate2 == 0
+						? 0
+						: gate2 - (cur % gate2);
+					long temp = cur + wait + time2;
+					if (min > temp) {
+						min = temp;
+					}
+				}
+
+				ans = min;
+			}
+
+			Console.WriteLine($"{ans}");
 		}
 	}
 }
@@ -50,12 +83,26 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-
+			var array = Console.ReadLine().Split(" ").Select(i => double.Parse(i)).ToArray();
+			double height_m = array[0] / 100.0;
+			double bmi = array[1];
+			double weight_kg = bmi * height_m * height_m;
+			Console.WriteLine(weight_kg.ToString("f3"));
 		}
 
 		public static void B()
 		{
+			var list = Enumerable.Range(1, 1000).ToList();
+			var strs = new List<string>();
+			foreach (var item in list) {
+				strs.Add(item.ToString());
+			}
 
+			strs.Sort((a, b) => a.CompareTo(b));
+
+			foreach (var item in strs) {
+				Console.WriteLine($"{item}");
+			}
 		}
 
 		public static void C()
