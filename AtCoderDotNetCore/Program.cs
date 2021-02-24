@@ -23,33 +23,46 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var ans = 0;
+			var ans = (long)0;
 
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var nm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var n = nm[0];
 			var m = nm[1];
-			var s = int.Parse(Console.ReadLine());
-			var tkdict = new SortedDictionary<int, int>();
-			var klist = new List<int>();
+			var s = long.Parse(Console.ReadLine());
+			var tkdict = new SortedDictionary<long, long>();
+			var klist = new List<long>();
 			for (var i = 0; i < n; ++i) {
-				var tk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var tk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 				tkdict.Add(tk[0], tk[1]);
 			}
 
-			var mood = 0;
-			var tkdict2 = new Dictionary<int, int>();
+			var mood = (long)0;
+			var tkdict2 = new Dictionary<long, long>();
 			foreach (var item in tkdict) {
 				//Console.WriteLine($"{item.Key}, {item.Value}");
 				mood += item.Value;
 				tkdict2.Add(item.Key, mood);
 			}
 
-			int start = -1;
+			if (n == 1) {
+				if (tkdict2.ElementAt(0).Value >= m) {
+					ans += s - tkdict2.ElementAt(0).Key;
+				}
+
+				Console.WriteLine($"{ans}");
+				return;
+			}
+
+			long start = -1;
 			foreach (var item in tkdict2) {
 				//Console.WriteLine($"{item.Key}, {item.Value}");
 				if (item.Value >= m) {
 					if (start == -1) {
 						start = item.Key;
+					} else {
+						if (item.Key == tkdict2.Last().Key) {
+							ans += item.Key - start;
+						}
 					}
 				} else {
 					if (start != -1) {
@@ -59,7 +72,7 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			if (tkdict2.Last().Key < s && tkdict2.Last().Value >= m) {
+			if (tkdict2.Last().Value >= m) {
 				ans += s - tkdict2.Last().Key;
 			}
 
@@ -78,11 +91,11 @@ namespace AtCoderDotNetCore
 			string s = Console.ReadLine();
 
 			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			long n = long.Parse(Console.ReadLine());
 
 			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			string result = "";
@@ -93,7 +106,7 @@ namespace AtCoderDotNetCore
 		public static void A()
 		{
 			var ans = "Bad";
-			int n = int.Parse(Console.ReadLine());
+			long n = long.Parse(Console.ReadLine());
 			if (n <= 59) {
 				ans = "Bad";
 			} else if (60 <= n && n <= 89) {
@@ -110,7 +123,7 @@ namespace AtCoderDotNetCore
 		public static void B()
 		{
 			var ans = 0.0;
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var n = array[0];
 			var va = array[1];
 			var vb = array[2];
@@ -162,17 +175,17 @@ namespace AtCoderDotNetCore
 
 		public static void SaitoDfs()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var n = nk[0];
 			var k = nk[1];
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-			int ans = int.MaxValue;
+			long ans = long.MaxValue;
 
-			void Dfs(List<int> items, int last)
+			void Dfs(List<long> items, long last)
 			{
 				if (items.Count == k) {
-					int count = 0;
+					long count = 0;
 
 					// 計算ロジック
 
@@ -184,16 +197,16 @@ namespace AtCoderDotNetCore
 				}
 
 				// 重複を防ぐために自分のindexより大きいものだけを選ぶ
-				int start = last + 1;
+				long start = last + 1;
 
-				for (int i = start; i < n; i++) {
+				for (long i = start; i < n; i++) {
 					items.Add(i);
 					Dfs(items, i);
 					items.RemoveAt(items.Count - 1);
 				}
 			}
 
-			Dfs(new List<int>(), -1);
+			Dfs(new List<long>(), -1);
 
 			Console.WriteLine($"{ans}");
 		}
