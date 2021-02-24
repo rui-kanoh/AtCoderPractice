@@ -23,61 +23,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var ans = (long)0;
-
-			var nm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-			var s = long.Parse(Console.ReadLine());
-			var tkdict = new SortedDictionary<long, long>();
-			var klist = new List<long>();
-			for (var i = 0; i < n; ++i) {
-				var tk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				tkdict.Add(tk[0], tk[1]);
-			}
-
-			var mood = (long)0;
-			var tkdict2 = new Dictionary<long, long>();
-			foreach (var item in tkdict) {
-				//Console.WriteLine($"{item.Key}, {item.Value}");
-				mood += item.Value;
-				tkdict2.Add(item.Key, mood);
-			}
-
-			if (n == 1) {
-				if (tkdict2.ElementAt(0).Value >= m) {
-					ans += s - tkdict2.ElementAt(0).Key;
-				}
-
-				Console.WriteLine($"{ans}");
-				return;
-			}
-
-			long start = -1;
-			foreach (var item in tkdict2) {
-				//Console.WriteLine($"{item.Key}, {item.Value}");
-				if (item.Value >= m) {
-					if (start == -1) {
-						start = item.Key;
-					} else {
-						if (item.Key == tkdict2.Last().Key) {
-							ans += item.Key - start;
-						}
-					}
-				} else {
-					if (start != -1) {
-						ans += item.Key - start;
-						start = -1;
-					}
-				}
-			}
-
-			if (tkdict2.Last().Value >= m) {
-				ans += s - tkdict2.Last().Key;
-			}
-
-
-			Console.WriteLine($"{ans}");
 		}
 	}
 }
@@ -139,7 +84,61 @@ namespace AtCoderDotNetCore
 
 		public static void C()
 		{
+			var ans = (long)0;
 
+			var nm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+			var s = long.Parse(Console.ReadLine());
+			var tkdict = new SortedDictionary<long, long>();
+			var klist = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				var tk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				tkdict.Add(tk[0], tk[1]);
+			}
+
+			var mood = (long)0;
+			var tkdict2 = new Dictionary<long, long>();
+			foreach (var item in tkdict) {
+				//Console.WriteLine($"{item.Key}, {item.Value}");
+				mood += item.Value;
+				tkdict2.Add(item.Key, mood);
+			}
+
+			if (n == 1) {
+				if (tkdict2.ElementAt(0).Value >= m) {
+					ans += s - tkdict2.ElementAt(0).Key;
+				}
+
+				Console.WriteLine($"{ans}");
+				return;
+			}
+
+			long start = -1;
+			foreach (var item in tkdict2) {
+				//Console.WriteLine($"{item.Key}, {item.Value}");
+				if (item.Value >= m) {
+					if (start == -1) {
+						start = item.Key;
+					} else {
+						if (item.Key == tkdict2.Last().Key) {
+							ans += item.Key - start;
+						}
+					}
+				} else {
+					if (start != -1) {
+						ans += item.Key - start;
+						start = -1;
+					}
+				}
+			}
+
+			if (tkdict2.Last().Value >= m) {
+				ans += s - tkdict2.Last().Key;
+			}
+
+
+			Console.WriteLine($"{ans}");
 		}
 
 		public static void D()
