@@ -25,57 +25,34 @@ namespace AtCoderDotNetCore
 		{
 			var m = int.Parse(Console.ReadLine());
 			var srcXY = new List<(int x, int y)>();
-			var srcX = new List<int>();
-			var srcY = new List<int>();
-			for (var i = 0; i < m; ++i) {
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var start = (array[0], array[1]);
+			srcXY.Add((0, 0));
+			for (var i = 1; i < m; ++i) {
 				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				srcXY.Add((xy[0], xy[1]));
-				srcX.Add(xy[0]);
-				srcY.Add(xy[1]);
+				srcXY.Add((xy[0] - start.Item1, xy[1] - start.Item2));
 			}
 
 			var n = int.Parse(Console.ReadLine());
-			var dstXY = new List<(int x, int y)>();
-			var dstX = new List<int>();
-			var dstY = new List<int>();
-			for (var i = 0; i < n; ++i) {
+			var dstXY = new HashSet<(int, int)>();
+			for (var i = 1; i < n; ++i) {
 				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 				dstXY.Add((xy[0], xy[1]));
-				dstX.Add(xy[0]);
-				dstY.Add(xy[1]);
 			}
 
-			//int min = 0;
-			int max = 1000000;
-			int maxX = srcX.Max();
-			int minX = srcX.Min();
-			int maxY = srcY.Max();
-			int minY = srcY.Min();
-
-			var shiftXY = (0, 0);
-			//var indexes = new List<int>();
-			//var listX = new List<int>(srcX);
-			var listXY = new List<(int, int)>(srcXY);
-			for (var i = -1 * minX; i <= max - maxX; ++i) {
-				for (var j = -1 * minY; j <= max - maxY; ++j) {
-					int count = 0;
-					for (var k = 0; k < srcX.Count; ++k) {
-						listXY[k] = (srcXY[k].x + i, srcXY[k].y + j);
+			foreach (var dst in dstXY) {
+				bool isExist = true;
+				foreach (var next in srcXY) {
+					if (dstXY.Contains((dst.Item1 + next.x, dst.Item2 + next.y)) == false) {
+						isExist = false;
+						break;
 					}
+				}
 
-					for (var k = 0; k < listXY.Count; ++k) {
-						if (dstXY.Contains(listXY[k])) {
-							++count;
-						}
-					}
-
-					if (count == listXY.Count) {
-						shiftXY.Item1 = i;
-						shiftXY.Item2 = j;
-
-						Console.WriteLine($"{shiftXY.Item1} {shiftXY.Item2}");
-						return;
-					}
+				if (isExist) {
+					Console.WriteLine($"{dst.Item1 - start.Item1} {dst.Item2 - start.Item2}");
+					return;
 				}
 			}
 		}
