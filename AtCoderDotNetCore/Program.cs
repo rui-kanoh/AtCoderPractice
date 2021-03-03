@@ -24,21 +24,25 @@ namespace AtCoderDotNetCore
 		public static void Exec()
 		{
 			var m = int.Parse(Console.ReadLine());
-			var srcXY = new List<(int x, int y)>();
+			//var srcXY = new List<(int x, int y)>();
 			var srcX = new List<int>();
 			var srcY = new List<int>();
 			for (var i = 0; i < m; ++i) {
 				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				srcXY.Add((xy[0], xy[1]));
+				//srcXY.Add((xy[0], xy[1]));
 				srcX.Add(xy[0]);
 				srcY.Add(xy[1]);
 			}
 
 			var n = int.Parse(Console.ReadLine());
-			var dstXY = new List<(int x, int y)>();
-			for (var i = 0; i < m; ++i) {
+			//var dstXY = new List<(int x, int y)>();
+			var dstX = new List<int>();
+			var dstY = new List<int>();
+			for (var i = 0; i < n; ++i) {
 				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				dstXY.Add((xy[0], xy[1]));
+				//dstXY.Add((xy[0], xy[1]));
+				dstX.Add(xy[0]);
+				dstY.Add(xy[1]);
 			}
 
 			//int min = 0;
@@ -49,26 +53,55 @@ namespace AtCoderDotNetCore
 			int minY = srcY.Min();
 
 			var shiftXY = (0, 0);
+			//var indexes = new List<int>();
+			var listX = new List<int>(srcX);
 			for (var i = -1 * minX; i <= max - maxX; ++i) {
-				for (var j = -1 * minY; j <= max - maxY; ++j) {
-					int count = 0;
-					for (var k = 0; k < srcX.Count; ++k) {
-						srcXY[k] = (srcXY[k].x + i, srcXY[k].y + j);			
-					}
+				int count = 0;
+				for (var k = 0; k < srcX.Count; ++k) {
+					listX[k] = srcX[k] + i;
+				}
 
-					for (var k = 0; k < srcXY.Count; ++k) {
-						if (dstXY.Contains(srcXY[k])) {
-							++count;
-						}
+				for (var k = 0; k < listX.Count; ++k) {
+					if (dstX.Contains(listX[k])) {
+						++count;
 					}
+				}
 
-					if (count == srcXY.Count) {
-						shiftXY = (i, j);
-						break;
-					}
+				if (count == srcX.Count) {
+					shiftXY.Item1 = i;
+					break;
 				}
 			}
 
+			var listY = new List<int>(srcY);
+			for (var i = -1 * minY; i <= max - maxY; ++i) {
+				int count = 0;
+				for (var k = 0; k < srcX.Count; ++k) {
+					listY[k] = srcY[k] + i;
+				}
+
+				for (var k = 0; k < listY.Count; ++k) {
+					if (dstY.Contains(listY[k])) {
+						++count;
+					}
+				}
+
+				if (count == srcY.Count) {
+					shiftXY.Item2 = i;
+					break;
+				}
+			}
+
+			/*
+			for (var i = 0; i < srcX.Count; ++i) {
+				if (dstX[i] == srcX[i] + shiftXY.Item1) {
+					shiftXY.Item2 = dstY[i] - srcY[i];
+					break;
+				}
+			}
+			*/
+
+			//Console.WriteLine($"{max2}");
 			Console.WriteLine($"{shiftXY.Item1} {shiftXY.Item2}");
 		}
 	}
