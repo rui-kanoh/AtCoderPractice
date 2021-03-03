@@ -23,8 +23,53 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var ans = "";
-			Console.WriteLine($"{ans}");
+			var m = int.Parse(Console.ReadLine());
+			var srcXY = new List<(int x, int y)>();
+			var srcX = new List<int>();
+			var srcY = new List<int>();
+			for (var i = 0; i < m; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				srcXY.Add((xy[0], xy[1]));
+				srcX.Add(xy[0]);
+				srcY.Add(xy[1]);
+			}
+
+			var n = int.Parse(Console.ReadLine());
+			var dstXY = new List<(int x, int y)>();
+			for (var i = 0; i < m; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				dstXY.Add((xy[0], xy[1]));
+			}
+
+			//int min = 0;
+			int max = 1000000;
+			int maxX = srcX.Max();
+			int minX = srcX.Min();
+			int maxY = srcY.Max();
+			int minY = srcY.Min();
+
+			var shiftXY = (0, 0);
+			for (var i = -1 * minX; i <= max - maxX; ++i) {
+				for (var j = -1 * minY; j <= max - maxY; ++j) {
+					int count = 0;
+					for (var k = 0; k < srcX.Count; ++k) {
+						srcXY[k] = (srcXY[k].x + i, srcXY[k].y + j);			
+					}
+
+					for (var k = 0; k < srcXY.Count; ++k) {
+						if (dstXY.Contains(srcXY[k])) {
+							++count;
+						}
+					}
+
+					if (count == srcXY.Count) {
+						shiftXY = (i, j);
+						break;
+					}
+				}
+			}
+
+			Console.WriteLine($"{shiftXY.Item1} {shiftXY.Item2}");
 		}
 	}
 }
@@ -52,7 +97,34 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
+			long n = long.Parse(Console.ReadLine());
+			var dict = new Dictionary<string, int>();
+			for (var i = 0; i < n; ++i) {
+				string s = Console.ReadLine();
+				if (dict.ContainsKey(s)) {
+					++dict[s];
+				} else {
+					dict.Add(s, 1);
+				}
+			}
 
+			var max = dict.Values.Max();
+
+			var list = new List<string>();
+			foreach (var item in dict) {
+				if (item.Value < max) {
+					continue;
+				}
+
+				list.Add(item.Key);
+			}
+
+			list.Sort();
+
+			foreach (var item in list) {
+				var ans = item;
+				Console.WriteLine($"{ans}");
+			}
 		}
 
 		public static void B()
