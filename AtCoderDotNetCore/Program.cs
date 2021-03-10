@@ -27,9 +27,9 @@ namespace AtCoderDotNetCore
 			var dict = new Dictionary<(int x, int y), (int r, int w, int h)>();
 			for  (var i = 0; i < n; ++i) {
 				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				dict.Add((array[0], array[1]), (array[2], 1, 1));
+				dict.Add((array[0], array[1]), (array[2], 0, 0));
 			}
-
+			
 			double GetSatisfy(long r, long s)
 			{
 				double value = (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s)) * (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s));
@@ -44,10 +44,15 @@ namespace AtCoderDotNetCore
 				bool next = false;
 				for (var i = 1; i <= 10000 && next == false; ++i) {
 					for (var j = 1; j <= 10000 && next == false; ++j) {
-						if (dict.Keys.Contains((item.x + i, item.y + j))) {
+						if (dict.Keys.Contains((item.x + i, item.y + j)) == false) {
 							width = i;
 							height = j;
-							continue;
+							if (i * j >= dict[item].r) {
+								next = true;
+								break;
+							} else {
+								continue;
+							}
 						}
 
 						next = true;
