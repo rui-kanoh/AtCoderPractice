@@ -39,8 +39,12 @@ namespace AtCoderDotNetCore
 
 			var dict2 = new Dictionary<(int x, int y), (int r, int w, int h)>(dict);
 			foreach (var item in dict2.Keys) {
-				if (dict2.Keys.Contains((item.x + 1, item.y + 1)) == false) {
-					dict[item] = (dict[item].r, dict[item].w + 1, dict[item].h + 1);
+				for (var i = 0; i <= 10000; ++i) {
+					for (var j = 0; j <= 10000; ++j) {
+						if (dict2.Keys.Contains((item.x + i, item.y + j)) == false) {
+							dict[item] = (dict[item].r, dict2[item].w + i, dict2[item].h + j);
+						}
+					}
 				}
 			}
 
