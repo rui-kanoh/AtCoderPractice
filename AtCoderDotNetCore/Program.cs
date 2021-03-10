@@ -23,38 +23,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var m = int.Parse(Console.ReadLine());
-			var srcXY = new List<(int x, int y)>();
-
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var start = (array[0], array[1]);
-			srcXY.Add((0, 0));
-			for (var i = 1; i < m; ++i) {
-				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				srcXY.Add((xy[0] - start.Item1, xy[1] - start.Item2));
-			}
-
-			var n = int.Parse(Console.ReadLine());
-			var dstXY = new HashSet<(int, int)>();
-			for (var i = 1; i < n; ++i) {
-				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				dstXY.Add((xy[0], xy[1]));
-			}
-
-			foreach (var dst in dstXY) {
-				bool isExist = true;
-				foreach (var next in srcXY) {
-					if (dstXY.Contains((dst.Item1 + next.x, dst.Item2 + next.y)) == false) {
-						isExist = false;
-						break;
-					}
-				}
-
-				if (isExist) {
-					Console.WriteLine($"{dst.Item1 - start.Item1} {dst.Item2 - start.Item2}");
-					return;
-				}
-			}
 		}
 	}
 }
@@ -82,34 +50,7 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var dict = new Dictionary<string, int>();
-			for (var i = 0; i < n; ++i) {
-				string s = Console.ReadLine();
-				if (dict.ContainsKey(s)) {
-					++dict[s];
-				} else {
-					dict.Add(s, 1);
-				}
-			}
 
-			var max = dict.Values.Max();
-
-			var list = new List<string>();
-			foreach (var item in dict) {
-				if (item.Value < max) {
-					continue;
-				}
-
-				list.Add(item.Key);
-			}
-
-			list.Sort();
-
-			foreach (var item in list) {
-				var ans = item;
-				Console.WriteLine($"{ans}");
-			}
 		}
 
 		public static void B()
