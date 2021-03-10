@@ -23,6 +23,42 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			long n = long.Parse(Console.ReadLine());
+			var dict = new Dictionary<(int x, int y), (int r, int w, int h)>();
+			for  (var i = 0; i < n; ++i) {
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				dict.Add((array[0], array[1]), (array[2], 1, 1));
+			}
+
+			double GetSatisfy(long r, long s)
+			{
+				double value = (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s)) * (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s));
+				value = 1.0 - value;
+				return value;
+			}
+
+			var dict2 = new Dictionary<(int x, int y), (int r, int w, int h)>(dict);
+			foreach (var item in dict2.Keys) {
+				if (dict2.Keys.Contains((item.x + 1, item.y + 1)) == false) {
+					dict[item] = (dict[item].r, dict[item].w + 1, dict[item].h + 1);
+				}
+			}
+
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			int d = 0;
+			double satAll = 0.0;
+			foreach (var item in dict.Keys) {
+				a = item.x;
+				b = item.y;
+				c = item.x + dict[item].w;
+				d = item.y + dict[item].h;
+				long area = dict[item].w * dict[item].h;
+				satAll += GetSatisfy(dict[item].r, area);
+				Console.WriteLine($"{a} {b} {c} {d}");
+			}
+			//Console.WriteLine($"{satAll}");
 		}
 	}
 }
