@@ -23,6 +23,173 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void Exec()
+		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
+			long n = long.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			string result = "";
+
+			Console.WriteLine(result);
+		}
+
+		public static void A()
+		{
+			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var x = array[0];
+			var a = array[1];
+			var b = array[2];
+			if (Math.Abs(x - a) < Math.Abs(x - b)) {
+				Console.WriteLine("A"); ;
+			} else {
+				Console.WriteLine("B"); ;
+			}
+		}
+
+		public static void B()
+		{
+			var a = new List<List<string>>();
+			for (var i = 0; i < 10; ++i) {
+				string s = Console.ReadLine();
+				a[i] = new List<string>();
+				for (var j = 0; j < 10; ++j) {
+					a[i].Add(s[i].ToString());
+				}
+			}
+		}
+
+		public static void C()
+		{
+			int K = int.Parse(Console.ReadLine());
+
+			int CalcCount(int d, int K)
+			{
+				int r = d / 2;
+				int rr = r * r;
+				int blockCount = d / K;
+
+				var lists = new List<List<bool>>();
+				for (var i = 0; i <= blockCount; ++i) {
+					var list = new List<bool>();
+					for (var j = 0; j <= blockCount; ++j) {
+						long distX = Math.Abs(K * i - r);
+						long distY = Math.Abs(K * j - r);
+						long dist = distX * distX + distY * distY;
+						bool inCircle = false;
+						if (dist <= rr) {
+							inCircle = true;
+						}
+						list.Add(inCircle);
+					}
+					lists.Add(list);
+				}
+
+				int count = 0;
+				for (var i = 0; i < blockCount; ++i) {
+					for (var j = 0; j < blockCount; ++j) {
+						if (lists[i][j]
+							&& lists[i + 1][j]
+							&& lists[i][j + 1]
+							&& lists[i + 1][j + 1]
+							&& lists[i + 1][j + 1]) {
+							++count;
+						}
+					}
+				}
+
+				//int count = list.Count(x => x != false);
+				//int sqCount = (int)Math.Sqrt(count) - 1;
+				//sqCount = sqCount * sqCount;
+				return count;
+			}
+
+			int sqCount200 = CalcCount(200, K);
+			int sqCount300 = CalcCount(300, K);
+			Console.WriteLine($"{sqCount200} {sqCount300}");
+		}
+
+		public static void D()
+		{
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = array[0];
+			var dict = new Dictionary<string, int>();
+			dict.Add("a", array[1]);
+			dict.Add("b", array[2]);
+			dict.Add("c", array[3]);
+
+			var listL = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				listL.Add(int.Parse(Console.ReadLine()));
+			}
+
+			int min = int.MaxValue;
+
+			void Dfs(List<string> items, int num)
+			{
+				if (items.Count == num) {
+					var sumA = 0;
+					var sumB = 0;
+					var sumC = 0;
+					var countA = -1;
+					var countB = -1;
+					var countC = -1;
+					for (var i = 0; i < items.Count; ++i) {
+						if (items[i] == "a") {
+							sumA += listL[i];
+							++countA;
+						} else if (items[i] == "b") {
+							sumB += listL[i];
+							++countB;
+						} else if (items[i] == "c") {
+							sumC += listL[i];
+							++countC;
+						}
+					}
+
+					if (countA == -1 || countB == -1 || countC == -1) {
+						return;
+					}
+
+					int answer = (countA + countB + countC) * 10
+						+ Math.Abs(dict["a"] - sumA)
+						+ Math.Abs(dict["b"] - sumB)
+						+ Math.Abs(dict["c"] - sumC);
+					if (min > answer) {
+						min = answer;
+					}
+
+					return;
+				}
+
+				for (var i = 0; i <= (int)('d' - 'a'); ++i) {
+					items.Add($"{(char)('a' + i)}");
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<string>(), n);
+
+			Console.WriteLine($"{min}");
+		}
+
+		public static void E()
+		{
 			//int n = int.Parse(Console.ReadLine());
 
 			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -101,54 +268,6 @@ namespace AtCoderDotNetCore
 			Dfs(new List<string>(), n);
 
 			Console.WriteLine($"{min}");
-		}
-	}
-}
-
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
-		public static void Exec()
-		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
-			long n = long.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(" ");
-
-			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			string result = "";
-
-			Console.WriteLine(result);
-		}
-
-		public static void A()
-		{
-
-		}
-
-		public static void B()
-		{
-
-		}
-
-		public static void C()
-		{
-
-		}
-
-		public static void D()
-		{
-
-		}
-
-		public static void E()
-		{
-
 		}
 
 		public static bool IsOdd(long n)
