@@ -172,7 +172,7 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
-		public static void DfsSample(List<string> items, int last, int num)
+		public static void DfsSample(List<string> items, int num)
 		{
 			if (items.Count == num) {
 
@@ -184,9 +184,9 @@ namespace AtCoderDotNetCore
 				return;
 			}
 
-			for (var i = last; i < (int)('d' - 'a'); ++i) {
+			for (var i = 0; i <= (int)('d' - 'a'); ++i) {
 				items.Add($"{(char)('a' + i)}");
-				DfsSample(items, i, num);
+				DfsSample(items, num);
 				items.RemoveAt(items.Count - 1);
 			}
 		}
