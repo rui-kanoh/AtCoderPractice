@@ -23,6 +23,104 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			int num = 10;
+			var mapA = new bool[num, num];
+			var mapB = new bool[num, num];
+
+			for (int i = 0; i < num; ++i) {
+				string s = Console.ReadLine();
+				for (int j = 0; j < num; ++j) {
+					if (s[j] == 'x') {
+						mapA[i, j] = mapB[i, j] = false;
+					} else {
+						mapA[i, j] = mapB[i, j] = true;
+					}
+				}
+			}
+
+			var vecterX = new int[] { -1, 1, 0, 0 };
+			var vecterY = new int[] { 0, 0, -1, 1 };
+
+
+			void dfs(int x, int y)
+			{
+				mapA[y, x] = false;
+
+				for (int i = 0; i < 4; ++i) {
+					int next_x = x + vecterX[i];
+					int next_y = y + vecterY[i];
+
+					if (next_x < 0 || next_y < 0 || next_x >= num || next_y >= num) {
+						continue;
+					}
+
+					if (mapA[next_y, next_x] == false) {
+						continue;
+					}
+
+
+					dfs(next_x, next_y);
+				}
+			}
+
+
+			int count = 0;
+			for (int i = 0; i < num; ++i) {
+				for (int j = 0; j < num; ++j) {
+					if (mapA[i, j] == false) {
+						continue;
+					}
+
+					dfs(j, i);
+					count++;
+				}
+			}
+
+			bool ok = false;
+			if (count == 1) {
+				ok = true;
+			} else {
+				for (int i = 0; i < num; ++i) {
+					for (int j = 0; j < num; ++j) {
+						for (int k = 0; k < num; ++k) {
+							for (int l = 0; l < num; ++l) {
+								mapA[k, l] = mapB[k, l];
+							}
+						}
+
+						if (mapA[i, j]) {
+							continue;
+						}
+
+						mapA[i, j] = true;
+
+						int ans = 0;
+						for (int k = 0; k < num; ++k) {
+							for (int l = 0; l < num; ++l) {
+								if (mapA[k, l] == false) {
+									continue;
+								}
+
+								dfs(l, k);
+								ans++;
+							}
+						}
+
+						if (ans == 1) {
+							ok = true;
+							break;
+						}
+
+
+					}
+				}
+			}
+
+			if (ok) {
+				Console.WriteLine("YES");
+			} else {
+				Console.WriteLine("NO");
+			}
 		}
 	}
 }
@@ -63,14 +161,7 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
-			var a = new List<List<string>>();
-			for (var i = 0; i < 10; ++i) {
-				string s = Console.ReadLine();
-				a[i] = new List<string>();
-				for (var j = 0; j < 10; ++j) {
-					a[i].Add(s[i].ToString());
-				}
-			}
+			
 		}
 
 		public static void C()
