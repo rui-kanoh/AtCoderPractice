@@ -23,61 +23,84 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var dict = new Dictionary<(int x, int y), (int r, int w, int h)>();
-			for  (var i = 0; i < n; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				dict.Add((array[0], array[1]), (array[2], 0, 0));
+			//int n = int.Parse(Console.ReadLine());
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = array[0];
+			var dict = new Dictionary<string, int>();
+			dict.Add("a", array[1]);
+			dict.Add("b", array[2]);
+			dict.Add("c", array[3]);
+
+			var listL = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				listL.Add(int.Parse(Console.ReadLine()));
 			}
-			
-			double GetSatisfy(long r, long s)
+
+			int min = int.MaxValue;
+
+			void Dfs(List<string> items, int num)
 			{
-				double value = (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s)) * (1.0 - (double)Math.Min(r, s) / (double)Math.Max(r, s));
-				value = 1.0 - value;
-				return value;
-			}
-
-			var dict2 = new Dictionary<(int x, int y), (int r, int w, int h)>(dict);
-			foreach (var item in dict2.Keys) {
-				int width = 1;
-				int height = 1;
-				bool next = false;
-				for (var i = 1; i <= 10000 && next == false; ++i) {
-					for (var j = 1; j <= 10000 && next == false; ++j) {
-						if (dict.Keys.Contains((item.x + i, item.y + j)) == false) {
-							width = i;
-							height = j;
-							if (i * j >= dict[item].r) {
-								next = true;
-								break;
-							} else {
-								continue;
-							}
-						}
-
-						next = true;
-						break;
+				if (items.Count == num) {
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
 					}
+					Console.WriteLine("");
+					*/
+
+					var sumA = 0;
+					var sumB = 0;
+					var sumC = 0;
+					var countA = -1;
+					var countB = -1;
+					var countC = -1;
+					for (var i = 0; i < items.Count; ++i) {
+						if (items[i] == "a") {
+							sumA += listL[i];
+							++countA;
+						} else if (items[i] == "b") {
+							sumB += listL[i];
+							++countB;
+						} else if (items[i] == "c") {
+							sumC += listL[i];
+							++countC;
+						}
+					}
+
+					if (countA == -1 || countB == -1 || countC == -1) {
+						return;
+					}
+
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+
+					int answer = (countA + countB + countC) * 10
+						+ Math.Abs(dict["a"] - sumA)
+						+ Math.Abs(dict["b"] - sumB)
+						+ Math.Abs(dict["c"] - sumC);
+					//Console.WriteLine($"{answer}");
+					if (min > answer) {
+						min = answer;
+					}
+
+					return;
 				}
 
-				dict[item] = (dict[item].r, dict2[item].w + width, dict2[item].h + height);
+				for (var i = 0; i <= (int)('d' - 'a'); ++i) {
+					items.Add($"{(char)('a' + i)}");
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
 			}
 
-			int a = 0;
-			int b = 0;
-			int c = 0;
-			int d = 0;
-			double satAll = 0.0;
-			foreach (var item in dict.Keys) {
-				a = item.x;
-				b = item.y;
-				c = item.x + dict[item].w;
-				d = item.y + dict[item].h;
-				long area = dict[item].w * dict[item].h;
-				satAll += GetSatisfy(dict[item].r, area);
-				Console.WriteLine($"{a} {b} {c} {d}");
-			}
-			//Console.WriteLine($"{satAll}");
+			Dfs(new List<string>(), n);
+
+			Console.WriteLine($"{min}");
 		}
 	}
 }
@@ -147,6 +170,25 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void DfsSample(List<string> items, int last, int num)
+		{
+			if (items.Count == num) {
+
+				foreach (var item in items) {
+					Console.Write($"{item} ");
+				}
+				Console.WriteLine("");
+
+				return;
+			}
+
+			for (var i = last; i < (int)('d' - 'a'); ++i) {
+				items.Add($"{(char)('a' + i)}");
+				DfsSample(items, i, num);
+				items.RemoveAt(items.Count - 1);
+			}
 		}
 
 		public static void SaitoDfs()
