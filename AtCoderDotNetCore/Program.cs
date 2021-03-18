@@ -65,26 +65,27 @@ namespace AtCoderDotNetCore
 		public static void B()
 		{
 			int num = 10;
-			var mapA = new bool[num, num];
-			var mapB = new bool[num, num];
+			var map = new bool[num, num];
+			var mapOrigin = new bool[num, num];
 
 			for (int i = 0; i < num; ++i) {
 				string s = Console.ReadLine();
 				for (int j = 0; j < num; ++j) {
 					if (s[j] == 'x') {
-						mapA[i, j] = mapB[i, j] = false;
+						map[i, j] = mapOrigin[i, j] = false;
 					} else {
-						mapA[i, j] = mapB[i, j] = true;
+						map[i, j] = mapOrigin[i, j] = true;
 					}
 				}
 			}
 
-			void dfs(int x, int y)
+			// 指定したマスの座標を起点にして隣接するマスをfalseに変えていく
+			void Dfs(int x, int y)
 			{
 				var vecterX = new int[] { -1, 1, 0, 0 };
 				var vecterY = new int[] { 0, 0, -1, 1 };
 
-				mapA[y, x] = false;
+				map[y, x] = false;
 
 				for (int i = 0; i < 4; ++i) {
 					int next_x = x + vecterX[i];
@@ -94,25 +95,26 @@ namespace AtCoderDotNetCore
 						continue;
 					}
 
-					if (mapA[next_y, next_x] == false) {
+					if (map[next_y, next_x] == false) {
 						continue;
 					}
 
 
-					dfs(next_x, next_y);
+					Dfs(next_x, next_y);
 				}
 			}
 
+			// trueとなっている領域の数を数える
 			int CalcIslandNum()
 			{
 				int count = 0;
 				for (int i = 0; i < num; ++i) {
 					for (int j = 0; j < num; ++j) {
-						if (mapA[i, j] == false) {
+						if (map[i, j] == false) {
 							continue;
 						}
 
-						dfs(j, i);
+						Dfs(j, i);
 						count++;
 					}
 				}
@@ -120,15 +122,17 @@ namespace AtCoderDotNetCore
 				return count;
 			}
 
+			// mapの初期化
 			void InitializeMap()
 			{
 				for (int k = 0; k < num; ++k) {
 					for (int l = 0; l < num; ++l) {
-						mapA[k, l] = mapB[k, l];
+						map[k, l] = mapOrigin[k, l];
 					}
 				}
 			}
 
+			// 最初から連結成分が1つの場合
 			int count = CalcIslandNum();
 			if (count == 1) {
 				Console.WriteLine("YES");
@@ -136,20 +140,20 @@ namespace AtCoderDotNetCore
 			}
 
 			bool isOK = false;
-			int answer = 0;
 
+			// 任意の海の1つを島にしてからmapを全探索して連結成分の数を数える
 			for (int i = 0; i < num && isOK == false; ++i) {
 				for (int j = 0; j < num && isOK == false; ++j) {
 					InitializeMap();
-					if (mapA[i, j]) {
+					if (map[i, j]) {
 						continue;
 					}
 
 					// 任意の海の1つを島にしてみる
-					mapA[i, j] = true;
+					map[i, j] = true;
 
-					answer = CalcIslandNum();
-					if (answer == 1) {
+					count = CalcIslandNum();
+					if (count == 1) {
 						isOK = true;
 						break;
 					}
