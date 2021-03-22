@@ -23,7 +23,84 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			int n = 10;
+			var a = new bool[n, n];
+			for (int i = 0; i < n; i++) {
+				string temp = Console.ReadLine();
+				for (int j = 0; j < n; j++) {
+					a[i, j] = temp[j] == 'o';
+				}
+			}
 
+			void DoIn4(int i, int j, int imax, int jmax, Action<int, int> action) {
+				int[] delta4_ = { 1, 0, -1, 0, 1 };
+				for (int dn = 0; dn < delta4_.Length - 1; ++dn) {
+					int d4i = i + delta4_[dn];
+					int d4j = j + delta4_[dn + 1];
+					if ((uint)d4i < (uint)imax && (uint)d4j < (uint)jmax) {
+						action(d4i, d4j);
+					}
+				}
+			}
+			
+			bool Check(bool[,] b)
+			{
+				bool found = false;
+				(int i, int j) first = (0, 0);
+				for (int i = 0; i < n; i++) {
+					for (int j = 0; j < n; j++) {
+						if (b[i, j]) {
+							first = (i, j);
+							found = true;
+							break;
+						}
+					}
+
+					if (found) {
+						break;
+					}
+				}
+
+				var done = new bool[n, n];
+				var canReach = new bool[n, n];
+				done[first.i, first.j] = true;
+				canReach[first.i, first.j] = true;
+				var que = new Queue<(int i, int j)>();
+				que.Enqueue(first);
+				while (que.Count > 0) {
+					var cur = que.Dequeue();
+					DoIn4(cur.i, cur.j, n, n, (ii, jj) => {
+						if (b[ii, jj] && done[ii, jj] == false) {
+							canReach[ii, jj] = true;
+							que.Enqueue((ii, jj));
+						}
+
+						done[ii, jj] = true;
+					});
+				}
+
+				for (int i = 0; i < n; i++) {
+					for (int j = 0; j < n; j++) {
+						if (b[i, j] && canReach[i, j] == false) {
+							return false;
+						}
+					}
+				}
+
+				return true;
+			}
+
+			bool ok = false;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					bool old = a[i, j];
+					a[i, j] = true;
+					ok = ok || Check(a);
+					a[i, j] = old;
+				}
+			}
+
+			Console.WriteLine(ok ? "YES" : "NO");
 		}
 	}
 }
