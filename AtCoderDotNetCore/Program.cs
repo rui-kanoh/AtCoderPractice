@@ -23,7 +23,42 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			long n = long.Parse(Console.ReadLine());
+			var list = new List<string>();
 
+			for (var i = 0; i < n; ++i) {
+				var str = Console.ReadLine();
+				list.Add(str);
+			}
+
+			// 番兵
+			list.Add("/");
+
+			var answer = 0;
+			long countL = 0;
+			long countR = 0;
+
+			bool rNow = false;
+			for (int i = 0; i < list.Count; i++) {
+				if (list[i] != "\\") {
+					if (rNow) {
+						if (countL == countR && countL != 0) {
+							++answer;
+						}
+
+						countL = 0;
+						countR = 0;
+					}
+
+					rNow = false;
+					++countL;
+				} else {
+					rNow = true;
+					++countR;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -51,30 +86,80 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var x = array[0];
-			var a = array[1];
-			var b = array[2];
-			if (Math.Abs(x - a) < Math.Abs(x - b)) {
-				Console.WriteLine("A");
-			} else {
-				Console.WriteLine("B");
-			}
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int a = array[0];
+			int b = array[1];
+
+			int answer = a + (a <= b ? 0 : -1);
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			long n = long.Parse(Console.ReadLine());
+			var list = new List<string>();
 
+			for (var i = 0; i < n; ++i) {
+				var str = Console.ReadLine();
+				list.Add(str);
+			}
+
+			var answer = 0;
+			long countL = 0;
+			long countR = 0;
+
+			foreach (var item in list) {
+				if (item == "/") {
+					++countL;
+				} else {
+					++countR;
+				}
+
+				if (item == "\\" && countL > 0 && countL == countR) {
+					++answer;
+					countL = 0;
+					countR = 0;
+				}
+
+				if (item == "\\" && countL == 0) {
+					countR = 0;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
+			string s = Console.ReadLine();
+			string t = Console.ReadLine();
+			var answer = -1;
 
+			if (s == t) {
+				Console.WriteLine("0");
+				return;
+			}
+
+			var str = s;
+			for (var i = 1; i <= s.Length; ++i) {
+				var front = str.Substring(s.Length - 1, 1);
+				str = front + str.Substring(0, s.Length - 1);
+				if (str == t) {
+					answer = i;
+					break;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
 		{
+			string s = Console.ReadLine();
+			string t = Console.ReadLine();
+			var answer = "UNRESTORABLE";
 
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
