@@ -23,42 +23,65 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var list = new List<string>();
+			string s = Console.ReadLine();
+			string t = Console.ReadLine();
+			string answer = null;
 
-			for (var i = 0; i < n; ++i) {
-				var str = Console.ReadLine();
-				list.Add(str);
-			}
-
-			// 番兵
-			list.Add("/");
-
-			var answer = 0;
-			long countL = 0;
-			long countR = 0;
-
-			bool rNow = false;
-			for (int i = 0; i < list.Count; i++) {
-				if (list[i] != "\\") {
-					if (rNow) {
-						if (countL == countR && countL != 0) {
-							++answer;
-						}
-
-						countL = 0;
-						countR = 0;
+			/*
+			bool match = false;
+			int index = -1;
+			for (var i = 0; i < s.Length - t.Length + 1; ++i) {
+				for (var j = 0; j < t.Length; ++j) {
+					if (s[i] != t[j] && s[i] != '?') {
+						Console.WriteLine($"{s[i]} {t[j]}");
+						match = false;
+						continue;
+					} else {
+						index = j;
+						match = true;
 					}
-
-					rNow = false;
-					++countL;
-				} else {
-					rNow = true;
-					++countR;
 				}
 			}
 
-			Console.WriteLine($"{answer}");
+			if (match) {
+				answer = s.Substring(0, index) + t;
+				answer = answer.Replace('?', 'a');
+			}
+			*/
+
+			int n = s.Length;
+			int m = t.Length;
+			for (int i = 0; i < n - m + 1; i++) {
+				bool match = true;
+				for (int j = 0; j < m; j++) {
+					if (s[i + j] != t[j] && s[i + j] != '?') {
+						match = false;
+						break;
+					}
+				}
+
+				if (match) {
+					char[] temp = s.ToArray();
+					for (int j = 0; j < n; j++) {
+						if (temp[j] == '?') {
+							temp[j] = 'a';
+						}
+					}
+
+					for (int j = 0; j < m; j++) {
+						temp[i + j] = t[j];
+					}
+
+					string ss = new string(temp);
+					answer = ss;
+				}
+			}
+
+			if (string.IsNullOrWhiteSpace(answer)) {
+				Console.WriteLine("UNRESTORABLE");
+			} else {
+				Console.WriteLine($"{answer}");
+			}
 		}
 	}
 }
@@ -104,25 +127,30 @@ namespace AtCoderDotNetCore
 				list.Add(str);
 			}
 
+			// 番兵
+			list.Add("/");
+
 			var answer = 0;
 			long countL = 0;
 			long countR = 0;
 
-			foreach (var item in list) {
-				if (item == "/") {
+			bool rNow = false;
+			for (int i = 0; i < list.Count; i++) {
+				if (list[i] != "\\") {
+					if (rNow) {
+						if (countL == countR && countL != 0) {
+							++answer;
+						}
+
+						countL = 0;
+						countR = 0;
+					}
+
+					rNow = false;
 					++countL;
 				} else {
+					rNow = true;
 					++countR;
-				}
-
-				if (item == "\\" && countL > 0 && countL == countR) {
-					++answer;
-					countL = 0;
-					countR = 0;
-				}
-
-				if (item == "\\" && countL == 0) {
-					countR = 0;
 				}
 			}
 
