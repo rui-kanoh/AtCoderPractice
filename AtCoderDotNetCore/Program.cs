@@ -23,65 +23,61 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			string s = Console.ReadLine();
-			string t = Console.ReadLine();
-			string answer = null;
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = nm[0];
+			int m = nm[1];
+			int nmax = 8;
+			bool[,] graph = new bool[nmax, nmax];
 
-			/*
-			bool match = false;
-			int index = -1;
-			for (var i = 0; i < s.Length - t.Length + 1; ++i) {
-				for (var j = 0; j < t.Length; ++j) {
-					if (s[i] != t[j] && s[i] != '?') {
-						Console.WriteLine($"{s[i]} {t[j]}");
-						match = false;
-						continue;
-					} else {
-						index = j;
-						match = true;
-					}
-				}
+			for (var i = 0; i < m; ++i) {
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int a = array[0] - 1;
+				int b = array[1] - 1;
+				graph[a, b] = graph[b, a] = true;
 			}
 
-			if (match) {
-				answer = s.Substring(0, index) + t;
-				answer = answer.Replace('?', 'a');
-			}
-			*/
 
-			int n = s.Length;
-			int m = t.Length;
-			for (int i = 0; i < n - m + 1; i++) {
-				bool match = true;
-				for (int j = 0; j < m; j++) {
-					if (s[i + j] != t[j] && s[i + j] != '?') {
-						match = false;
+			int Dfs(int v, int n, bool[] visited)
+			{
+				bool allVisited = true;
+				foreach (var item in visited) {
+					if (item == false) {
+						allVisited = false;
 						break;
 					}
 				}
 
-				if (match) {
-					char[] temp = s.ToArray();
-					for (int j = 0; j < n; j++) {
-						if (temp[j] == '?') {
-							temp[j] = 'a';
-						}
-					}
-
-					for (int j = 0; j < m; j++) {
-						temp[i + j] = t[j];
-					}
-
-					string ss = new string(temp);
-					answer = ss;
+				if (allVisited) {
+					return 1;
 				}
+
+				int ret = 0;
+				for (var i = 0; i < n; ++i) {
+					if (graph[v, i] == false) {
+						continue;
+					}
+
+					if (visited[i]) {
+						continue;
+					}
+
+					visited[i] = true;
+					ret += Dfs(i, n, visited);
+					visited[i] = false;
+				}
+
+				return ret;
 			}
 
-			if (string.IsNullOrWhiteSpace(answer)) {
-				Console.WriteLine("UNRESTORABLE");
-			} else {
-				Console.WriteLine($"{answer}");
+			bool[] visited = new bool[n];
+			for (var i = 0; i < n; ++i) {
+				visited[i] = false;
 			}
+
+			visited[0] = true;
+			int count = Dfs(0, n, visited);
+
+			Console.WriteLine($"{count}");
 		}
 	}
 }
@@ -109,85 +105,67 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int a = array[0];
-			int b = array[1];
-
-			int answer = a + (a <= b ? 0 : -1);
-			Console.WriteLine($"{answer}");
+			int h1 = int.Parse(Console.ReadLine());
+			int h2 = int.Parse(Console.ReadLine());
+			Console.WriteLine($"{h1 - h2}");
 		}
 
 		public static void B()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var list = new List<string>();
-
+			int n = int.Parse(Console.ReadLine());
+			var listXY = new List<(int x, int y)>();
 			for (var i = 0; i < n; ++i) {
-				var str = Console.ReadLine();
-				list.Add(str);
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				listXY.Add((array[0], array[1]));
 			}
 
-			// 番兵
-			list.Add("/");
+			long CalcDistance2((int x, int y) p0, (int x, int y) p1)
+			{
+				long dist = (p0.x - p1.x) * (p0.x - p1.x) + (p0.y - p1.y) * (p0.y - p1.y);
+				return dist;
+			}
 
-			var answer = 0;
-			long countL = 0;
-			long countR = 0;
+			long answer2 = 0;
 
-			bool rNow = false;
-			for (int i = 0; i < list.Count; i++) {
-				if (list[i] != "\\") {
-					if (rNow) {
-						if (countL == countR && countL != 0) {
-							++answer;
-						}
+			void Dfs(List<int> items, int num, int start)
+			{
+				if (items.Count == num) {
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
 
-						countL = 0;
-						countR = 0;
+					long max = CalcDistance2(listXY[items[0]], listXY[items[1]]);
+					if (answer2 < max) {
+						answer2 = max;
 					}
 
-					rNow = false;
-					++countL;
-				} else {
-					rNow = true;
-					++countR;
+					return;
+				}
+
+				for (var i = start + 1; i < listXY.Count; ++i) {
+					items.Add(i);
+					Dfs(items, num, i);
+					items.RemoveAt(items.Count - 1);
 				}
 			}
 
+			Dfs(new List<int>(), 2, -1);
+
+			double answer = Math.Round(Math.Sqrt(answer2), 4);
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			string s = Console.ReadLine();
-			string t = Console.ReadLine();
-			var answer = -1;
 
-			if (s == t) {
-				Console.WriteLine("0");
-				return;
-			}
-
-			var str = s;
-			for (var i = 1; i <= s.Length; ++i) {
-				var front = str.Substring(s.Length - 1, 1);
-				str = front + str.Substring(0, s.Length - 1);
-				if (str == t) {
-					answer = i;
-					break;
-				}
-			}
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
 		{
-			string s = Console.ReadLine();
-			string t = Console.ReadLine();
-			var answer = "UNRESTORABLE";
 
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
