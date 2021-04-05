@@ -27,7 +27,7 @@ namespace AtCoderDotNetCore
 			int n = nm[0];
 			int m = nm[1];
 			int nmax = 8;
-			bool[,] graph = new bool[nmax, nmax];
+			bool[,] graph = new bool[n, n];
 
 			for (var i = 0; i < m; ++i) {
 				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
