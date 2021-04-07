@@ -23,61 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int n = nm[0];
-			int m = nm[1];
-			int nmax = 8;
-			bool[,] graph = new bool[n, n];
 
-			for (var i = 0; i < m; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				int a = array[0] - 1;
-				int b = array[1] - 1;
-				graph[a, b] = graph[b, a] = true;
-			}
-
-
-			int Dfs(int v, int n, bool[] visited)
-			{
-				bool allVisited = true;
-				foreach (var item in visited) {
-					if (item == false) {
-						allVisited = false;
-						break;
-					}
-				}
-
-				if (allVisited) {
-					return 1;
-				}
-
-				int ret = 0;
-				for (var i = 0; i < n; ++i) {
-					if (graph[v, i] == false) {
-						continue;
-					}
-
-					if (visited[i]) {
-						continue;
-					}
-
-					visited[i] = true;
-					ret += Dfs(i, n, visited);
-					visited[i] = false;
-				}
-
-				return ret;
-			}
-
-			bool[] visited = new bool[n];
-			for (var i = 0; i < n; ++i) {
-				visited[i] = false;
-			}
-
-			visited[0] = true;
-			int count = Dfs(0, n, visited);
-
-			Console.WriteLine($"{count}");
 		}
 	}
 }
@@ -105,57 +51,12 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int h1 = int.Parse(Console.ReadLine());
-			int h2 = int.Parse(Console.ReadLine());
-			Console.WriteLine($"{h1 - h2}");
+
 		}
 
 		public static void B()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var listXY = new List<(int x, int y)>();
-			for (var i = 0; i < n; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				listXY.Add((array[0], array[1]));
-			}
 
-			long CalcDistance2((int x, int y) p0, (int x, int y) p1)
-			{
-				long dist = (p0.x - p1.x) * (p0.x - p1.x) + (p0.y - p1.y) * (p0.y - p1.y);
-				return dist;
-			}
-
-			long answer2 = 0;
-
-			void Dfs(List<int> items, int num, int start)
-			{
-				if (items.Count == num) {
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-
-					long max = CalcDistance2(listXY[items[0]], listXY[items[1]]);
-					if (answer2 < max) {
-						answer2 = max;
-					}
-
-					return;
-				}
-
-				for (var i = start + 1; i < listXY.Count; ++i) {
-					items.Add(i);
-					Dfs(items, num, i);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<int>(), 2, -1);
-
-			double answer = Math.Round(Math.Sqrt(answer2), 4);
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
@@ -437,6 +338,54 @@ namespace AtCoderDotNetCore
 			}
 
 			Console.WriteLine(ok ? "YES" : "NO");
+		}
+
+		public static void DfsSample2()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var listXY = new List<(int x, int y)>();
+			for (var i = 0; i < n; ++i) {
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				listXY.Add((array[0], array[1]));
+			}
+
+			long CalcDistance2((int x, int y) p0, (int x, int y) p1)
+			{
+				long dist = (p0.x - p1.x) * (p0.x - p1.x) + (p0.y - p1.y) * (p0.y - p1.y);
+				return dist;
+			}
+
+			long answer2 = 0;
+
+			void Dfs(List<int> items, int num, int start)
+			{
+				if (items.Count == num) {
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+
+					long max = CalcDistance2(listXY[items[0]], listXY[items[1]]);
+					if (answer2 < max) {
+						answer2 = max;
+					}
+
+					return;
+				}
+
+				for (var i = start + 1; i < listXY.Count; ++i) {
+					items.Add(i);
+					Dfs(items, num, i);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), 2, -1);
+
+			double answer = Math.Round(Math.Sqrt(answer2), 4);
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
