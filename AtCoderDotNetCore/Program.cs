@@ -23,81 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nts = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nts[0];
-			var t = nts[1];
-			var s = nts[2];
-			var listAB = new List<(int a, int b)>();
-			for (var i = 0; i < n; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				listAB.Add((array[0], array[1]));
-			}
-			int max = 0;
 
-			int SumA(List<int> items)
-			{
-				int sum = 0;
-				foreach (var item in items) {
-					sum += listAB[item].a;
-				}
-
-				return sum;
-			}
-
-			int SumB(List<int> items)
-			{
-				int sum = 0;
-				foreach (var item in items) {
-					sum += listAB[item].b;
-				}
-
-				return sum;
-			}
-
-			void Dfs(List<int> items, int num)
-			{
-				if (items.Any()) {
-					int sum = SumB(items);
-					if (sum <= t) {
-						foreach (var item in items) {
-							Console.Write($"{item} ");
-						}
-						Console.WriteLine("");
-
-						int time = 0;
-						bool canWatchFirework = false;
-						foreach (var item in items) {
-							time += listAB[item].b;
-							if (time <= s) {
-								canWatchFirework = true;
-							}
-						}
-
-						if (canWatchFirework) {
-							int sumA = SumA(items);
-							if (max < sumA) {
-								max = sumA;
-							}
-						}
-
-						return;
-					}
-				}
-
-				for (var i = 0; i < n; ++i) {
-					if (items.Contains(i)) {
-						continue;
-					}
-
-					items.Add(i);
-					Dfs(items, num);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<int>(), n);
-
-			Console.WriteLine($"{max}");
 		}
 	}
 }
@@ -125,73 +51,19 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int count = 0;
-			for (var i = 0; i < 12; ++i) {
-				string str = Console.ReadLine();
-				if (str.Contains("r")) {
-					++count;
-				}
-			}
-
-			Console.WriteLine($"{count}");
 		}
 
 		public static void B()
 		{
-			var abck = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			long a = abck[0];
-			long b = abck[1];
-			long c = abck[2];
-			long k = abck[3];
-			long max = (long)Math.Pow(10.0, 18.0);
 
-			/*
-			for (var i = 0; i < k; ++i) {
-				long aa = b + c;
-				long bb = c + a;
-				long cc = a + b;
-				a = aa;
-				b = bb;
-				c = cc;
-			}
-			*/
-
-			long answer = 0;
-			if (k % 2 == 0) {
-				answer = a - b;
-			} else {
-				answer = -a + b;
-			}
-			if (answer <= max) {
-				Console.WriteLine($"{answer}");
-			} else {
-				Console.WriteLine($"Unfair");
-			}
 		}
 
 		public static void C()
 		{
-			string str = Console.ReadLine();
-			if (str.Length == 1) {
-				Console.WriteLine($"1");
-				return;
-			}
-
-			int count = 1;
-			char top = str[0];
-			for (var i = 1; i < str.Length; ++i) {
-				if (top >= str[i]) {
-					++count;
-					top = str[i];
-				}
-			}
-
-			Console.WriteLine($"{count}");
 		}
 
 		public static void D()
 		{
-
 		}
 
 		public static void E()
