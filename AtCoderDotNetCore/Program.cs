@@ -23,78 +23,14 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nmk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int n = nmk[0];
-			int m = nmk[1];
-			int k = nmk[2];
-
-			var sg = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int s = sg[0];
-			int g = sg[1];
-			if (s > g) {
-				int temp = s;
-				s = g;
-				g = temp;
+			int n = int.Parse(Console.ReadLine());
+			var arrayA = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int sum = 0;
+			for (var i = 0; i < n; ++i) {
+				sum += arrayA[i] - 1;
 			}
 
-			var alist = new List<int>();
-			var blist = new List<int>();
-			var dlist = new List<int>();
-			var sumList = new List<int>();
-			for (var i = 0; i < m; ++i) {
-				var abd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				alist.Add(abd[0]);
-				blist.Add(abd[1]);
-				dlist.Add(abd[2]);
-				if (i == 0) {
-					sumList.Add(0);
-				} else {
-					sumList.Add(dlist[i - 1] + dlist[i]);
-				}
-			}
-
-			var xlist = new List<int>();
-			var flist = new List<int>();
-			for (var i = 0; i < m; ++i) {
-				var xf = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				xlist.Add(xf[0]);
-				flist.Add(xf[1]);
-			}
-
-			var answer = int.MaxValue;
-			int cost = -1;
-
-			int CalcCost(int s, int g)
-			{
-				int cost = -1;
-				var dist = sumList[g] - sumList[s];
-				int index = 0;
-				for (var i = 0; i < xlist.Count; ++i) {
-					if (xlist[i] >= dist) {
-						index = i;
-						break;
-					}
-				}
-
-				cost = flist[index];
-				return cost;
-			}
-
-			if (s - g == 1) {
-				cost = CalcCost(s, g);
-				answer = Math.Min(answer, cost);
-				Console.WriteLine($"{answer}");
-				return;
-			}
-
-			for (var i = 1; i < g - s; ++i) {
-				int cost1 = CalcCost(s, s + i);
-				int cost2 = CalcCost(s + i, g);
-				cost = cost1 + cost2;
-				answer = Math.Min(answer, cost);
-			}
-
-			Console.WriteLine($"{answer}");
+			Console.WriteLine($"{sum}");
 		}
 	}
 }
@@ -211,6 +147,78 @@ namespace AtCoderDotNetCore
 
 		public static void D()
 		{
+				var nmk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int n = nmk[0];
+				int m = nmk[1];
+				int k = nmk[2];
+
+				var sg = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int s = sg[0];
+				int g = sg[1];
+				if (s > g) {
+					int temp = s;
+					s = g;
+					g = temp;
+				}
+
+				var alist = new List<int>();
+				var blist = new List<int>();
+				var dlist = new List<int>();
+				var sumList = new List<int>();
+				for (var i = 0; i < m; ++i) {
+					var abd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+					alist.Add(abd[0]);
+					blist.Add(abd[1]);
+					dlist.Add(abd[2]);
+					if (i == 0) {
+						sumList.Add(0);
+					} else {
+						sumList.Add(dlist[i - 1] + dlist[i]);
+					}
+				}
+
+				var xlist = new List<int>();
+				var flist = new List<int>();
+				for (var i = 0; i < m; ++i) {
+					var xf = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+					xlist.Add(xf[0]);
+					flist.Add(xf[1]);
+				}
+
+				var answer = int.MaxValue;
+				int cost = -1;
+
+				int CalcCost(int s, int g)
+				{
+					int cost = -1;
+					var dist = sumList[g] - sumList[s];
+					int index = 0;
+					for (var i = 0; i < xlist.Count; ++i) {
+						if (xlist[i] >= dist) {
+							index = i;
+							break;
+						}
+					}
+
+					cost = flist[index];
+					return cost;
+				}
+
+				if (s - g == 1) {
+					cost = CalcCost(s, g);
+					answer = Math.Min(answer, cost);
+					Console.WriteLine($"{answer}");
+					return;
+				}
+
+				for (var i = 1; i < g - s; ++i) {
+					int cost1 = CalcCost(s, s + i);
+					int cost2 = CalcCost(s + i, g);
+					cost = cost1 + cost2;
+					answer = Math.Min(answer, cost);
+				}
+
+				Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
