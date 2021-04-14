@@ -23,14 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var arrayA = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int sum = 0;
-			for (var i = 0; i < n; ++i) {
-				sum += arrayA[i] - 1;
-			}
 
-			Console.WriteLine($"{sum}");
 		}
 	}
 }
