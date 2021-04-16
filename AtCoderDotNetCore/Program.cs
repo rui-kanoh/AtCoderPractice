@@ -23,7 +23,58 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var alist = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			alist.Sort();
 
+			int max = alist.Max();
+
+			int BinarySearch(int value, List<int> list)
+			{
+				int ng = -1;
+				int ok = alist.Count;
+				while (ok - ng > 1) {
+					int mid = (ok + ng) / 2;
+					if (alist[mid] > value) {
+						ok = mid;
+					} else {
+						ng = mid;
+					}
+				}
+
+				int t = ok;
+
+				return t;
+			}
+
+			int mid = BinarySearch(max / 2, alist);
+			int answer = 0;
+			if (alist.Count == 2) {
+				int mid1 = Math.Abs(max / 2 - alist[0]);
+				int mid2 = Math.Abs(max / 2 - alist[1]);
+				int min = Math.Min(mid1, mid2);
+				if (min == mid1 || mid1 == mid2) {
+					answer = alist[0];
+				} else {
+					answer = alist[1];
+				}
+			} else {
+				int mid1 = Math.Abs(max / 2 - alist[mid]);
+				int mid2 = Math.Abs(max / 2 - alist[mid - 1]);
+				int mid3 = Math.Abs(max / 2 - alist[mid + 1]);
+				int min = Math.Min(Math.Min(mid1, mid2), mid3);
+				if (min == mid1) {
+					answer = alist[mid];
+				} else if (min == mid2) {
+					answer = alist[mid - 1];
+				} else {
+					answer = alist[mid + 1];
+				}
+			}
+
+			string str = max >= answer ? $"{max} {answer}" : $"{answer} {max}";
+
+			Console.WriteLine(str);
 		}
 	}
 }
