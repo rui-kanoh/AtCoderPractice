@@ -27,52 +27,53 @@ namespace AtCoderDotNetCore
 			var alist = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
 			alist.Sort();
 
-			int max = alist.Max();
+			int max = alist[alist.Count - 1];
+			alist.RemoveAt(alist.Count - 1);
 
-			int BinarySearch(int value, List<int> list)
+			(bool isFound, int left, int right) BinarySearch(int value, List<int> list)
 			{
-				int ng = -1;
-				int ok = alist.Count;
-				while (ok - ng > 1) {
-					int mid = (ok + ng) / 2;
-					if (alist[mid] > value) {
-						ok = mid;
+				int left = -1;
+				int right = list.Count;
+				while (right - left > 1) {
+					int mid = (right + left) / 2;
+					if (list[mid] > value) {
+						return (true, mid, mid);
+					} else if (list[mid] > value) {
+						right = mid;
 					} else {
-						ng = mid;
+						left = mid;
 					}
 				}
 
-				int t = ok;
+				if (left == -1 && right == list.Count) {
+					return (false, 0, list.Count - 1);
+				} else if (left == -1) {
+					return (false, 0, 0);
+				} else if (right == list.Count) {
+					return (false, list.Count - 1, list.Count - 1);
+				}
 
-				return t;
+				return (false, left, right);
 			}
 
-			int mid = BinarySearch(max / 2, alist);
+			var ret = BinarySearch(max / 2, alist);
 			int answer = 0;
-			if (alist.Count == 2) {
-				int mid1 = Math.Abs(max / 2 - alist[0]);
-				int mid2 = Math.Abs(max / 2 - alist[1]);
-				int min = Math.Min(mid1, mid2);
-				if (min == mid1 || mid1 == mid2) {
-					answer = alist[0];
-				} else {
-					answer = alist[1];
-				}
+			if (alist.Count == 1) {
+				answer = alist[0];
+			} else if (ret.isFound) {
+				answer = alist[ret.left];
 			} else {
-				int mid1 = Math.Abs(max / 2 - alist[mid]);
-				int mid2 = Math.Abs(max / 2 - alist[mid - 1]);
-				int mid3 = Math.Abs(max / 2 - alist[mid + 1]);
-				int min = Math.Min(Math.Min(mid1, mid2), mid3);
-				if (min == mid1) {
-					answer = alist[mid];
-				} else if (min == mid2) {
-					answer = alist[mid - 1];
+				int left = Math.Abs(max / 2 - alist[ret.left]);
+				int right = Math.Abs(max / 2 - alist[ret.right]);
+				int min = Math.Min(left, right);
+				if (left <= right) {
+					answer = alist[ret.left];
 				} else {
-					answer = alist[mid + 1];
+					answer = alist[ret.right];
 				}
 			}
 
-			string str = max >= answer ? $"{max} {answer}" : $"{answer} {max}";
+			string str = $"{max} {answer}";
 
 			Console.WriteLine(str);
 		}
