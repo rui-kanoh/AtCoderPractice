@@ -30,6 +30,26 @@ namespace AtCoderDotNetCore
 			int max = alist[alist.Count - 1];
 			alist.RemoveAt(alist.Count - 1);
 
+			long GetCoeff(int n, int r)
+			{
+				if (r == 0) {
+					return 0;
+				}
+
+				var pascal = new long[n + 1, n + 1];
+				pascal[0, 0] = 1;
+				for (var i = 1; i <= n; ++i) {
+					pascal[i, 0] = 1;
+					for (var j = 1; j <= n; ++j) {
+						pascal[i, j] = pascal[i - 1, j - 1] + pascal[i - 1, j];
+					}
+				}
+
+				return pascal[n, r];
+			}
+
+
+			/*
 			(bool isFound, int left, int right) BinarySearch(int value, List<int> list)
 			{
 				int left = -1;
@@ -57,7 +77,6 @@ namespace AtCoderDotNetCore
 			}
 
 			var ret = BinarySearch(max / 2, alist);
-			int answer = 0;
 			if (alist.Count == 1) {
 				answer = alist[0];
 			} else if (ret.isFound) {
@@ -70,6 +89,17 @@ namespace AtCoderDotNetCore
 					answer = alist[ret.left];
 				} else {
 					answer = alist[ret.right];
+				}
+			}
+			*/
+
+			var answer = alist[0];
+			long value = 0;
+			for(var i = 0; i < alist.Count; ++i) {
+				long cmb = GetCoeff(max, alist[i]);
+				if (value < cmb) {
+					answer = alist[i];
+					value = cmb;
 				}
 			}
 
