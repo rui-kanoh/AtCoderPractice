@@ -36,7 +36,7 @@ namespace AtCoderDotNetCore
 				int right = list.Count;
 				while (right - left > 1) {
 					int mid = (right + left) / 2;
-					if (list[mid] > value) {
+					if (list[mid] == value) {
 						return (true, mid, mid);
 					} else if (list[mid] > value) {
 						right = mid;
@@ -66,7 +66,7 @@ namespace AtCoderDotNetCore
 				int left = Math.Abs(max / 2 - alist[ret.left]);
 				int right = Math.Abs(max / 2 - alist[ret.right]);
 				int min = Math.Min(left, right);
-				if (left <= right) {
+				if (left < right) {
 					answer = alist[ret.left];
 				} else {
 					answer = alist[ret.right];
