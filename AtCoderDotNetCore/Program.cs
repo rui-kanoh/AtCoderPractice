@@ -23,7 +23,42 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var mas = new int[3, 3];
+			for (var i = 0; i < mas.GetLength(1); ++i) {
+				for (var j = 0; j < mas.GetLength(0); ++j) {
+					mas[i, j] = i * mas.GetLength(0) + j + 1;
+				}
+			}
 
+			for (var i = 0; i < mas.GetLength(1); ++i) {
+				for (var j = 0; j < mas.GetLength(0); ++j) {
+					Console.Write($"{mas[i, j]} ");
+				}
+
+				Console.WriteLine("");
+			}
+
+			var ret = GetIndexes(mas);
+			Console.WriteLine($"{ret.center}");
+			Console.WriteLine($"{ret.top}");
+			Console.WriteLine($"{ret.bottom}");
+			Console.WriteLine($"{ret.left}");
+			Console.WriteLine($"{ret.right}");
+		}
+
+		public static (int center, int top, int bottom, int left, int right) GetIndexes(int[,] mas)
+		{
+			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
+				return (0, 0, 0, 0, 0);
+			}
+
+			int center = mas[1, 1];
+			var list = new List<int>();
+			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
+				list.Add(mas[x + 1, y + 1]);
+			}
+
+			return (center, list[0], list[2], list[1], list[3]);
 		}
 	}
 }
@@ -71,7 +106,7 @@ namespace AtCoderDotNetCore
 
 		}
 
-		public (bool isFound, int left, int right) static BinarySearch(int value, List<int> list)
+		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
 		{
 			int left = -1;
 			int right = list.Count;
@@ -133,6 +168,44 @@ namespace AtCoderDotNetCore
 			}
 
 			return pascal;
+		}
+
+		public static (int center, int top, int bottom, int left, int right) GetIndexes(int[,] mas)
+		{
+			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
+				return (0, 0, 0, 0, 0);
+			}
+
+			int center = mas[1, 1];
+			var list = new List<int>();
+			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
+				list.Add(mas[x + 1, y + 1]);
+			}
+
+			return (center, list[0], list[1], list[2], list[3]);
+		}
+
+		public static void IndexTest()
+		{
+			var mas = new int[3, 3];
+			for (var i = 0; i < mas.GetLength(1); ++i) {
+				for (var j = 0; j < mas.GetLength(0); ++j) {
+					mas[i, j] = i * mas.GetLength(0) + j + 1;
+				}
+			}
+
+			for (var i = 0; i < mas.GetLength(1); ++i) {
+				for (var j = 0; j < mas.GetLength(0); ++j) {
+					Console.Write($"{mas[i, j]} ");
+				}
+
+				Console.WriteLine("");
+			}
+
+			Console.WriteLine($"{mas[1, 1]}");
+			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
+				Console.WriteLine($"{mas[x + 1, y + 1]}");
+			}
 		}
 
 		public static void DfsSample(List<string> items, int num)
