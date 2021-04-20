@@ -23,7 +23,9 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var answer = "";
 
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
