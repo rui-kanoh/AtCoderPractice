@@ -23,89 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var alist = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-			alist.Sort();
 
-			int max = alist[alist.Count - 1];
-			alist.RemoveAt(alist.Count - 1);
-
-			long GetCoeff(int n, int r)
-			{
-				if (r == 0) {
-					return 0;
-				}
-
-				var pascal = new long[n + 1, n + 1];
-				pascal[0, 0] = 1;
-				for (var i = 1; i <= n; ++i) {
-					pascal[i, 0] = 1;
-					for (var j = 1; j <= n; ++j) {
-						pascal[i, j] = pascal[i - 1, j - 1] + pascal[i - 1, j];
-					}
-				}
-
-				return pascal[n, r];
-			}
-
-
-			/*
-			(bool isFound, int left, int right) BinarySearch(int value, List<int> list)
-			{
-				int left = -1;
-				int right = list.Count;
-				while (right - left > 1) {
-					int mid = (right + left) / 2;
-					if (list[mid] == value) {
-						return (true, mid, mid);
-					} else if (list[mid] > value) {
-						right = mid;
-					} else {
-						left = mid;
-					}
-				}
-
-				if (left == -1 && right == list.Count) {
-					return (false, 0, list.Count - 1);
-				} else if (left == -1) {
-					return (false, 0, 0);
-				} else if (right == list.Count) {
-					return (false, list.Count - 1, list.Count - 1);
-				}
-
-				return (false, left, right);
-			}
-
-			var ret = BinarySearch(max / 2, alist);
-			if (alist.Count == 1) {
-				answer = alist[0];
-			} else if (ret.isFound) {
-				answer = alist[ret.left];
-			} else {
-				int left = Math.Abs(max / 2 - alist[ret.left]);
-				int right = Math.Abs(max / 2 - alist[ret.right]);
-				int min = Math.Min(left, right);
-				if (left < right) {
-					answer = alist[ret.left];
-				} else {
-					answer = alist[ret.right];
-				}
-			}
-			*/
-
-			var answer = alist[0];
-			long value = 0;
-			for(var i = 0; i < alist.Count; ++i) {
-				long cmb = GetCoeff(max, alist[i]);
-				if (value < cmb) {
-					answer = alist[i];
-					value = cmb;
-				}
-			}
-
-			string str = $"{max} {answer}";
-
-			Console.WriteLine(str);
 		}
 	}
 }
@@ -133,172 +51,50 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int a = ab[0];
-			int b = ab[1];
-			if ((a + b) % 3 == 0 || a % 3 == 0 || b % 3 == 0) {
-				Console.WriteLine("Possible");
-			} else {
-				Console.WriteLine("Impossible");
-			}
 		}
 
 		public static void B()
 		{
-			string a = Console.ReadLine();
-			int b = int.Parse(Console.ReadLine());
-
-			int ama = b % a.Length;
-			int index = ama > 0 ? ama - 1 : a.Length - 1;
-			var answer = a[index];
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int n = nm[0];
-			int m = nm[1];
-			var klist = new List<int>();
-			var slists = new List<List<int>>();
-			for (var i = 0; i < m; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				klist.Add(array[0]);
-				var slist = new List<int>();
-				for (var j = 1; j <= array[0]; ++j) {
-					slist.Add(array[j]);
-				}
-
-				slists.Add(slist);
-			}
-
-			var listP = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-
-			int count = 0;
-
-			void Dfs(List<int> items, int num)
-			{
-				if (items.Count == num) {
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-					int lampCount = 0;
-					for (var i = 0; i < m; ++i) {
-						int onCount = 0;
-						for (var j = 0; j < klist[i]; ++j) {
-							int index = slists[i][j] - 1;
-							if (items[index] == 1) {
-								++onCount;
-							}
-						}
-
-						if (onCount % 2 == listP[i]) {
-							++lampCount;
-						}
-					}
-
-					if (lampCount == m) {
-						++count;
-					}
-
-					return;
-				}
-
-				for (var i = 0; i <= 1; ++i) {
-					items.Add(i);
-					Dfs(items, num);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<int>(), n);
-
-			Console.WriteLine($"{count}");
 		}
 
 		public static void D()
 		{
-				var nmk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				int n = nmk[0];
-				int m = nmk[1];
-				int k = nmk[2];
 
-				var sg = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				int s = sg[0];
-				int g = sg[1];
-				if (s > g) {
-					int temp = s;
-					s = g;
-					g = temp;
-				}
-
-				var alist = new List<int>();
-				var blist = new List<int>();
-				var dlist = new List<int>();
-				var sumList = new List<int>();
-				for (var i = 0; i < m; ++i) {
-					var abd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-					alist.Add(abd[0]);
-					blist.Add(abd[1]);
-					dlist.Add(abd[2]);
-					if (i == 0) {
-						sumList.Add(0);
-					} else {
-						sumList.Add(dlist[i - 1] + dlist[i]);
-					}
-				}
-
-				var xlist = new List<int>();
-				var flist = new List<int>();
-				for (var i = 0; i < m; ++i) {
-					var xf = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-					xlist.Add(xf[0]);
-					flist.Add(xf[1]);
-				}
-
-				var answer = int.MaxValue;
-				int cost = -1;
-
-				int CalcCost(int s, int g)
-				{
-					int cost = -1;
-					var dist = sumList[g] - sumList[s];
-					int index = 0;
-					for (var i = 0; i < xlist.Count; ++i) {
-						if (xlist[i] >= dist) {
-							index = i;
-							break;
-						}
-					}
-
-					cost = flist[index];
-					return cost;
-				}
-
-				if (s - g == 1) {
-					cost = CalcCost(s, g);
-					answer = Math.Min(answer, cost);
-					Console.WriteLine($"{answer}");
-					return;
-				}
-
-				for (var i = 1; i < g - s; ++i) {
-					int cost1 = CalcCost(s, s + i);
-					int cost2 = CalcCost(s + i, g);
-					cost = cost1 + cost2;
-					answer = Math.Min(answer, cost);
-				}
-
-				Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
 		{
 
+		}
+
+		public (bool isFound, int left, int right) static BinarySearch(int value, List<int> list)
+		{
+			int left = -1;
+			int right = list.Count;
+			while (right - left > 1) {
+				int mid = (right + left) / 2;
+				if (list[mid] == value) {
+					return (true, mid, mid);
+				} else if (list[mid] > value) {
+					right = mid;
+				} else {
+					left = mid;
+				}
+			}
+
+			if (left == -1 && right == list.Count) {
+				return (false, 0, list.Count - 1);
+			} else if (left == -1) {
+				return (false, 0, 0);
+			} else if (right == list.Count) {
+				return (false, list.Count - 1, list.Count - 1);
+			}
+
+			return (false, left, right);
 		}
 
 		public static bool IsOdd(long n)
@@ -320,6 +116,23 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static long[,] GetPascal(int n)
+		{
+			var pascal = new long[n, n];
+			pascal[0, 0] = 1;
+			pascal[1, 0] = 1;
+			pascal[1, 1] = 1;
+			for (var i = 2; i < n; ++i) {
+				pascal[i, 0] = 1;
+				pascal[i, i] = 1;
+				for (var j = 1; j < i; ++j) {
+					pascal[i, j] = pascal[i - 1, j - 1] + pascal[i - 1, j];
+				}
+			}
+
+			return pascal;
 		}
 
 		public static void DfsSample(List<string> items, int num)
