@@ -23,42 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var mas = new int[3, 3];
-			for (var i = 0; i < mas.GetLength(1); ++i) {
-				for (var j = 0; j < mas.GetLength(0); ++j) {
-					mas[i, j] = i * mas.GetLength(0) + j + 1;
-				}
-			}
 
-			for (var i = 0; i < mas.GetLength(1); ++i) {
-				for (var j = 0; j < mas.GetLength(0); ++j) {
-					Console.Write($"{mas[i, j]} ");
-				}
-
-				Console.WriteLine("");
-			}
-
-			var ret = GetIndexes(mas);
-			Console.WriteLine($"{ret.center}");
-			Console.WriteLine($"{ret.top}");
-			Console.WriteLine($"{ret.bottom}");
-			Console.WriteLine($"{ret.left}");
-			Console.WriteLine($"{ret.right}");
-		}
-
-		public static (int center, int top, int bottom, int left, int right) GetIndexes(int[,] mas)
-		{
-			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
-				return (0, 0, 0, 0, 0);
-			}
-
-			int center = mas[1, 1];
-			var list = new List<int>();
-			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
-				list.Add(mas[x + 1, y + 1]);
-			}
-
-			return (center, list[0], list[2], list[1], list[3]);
 		}
 	}
 }
@@ -170,22 +135,7 @@ namespace AtCoderDotNetCore
 			return pascal;
 		}
 
-		public static (int center, int top, int bottom, int left, int right) GetIndexes(int[,] mas)
-		{
-			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
-				return (0, 0, 0, 0, 0);
-			}
-
-			int center = mas[1, 1];
-			var list = new List<int>();
-			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
-				list.Add(mas[x + 1, y + 1]);
-			}
-
-			return (center, list[0], list[1], list[2], list[3]);
-		}
-
-		public static void IndexTest()
+		public static void GetIndexTest()
 		{
 			var mas = new int[3, 3];
 			for (var i = 0; i < mas.GetLength(1); ++i) {
@@ -194,18 +144,46 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			for (var i = 0; i < mas.GetLength(1); ++i) {
-				for (var j = 0; j < mas.GetLength(0); ++j) {
-					Console.Write($"{mas[i, j]} ");
+			var mas2 = new int[5, 5];
+			for (var i = 1; i <= mas.GetLength(1); ++i) {
+				for (var j = 1; j <= mas.GetLength(0); ++j) {
+					mas2[i, j] = mas[i - 1, j - 1];
+				}
+			}
+
+			for (var i = 0; i < mas2.GetLength(1); ++i) {
+				for (var j = 0; j < mas2.GetLength(0); ++j) {
+					Console.Write($"{mas2[i, j]} ");
 				}
 
 				Console.WriteLine("");
 			}
 
-			Console.WriteLine($"{mas[1, 1]}");
-			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
-				Console.WriteLine($"{mas[x + 1, y + 1]}");
+			Console.WriteLine("");
+			Console.WriteLine("");
+
+			for (var i = 1; i <= mas.GetLength(1); ++i) {
+				for (var j = 1; j <= mas.GetLength(0); ++j) {
+					var ret = GetIndexes(mas2, i, j);
+					string str = $"{ret.center} {ret.top} {ret.bottom} {ret.left} {ret.right}";
+					Console.WriteLine($"{str} ");
+				}
 			}
+		}
+
+		public static (int center, int top, int bottom, int left, int right) GetIndexes(int[,] mas, int centerX, int centerY)
+		{
+			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
+				return (0, 0, 0, 0, 0);
+			}
+
+			int center = mas[centerX, centerY];
+			var list = new List<int>();
+			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
+				list.Add(mas[x + centerX, y + centerY]);
+			}
+
+			return (center, list[0], list[2], list[1], list[3]);
 		}
 
 		public static void DfsSample(List<string> items, int num)
