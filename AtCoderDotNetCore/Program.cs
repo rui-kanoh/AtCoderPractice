@@ -23,83 +23,54 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var b1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var b2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var c1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var c2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var c3 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int num = 9;
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => (int.Parse(i))).ToList();
 
-			var dict = new Dictionary<(int i, int j), int>() {
-				{ (1, 1), 0 },
-				{ (1, 2), 1 },
-				{ (1, 3), 2 },
-				{ (2, 1), 3 },
-				{ (2, 2), 4 },
-				{ (2, 3), 5 },
-				{ (3, 1), 6 },
-				{ (3, 2), 7 },
-				{ (3, 3), 8 },
-			};
+			if (a.Count == 2) {
+				string str = a[0] > a[1] ? $"{a[0]} {a[1]}" : $"{a[1]} {a[0]}";
+				Console.WriteLine(str);
+				return;
+			}
 
-			int maxO = 0;
-			int maxX = 0;
-
-			void Dfs(List<string> items, int num)
-			{
-				if (items.Count == num) {
-					int countO = items.Count(x => x == "o");
-					int countX = items.Count(x => x == "x");
-					if (countO != 5 || countX != 4) {
-						return;
-					}
-
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-
-					for (var i = 1; i <= 2; ++i) {
-						for (var j = 1; j <= 3; ++j) {
-							if (items[dict[(i, j)]] == items[dict[(i + 1, j)]]) {
-								countO += i == 1 ? b1[j - 1] : b2[j - 1];
-							} else {
-								countX += i == 1 ? b1[j - 1] : b2[j -1];
-							}
-						}
-					}
-
-					for (var i = 1; i <= 3; ++i) {
-						for (var j = 1; j <= 2; ++j) {
-							if (items[dict[(i, j)]] == items[dict[(i, j + 1)]]) {
-								countO += i == 1 ? c1[j - 1] : i == 2 ? c2[j - 1] : c3[j - 1];
-							} else {
-								countX += i == 1 ? c1[j - 1] : i == 2 ? c2[j - 1] : c3[j - 1];
-							}
-						}
-					}
-
-					maxO = Math.Max(countO, maxO);
-					maxX = Math.Max(countX, maxX);
-
-					return;
-				}
-
-				var strs = new[] { "o", "x" };
-				foreach (var str in strs) {
-					items.Add(str);
-					Dfs(items, num);
-					items.RemoveAt(items.Count - 1);
+			int max = a.Max();
+			var answer = 0;
+			int min = int.MaxValue;
+			foreach (var item in a) {
+				if (min > Math.Abs(item * 2 - max)) {
+					min = Math.Abs(item * 2 - max);
+					answer = item;
 				}
 			}
 
-			Dfs(new List<string>(), num);
-
-			Console.WriteLine($"{maxO}");
-			Console.WriteLine($"{maxX}");
+			Console.WriteLine($"{max} {answer}");
 		}
+
+		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
+		{
+			int left = -1;
+			int right = list.Count;
+			while (right - left > 1) {
+				int mid = (right + left) / 2;
+				if (list[mid] == value) {
+					return (true, mid, mid);
+				} else if (list[mid] > value) {
+					right = mid;
+				} else {
+					left = mid;
+				}
+			}
+
+			if (left == -1 && right == list.Count) {
+				return (false, 0, list.Count - 1);
+			} else if (left == -1) {
+				return (false, 0, 0);
+			} else if (right == list.Count) {
+				return (false, list.Count - 1, list.Count - 1);
+			}
+
+			return (false, left, right);
+		}
+
 	}
 }
 
@@ -256,7 +227,82 @@ namespace AtCoderDotNetCore
 
 		public static void E()
 		{
+			var b1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var b2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var c1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var c2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var c3 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int num = 9;
 
+			var dict = new Dictionary<(int i, int j), int>() {
+				{ (1, 1), 0 },
+				{ (1, 2), 1 },
+				{ (1, 3), 2 },
+				{ (2, 1), 3 },
+				{ (2, 2), 4 },
+				{ (2, 3), 5 },
+				{ (3, 1), 6 },
+				{ (3, 2), 7 },
+				{ (3, 3), 8 },
+			};
+
+			int maxO = 0;
+			int maxX = 0;
+
+			void Dfs(List<string> items, int num)
+			{
+				if (items.Count == num) {
+					int countO = items.Count(x => x == "o");
+					int countX = items.Count(x => x == "x");
+					if (countO != 5 || countX != 4) {
+						return;
+					}
+
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+
+					for (var i = 1; i <= 2; ++i) {
+						for (var j = 1; j <= 3; ++j) {
+							if (items[dict[(i, j)]] == items[dict[(i + 1, j)]]) {
+								countO += i == 1 ? b1[j - 1] : b2[j - 1];
+							} else {
+								countX += i == 1 ? b1[j - 1] : b2[j - 1];
+							}
+						}
+					}
+
+					for (var i = 1; i <= 3; ++i) {
+						for (var j = 1; j <= 2; ++j) {
+							if (items[dict[(i, j)]] == items[dict[(i, j + 1)]]) {
+								countO += i == 1 ? c1[j - 1] : i == 2 ? c2[j - 1] : c3[j - 1];
+							} else {
+								countX += i == 1 ? c1[j - 1] : i == 2 ? c2[j - 1] : c3[j - 1];
+							}
+						}
+					}
+
+					maxO = Math.Max(countO, maxO);
+					maxX = Math.Max(countX, maxX);
+
+					return;
+				}
+
+				var strs = new[] { "o", "x" };
+				foreach (var str in strs) {
+					items.Add(str);
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<string>(), num);
+
+			Console.WriteLine($"{maxO}");
+			Console.WriteLine($"{maxX}");
 		}
 
 		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
