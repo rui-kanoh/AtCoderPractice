@@ -72,8 +72,8 @@ namespace AtCoderDotNetCore
 			var b = abc[1];
 			var c = abc[2];
 
-			BigInteger deno = (BigInteger)Math.Pow(10.0, 9.0) + 7;
-			BigInteger answer = ((BigInteger)(a % deno) * (BigInteger)(b % deno) * (BigInteger)(c % deno)) % (BigInteger)deno;
+			long deno = (long)Math.Pow(10.0, 9.0) + 7;
+			long answer = ((a * b % deno) * c) % deno;
 
 			Console.WriteLine($"{answer}");
 		}
