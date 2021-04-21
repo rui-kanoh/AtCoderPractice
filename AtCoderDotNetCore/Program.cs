@@ -42,9 +42,7 @@ namespace AtCoderDotNetCore
 				{ (3, 3), 8 },
 			};
 
-			int countO = 0;
 			int maxO = 0;
-			int countX = 0;
 			int maxX = 0;
 
 			void Dfs(List<string> items, int num)
