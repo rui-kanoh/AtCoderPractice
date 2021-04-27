@@ -50,168 +50,26 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var a = abc[0];
-			var b = abc[1];
-			var c = abc[2];
-
-			long answer = b;
-			if (c > a + b + 1) {
-				c = a + b + 1;
-			}
-
-			answer += c;
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var a = abc[0];
-			var b = abc[1];
-			var c = abc[2];
 
-			long deno = (long)Math.Pow(10.0, 9.0) + 7;
-			long answer = ((a * b % deno) * c) % deno;
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
-			var answer = (long)0;
-			for (var i = 0; i < n; ++i) {
-				answer += a[i] - 1;
-			}
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => (int.Parse(i))).ToList();
-
-			if (a.Count == 2) {
-				string str = a[0] > a[1] ? $"{a[0]} {a[1]}" : $"{a[1]} {a[0]}";
-				Console.WriteLine(str);
-				return;
-			}
-
-			int max = a.Max();
-			var answer = 0;
-			int min = int.MaxValue;
-			foreach (var item in a) {
-				if (min > Math.Abs(item * 2 - max)) {
-					min = Math.Abs(item * 2 - max);
-					answer = item;
-				}
-			}
-
-			Console.WriteLine($"{max} {answer}");
+			
 		}
 
 		public static void E()
 		{
-			var b1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var b2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var b = new int[2, 3];
-			for (var i = 0; i < 3; ++i) {
-				b[0, i] = b1[i];
-				b[1, i] = b2[i];
-			}
-			var c = new int[3, 2];
-			var c1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var c2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var c3 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			for (var i = 0; i < 2; ++i) {
-				c[0, i] = c1[i];
-				c[1, i] = c2[i];
-				c[2, i] = c3[i];
-			}
-
-			(int countO, int countX) Dfs(int[,] items, int turn)
-			{
-				if (turn == 10) {
-					int countO = 0;
-					int countX = 0;
-					for (var i = 0; i < 2; ++i) {
-						for (var j = 0; j < 3; ++j) {
-							if (items[i, j] == items[i + 1, j]) {
-								countO += b[i, j];
-							} else {
-								countX += b[i, j];
-							}
-						}
-					}
-
-					for (var i = 0; i < 3; ++i) {
-						for (var j = 0; j < 2; ++j) {
-							if (items[i, j] == items[i, j + 1]) {
-								countO += c[i, j];
-							} else {
-								countX += c[i, j];
-							}
-						}
-					}
-
-					return (countO, countX);
-				}
-
-				if (turn % 2 == 1) {
-					int countO = -1;
-					int countX = -1;
-					for (var i = 0; i < 3; ++i) {
-						for (var j = 0; j < 3; ++j) {
-							if (items[i, j] != 0) {
-								continue;
-							}
-
-							items[i, j] = 1;
-							var ret = Dfs(items, turn + 1);
-							if (ret.countO > countO) {
-								countO = ret.countO;
-								countX = ret.countX;
-							}
-
-							items[i, j] = 0;
-						}
-					}
-
-					return (countO, countX);
-				} else {
-					int countO = -1;
-					int countX = -1;
-					for (var i = 0; i < 3; ++i) {
-						for (var j = 0; j < 3; ++j) {
-							if (items[i, j] != 0) {
-								continue;
-							}
-
-							items[i, j] = -1;
-
-							var ret = Dfs(items, turn + 1);
-							if (ret.countX > countX) {
-								countO = ret.countO;
-								countX = ret.countX;
-							}
-
-							items[i, j] = 0;
-						}
-					}
-
-					return (countO, countX);
-				}
-			}
-
-			var (countO, countX) = Dfs(new int[3, 3], 1);
-
-			Console.WriteLine($"{countO}");
-			Console.WriteLine($"{countX}");
+			
 		}
 
 		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
