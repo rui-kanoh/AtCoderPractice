@@ -25,17 +25,13 @@ namespace AtCoderDotNetCore
 		{
 			int n = int.Parse(Console.ReadLine());
 
-			int zeroUsagi = 1;
-			int oneUsagi = 0;
-			int twoUsagi = 0;
+			(int a, int b) rab = (1, 0);
 
-			for (int i = 0; i < n; ++i) {
-				twoUsagi += oneUsagi;
-				oneUsagi = zeroUsagi;
-				zeroUsagi = twoUsagi;
+			for (int i = 0; i <= n; ++i) {
+				rab = (rab.b, rab.a + rab.b);
 			}
 
-			var answer = zeroUsagi + oneUsagi + twoUsagi;
+			var answer = rab.b;
 
 			Console.WriteLine($"{answer}");
 		}
