@@ -23,17 +23,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int n = int.Parse(Console.ReadLine());
-
-			(int a, int b) rab = (1, 0);
-
-			for (int i = 0; i <= n; ++i) {
-				rab = (rab.b, rab.a + rab.b);
-			}
-
-			var answer = rab.b;
-
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -63,16 +52,13 @@ namespace AtCoderDotNetCore
 		{
 			int n = int.Parse(Console.ReadLine());
 
-			int parentCount = n >= 2 ? (n - 2) : 0;
-			long answer = 1 + parentCount;
-			if (n < 2) {
-				Console.WriteLine($"{answer}");
-				return;
+			(int a, int b) rab = (1, 0);
+
+			for (int i = 0; i <= n; ++i) {
+				rab = (rab.b, rab.a + rab.b);
 			}
 
-			for (var i = 2; i <= n; i = i + 2) {
-				answer += n - i;
-			}
+			var answer = rab.b;
 
 			Console.WriteLine($"{answer}");
 		}
@@ -150,12 +136,6 @@ namespace AtCoderDotNetCore
 			void Dfs(List<int> items, int num)
 			{
 				if (items.Count == num) {
-					/*
-					if (items.Count(s => s == 1) == 0) {
-						return;
-					}
-					*/
-
 					for (var i = 0; i < h; ++i) {
 						if (items[i] == 1) {
 							for (var j = 0; j < w; ++j) {
