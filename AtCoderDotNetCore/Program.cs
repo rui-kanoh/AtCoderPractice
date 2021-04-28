@@ -40,11 +40,6 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			if (countR == k) {
-				Console.WriteLine($"1");
-				return;
-			}
-
 			void Origin(string[,] c)
 			{
 				for (var i = 0; i < h; ++i) {
