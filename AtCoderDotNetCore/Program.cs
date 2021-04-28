@@ -23,7 +23,106 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var hwk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int h = hwk[0];
+			int w = hwk[1];
+			int k = hwk[2];
+			int countR = 0;
+			var c = new string[h, w];
+			var cOrigin = new string[h, w];
+			for (var i = 0; i < h; ++i) {
+				var array = Console.ReadLine();
+				for (var j = 0; j < array.Length; ++j) {
+					c[i, j] = cOrigin[i, j] = array[j].ToString();
+					if (array[j] == '#') {
+						++countR;
+					}
+				}
+			}
+
+			if (countR == k) {
+				Console.WriteLine($"1");
+				return;
+			}
+
+			void Origin(string[,] c)
+			{
+				for (var i = 0; i < h; ++i) {
+					for (var j = 0; j < w; ++j) {
+						c[i, j] = cOrigin[i, j];
+					}
+				}
+			}
+
+			var answer = 0;
+			var number = h + w;
+
+			int Count(string[,] lists)
+			{
+				int count = 0;
+				for (var i = 0; i < lists.GetLength(0); ++i) {
+					for (var j = 0; j < lists.GetLength(1); ++j) {
+						if (lists[i, j] == "#") {
+							++count;
+						}
+					}
+				}
+
+				return count;
+			}
+
+			void Dfs(List<int> items, int num)
+			{
+				if (items.Count == num) {
+					/*
+					if (items.Count(s => s == 1) == 0) {
+						return;
+					}
+					*/
+
+					for (var i = 0; i < h; ++i) {
+						if (items[i] == 1) {
+							for (var j = 0; j < w; ++j) {
+								c[i, j] = "*";
+							}
+						}
+					}
+
+					for (var i = 0; i < w; ++i) {
+						if (items[i + h] == 1) {
+							for (var j = 0; j < h; ++j) {
+								c[j, i] = "*";
+							}
+						}
+					}
+
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+					int count = Count(c);
+					if (count == k) {
+						++answer;
+					}
+
+					Origin(c);
+					return;
+				}
+
+				for (var i = 0; i < 2; ++i) {
+					items.Add(i);
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), number);
+			Console.WriteLine($"{answer}");
 		}
+
+		
 	}
 }
 
@@ -50,11 +149,45 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
+			int n = int.Parse(Console.ReadLine());
+
+			int parentCount = n >= 2 ? (n - 2) : 0;
+			long answer = 1 + parentCount;
+			if (n < 2) {
+				Console.WriteLine($"{answer}");
+				return;
+			}
+
+			for (var i = 2; i <= n; i = i + 2) {
+				answer += n - i;
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			var lh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int l = lh[0];
+			int h = lh[1];
+			int n = int.Parse(Console.ReadLine());
+			var alist = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				alist.Add(int.Parse(Console.ReadLine()));
+			}
 
+			for (var i = 0; i < n; ++i) {
+				var answer = 0;
+				if (h < alist[i]) {
+					answer = -1;
+				} else if (l <= alist[i]) {
+					answer = 0;
+				} else {
+					answer = l - alist[i];
+				}
+
+				Console.WriteLine($"{answer}");
+			}
 		}
 
 		public static void C()
