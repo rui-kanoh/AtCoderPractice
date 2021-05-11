@@ -23,6 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+
 		}
 	}
 }
@@ -50,132 +51,16 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int n = int.Parse(Console.ReadLine());
-
-			(int a, int b) rab = (1, 0);
-
-			for (int i = 0; i <= n; ++i) {
-				rab = (rab.b, rab.a + rab.b);
-			}
-
-			var answer = rab.b;
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var lh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int l = lh[0];
-			int h = lh[1];
-			int n = int.Parse(Console.ReadLine());
-			var alist = new List<int>();
-			for (var i = 0; i < n; ++i) {
-				alist.Add(int.Parse(Console.ReadLine()));
-			}
 
-			for (var i = 0; i < n; ++i) {
-				var answer = 0;
-				if (h < alist[i]) {
-					answer = -1;
-				} else if (l <= alist[i]) {
-					answer = 0;
-				} else {
-					answer = l - alist[i];
-				}
-
-				Console.WriteLine($"{answer}");
-			}
 		}
 
 		public static void C()
 		{
-			var hwk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int h = hwk[0];
-			int w = hwk[1];
-			int k = hwk[2];
-			int countR = 0;
-			var c = new string[h, w];
-			var cOrigin = new string[h, w];
-			for (var i = 0; i < h; ++i) {
-				var array = Console.ReadLine();
-				for (var j = 0; j < array.Length; ++j) {
-					c[i, j] = cOrigin[i, j] = array[j].ToString();
-					if (array[j] == '#') {
-						++countR;
-					}
-				}
-			}
-
-			void Origin(string[,] c)
-			{
-				for (var i = 0; i < h; ++i) {
-					for (var j = 0; j < w; ++j) {
-						c[i, j] = cOrigin[i, j];
-					}
-				}
-			}
-
-			var answer = 0;
-			var number = h + w;
-
-			int Count(string[,] lists)
-			{
-				int count = 0;
-				for (var i = 0; i < lists.GetLength(0); ++i) {
-					for (var j = 0; j < lists.GetLength(1); ++j) {
-						if (lists[i, j] == "#") {
-							++count;
-						}
-					}
-				}
-
-				return count;
-			}
-
-			void Dfs(List<int> items, int num)
-			{
-				if (items.Count == num) {
-					for (var i = 0; i < h; ++i) {
-						if (items[i] == 1) {
-							for (var j = 0; j < w; ++j) {
-								c[i, j] = "*";
-							}
-						}
-					}
-
-					for (var i = 0; i < w; ++i) {
-						if (items[i + h] == 1) {
-							for (var j = 0; j < h; ++j) {
-								c[j, i] = "*";
-							}
-						}
-					}
-
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-					int count = Count(c);
-					if (count == k) {
-						++answer;
-					}
-
-					Origin(c);
-					return;
-				}
-
-				for (var i = 0; i < 2; ++i) {
-					items.Add(i);
-					Dfs(items, num);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<int>(), number);
-			Console.WriteLine($"{answer}");
+			
 		}
 
 		public static void D()
@@ -214,9 +99,29 @@ namespace AtCoderDotNetCore
 			return (false, left, right);
 		}
 
+		public static void DfsBool(List<bool> items, int num)
+		{
+			if (items.Count == num) {
+				foreach (var item in items) {
+					Console.Write($"{item} ");
+				}
+				Console.WriteLine("");
+
+				return;
+			}
+
+			Array.ForEach(
+				new[] { true, false },
+				value => {
+					items.Add(value);
+					DfsBool(items, num);
+					items.RemoveAt(items.Count - 1);
+				});
+		}
+
 		public static bool IsOdd(long n)
 		{
-			bool isOdd = n % 2 == 1;
+			bool isOdd = (n & 0x1) == 0x1;
 			return isOdd;
 		}
 
