@@ -23,7 +23,14 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var h = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -44,23 +51,104 @@ namespace AtCoderDotNetCore
 			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-			string answer = "";
+			var answer = 0;
 
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void A()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var dx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var d = dx[0];
+			var x = dx[1];
+			var a = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				a.Add(int.Parse(Console.ReadLine()));
+			}
+
+			var answer = x + n;
+			for (var i = 0; i < n; ++i) {
+				for (var j = 2; j <= d; ++j) {
+					for (var k = 1; k < d; ++k) {
+						int day = k * a[i] + 1;
+						if (day > d) {
+							break;
+						}
+
+						if (day == j) {
+							++answer;
+							//Console.WriteLine($"{i},{j}, {k}, {answer}");
+						}
+					}
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			string s = Console.ReadLine();
+			long k = long.Parse(Console.ReadLine());
 
+			double Facter(string c, long day)
+			{
+				int number = int.Parse(c);
+				double num = Math.Pow(number, (double)day);
+				return num;
+			}
+
+			var answer = 0;
+			double num = 0;
+			long days = 5000000000000000;
+			for (var i = 0; i < s.Length; ++i) {
+				num += Facter(s[i].ToString(), days);
+				if (num >= k) {
+					answer = int.Parse(s[i].ToString());
+					break;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			
+			int n = int.Parse(Console.ReadLine());
+			string s = Console.ReadLine();
+
+			var answer = 0;
+
+			if (s.Length <= 3) {
+				answer = 0;
+			} else {
+
+				int position = n - 1;
+				while (position > 0) {
+					for (var j = 1; j <= 3; ++j) {
+						if (position - j < 0) {
+							break;
+						}
+
+						if (s[position - j] == '.') {
+							position -= j;
+							break;
+						}
+
+						if (j == 3) {
+							++answer;
+							position -= 3;
+						}
+					}
+
+					if (position == 0) {
+						break;
+					}
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
