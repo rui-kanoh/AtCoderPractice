@@ -21,14 +21,63 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
+		public class Holiday {
+			public bool isHoliday = true;
+			public bool usesPaid = false;
+		}
+
 		public static void Exec()
 		{
+			
+
 			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var n = nk[0];
 			var k = nk[1];
 			var h = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var holidays = new Holiday[n];
+			for (var i = 0; i < n; ++i) {
+				holidays[i] = new Holiday();
+				holidays[i].isHoliday = h[i] == 1 ? true : false;
+			}
 
-			var answer = 0;
+			int max = 0;
+			int end = 0;
+
+			int sum = 0;
+			int paid = k;
+			for (int start = 0; start < n; ++start) {
+				// paidが0になるまでendを伸ばす
+				while (end < n && paid > 0) {
+					if (holidays[end].isHoliday) {
+						++sum;
+					} else {
+						++sum;
+						--paid;
+						holidays[end].usesPaid = true;
+					}
+
+					++end;
+				}
+
+				max = Math.Max(max, sum);
+				Console.WriteLine($"{max}, {sum}");
+
+				if (end == start) {
+					if (end < n - 1) {
+						++end;
+					}
+				}
+
+				if (holidays[start].isHoliday) {
+					--sum;
+					if (holidays[start].usesPaid) {
+						holidays[start].usesPaid = false;
+						++paid;
+					}
+				}
+			}
+
+			var answer = max;
 
 			Console.WriteLine($"{answer}");
 		}
