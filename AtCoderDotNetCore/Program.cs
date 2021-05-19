@@ -46,22 +46,27 @@ namespace AtCoderDotNetCore
 			int paid = k;
 			for (int start = 0; start < n; ++start) {
 				// paidが0になるまでendを伸ばす
-				while (end < n && paid > 0) {
-					++sum;
-					if (holidays[end].isHoliday == false) {
-						--paid;
-						holidays[end].usesPaid = true;
+				while (end < n) {
+					if (holidays[end].isHoliday) {
+						++sum;
+					} else {
+						if (paid > 0) {
+							--paid;
+							holidays[end].usesPaid = true;
+							++sum;
+						} else {
+							break;
+						}
 					}
 
 					++end;
 				}
 
 				max = Math.Max(max, sum);
+				//Console.WriteLine($"{start} {end} {paid} {sum} {max}");
 
 				if (end == start) {
-					if (end < n - 1) {
-						++end;
-					}
+					++end;
 				}
 
 				if (holidays[start].isHoliday) {
@@ -70,8 +75,11 @@ namespace AtCoderDotNetCore
 					if (holidays[start].usesPaid) {
 						holidays[start].usesPaid = false;
 						++paid;
+						--sum;
 					}
 				}
+
+				//Console.WriteLine($"{start} {end} {paid} {sum}");
 			}
 
 			var answer = max;
