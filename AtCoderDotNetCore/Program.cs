@@ -21,15 +21,14 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public class Holiday {
+		public class Holiday
+		{
 			public bool isHoliday = true;
 			public bool usesPaid = false;
 		}
 
 		public static void Exec()
 		{
-			
-
 			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var n = nk[0];
 			var k = nk[1];
@@ -48,10 +47,8 @@ namespace AtCoderDotNetCore
 			for (int start = 0; start < n; ++start) {
 				// paidが0になるまでendを伸ばす
 				while (end < n && paid > 0) {
-					if (holidays[end].isHoliday) {
-						++sum;
-					} else {
-						++sum;
+					++sum;
+					if (holidays[end].isHoliday == false) {
 						--paid;
 						holidays[end].usesPaid = true;
 					}
@@ -60,7 +57,6 @@ namespace AtCoderDotNetCore
 				}
 
 				max = Math.Max(max, sum);
-				Console.WriteLine($"{max}, {sum}");
 
 				if (end == start) {
 					if (end < n - 1) {
@@ -70,6 +66,7 @@ namespace AtCoderDotNetCore
 
 				if (holidays[start].isHoliday) {
 					--sum;
+				} else {
 					if (holidays[start].usesPaid) {
 						holidays[start].usesPaid = false;
 						++paid;
