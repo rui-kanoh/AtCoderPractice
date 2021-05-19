@@ -31,47 +31,23 @@ namespace AtCoderDotNetCore
 			var baby = 0;
 
 			bool exists = false;
-
-			void Dfs(List<int> items, int num)
-			{
-				if (items.Count == num) {
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-					
-					int countA = items.Count(item => item == 0);
-					int countE = items.Count(item => item == 1);
-					int countB = items.Count(item => item == 2);
-					if (countA == 0 || countE == 0 || countB == 0){
-						return;
-					}
-
-					int total = countA * 2 + countE * 3 + countB * 4;
-					if (total == m) {
-						exists = true;
-						adolt = countA;
-						elder = countE;
-						baby = countB;
-					}
-
-					return;
-				}
-
-				for (var i = 0; i <= 3; ++i) {
-					items.Add(i);
-					Dfs(items, num);
-					if (exists) {
-						return;
-					}
-
-					items.RemoveAt(items.Count - 1);
+			for (var i = 0; i <= n; ++i) {
+				int ans = 4 * n - 2 * i;
+				if (m == ans) {
+					adolt = i;
+					baby = n - i;
+					elder = 0;
+					exists = true;
+					break;
+				} else if (m == ans - 1) {
+					adolt = i;
+					baby = n - i - 1;
+					elder = 1;
+					exists = true;
+					break;
 				}
 			}
 
-			Dfs(new List<int>(), n);
 			var answer = exists ? $"{adolt} {elder} {baby}" : "-1 -1 -1";
 			Console.WriteLine($"{answer}");
 		}
