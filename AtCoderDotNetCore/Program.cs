@@ -23,8 +23,56 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var answer = 0;
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+			var adolt = 0;
+			var elder = 0;
+			var baby = 0;
 
+			bool exists = false;
+
+			void Dfs(List<int> items, int num)
+			{
+				if (items.Count == num) {
+					/*
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+					
+					int countA = items.Count(item => item == 0);
+					int countE = items.Count(item => item == 1);
+					int countB = items.Count(item => item == 2);
+					if (countA == 0 || countE == 0 || countB == 0){
+						return;
+					}
+
+					int total = countA * 2 + countE * 3 + countB * 4;
+					if (total == m) {
+						exists = true;
+						adolt = countA;
+						elder = countE;
+						baby = countB;
+					}
+
+					return;
+				}
+
+				for (var i = 0; i <= 3; ++i) {
+					items.Add(i);
+					Dfs(items, num);
+					if (exists) {
+						return;
+					}
+
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), n);
+			var answer = exists ? $"{adolt} {elder} {baby}" : "-1 -1 -1";
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -53,12 +101,65 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
+			int num = 3;
+			int town = 4;
+			var lists = new List<List<int>>();
+			for (var i = 0; i < town; ++i) {
+				lists.Add(new List<int>());
+			}
 
+			for (var i = 0; i < num; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int a = ab[0] - 1;
+				int b = ab[1] - 1;
+				lists[a].Add(b);
+				lists[b].Add(a);
+			}
+
+			var indexes = new List<int>();
+
+			int first = 0;
+			if (lists[first].Any()) {
+				indexes.Add(first);
+				int next1 = lists[first][0];
+				indexes.Add(next1);
+				int next2 = 0;
+				for (var i = 0; i < lists[next1].Count; ++i) {
+					int index = lists[next1][i];
+					if (index != first && index != next1) {
+						next2 = index;
+						break;
+					}
+				}
+
+				indexes.Add(next2);
+
+				int next3 = 0;
+				for (var i = 0; i < lists[next2].Count; ++i) {
+					int index = lists[next2][i];
+					if (index != first && index != next1 && index != next2) {
+						next3 = index;
+						break;
+					}
+				}
+
+				indexes.Add(next3);
+			}
+
+			indexes = indexes.Distinct().ToList();
+
+			bool canReach = indexes.Count == town;
+
+			var answer = canReach ? "YES" : "NO";
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-
+			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var answer = xy[0] > xy[1] ? xy[0] : xy[1];
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
