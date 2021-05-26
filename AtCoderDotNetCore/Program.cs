@@ -23,33 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-			var adolt = 0;
-			var elder = 0;
-			var baby = 0;
-
-			bool exists = false;
-			for (var i = 0; i <= n; ++i) {
-				int ans = 4 * n - 2 * i;
-				if (m == ans) {
-					adolt = i;
-					baby = n - i;
-					elder = 0;
-					exists = true;
-					break;
-				} else if (m == ans - 1) {
-					adolt = i;
-					baby = n - i - 1;
-					elder = 1;
-					exists = true;
-					break;
-				}
-			}
-
-			var answer = exists ? $"{adolt} {elder} {baby}" : "-1 -1 -1";
-			Console.WriteLine($"{answer}");
+			
 		}
 	}
 }
