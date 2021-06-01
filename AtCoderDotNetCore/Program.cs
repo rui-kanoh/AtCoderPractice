@@ -23,7 +23,35 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			string MakePath(int sx, int sy, int tx, int ty)
+			{
+				string str = "";
+				if (sx == tx && sy == ty) {
+					return str;
+				}
+
+				string strx = sx < tx ? "D" : "U";
+				int xcount = Math.Abs(tx - sx);
+				for (var i = 0; i < xcount; ++i) {
+					str += strx;
+				}
+
+				string stry = sy < ty ? "R" : "L";
+				int ycount = Math.Abs(ty - sy);
+				for (var i = 0; i < ycount; ++i) {
+					str += stry;
+				}
+
+				return str;
+			}
+
+			for (var i = 0; i < 1000; ++i) {
+				var st = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				string path = MakePath(st[0], st[1], st[2], st[3]);
+				Console.WriteLine(path);
+				Console.Out.Flush();
+				Console.ReadLine();
+			}
 		}
 	}
 }
@@ -47,6 +75,99 @@ namespace AtCoderDotNetCore
 			var answer = 0;
 
 			Console.WriteLine($"{answer}");
+		}
+
+		public static void MakeInputData()
+		{
+			int rand(int L, int U)
+			{
+				var random = new Random();
+				return random.Next(L, U);
+			}
+
+			int[,] MakeEdgeH()
+			{
+				int D = rand(100, 2000);
+				var h = new int[30, 29];
+				int M = rand(1, 2);
+
+				var H = new int[30, 2];
+				for (var i = 0; i < 30; ++i) {
+					for (var j = 0; j < M; ++j) {
+						H[i, j] = rand(1000 + D, 9000 - D);
+					}
+				}
+
+				var delta = new int[30, 29];
+				for (var i = 0; i < delta.GetLength(1); ++i) {
+					for (var j = 0; j < delta.GetLength(0); ++j) {
+						delta[i, j] = rand(-D, D);
+					}
+				}
+
+				if (M == 1) {
+					for (var i = 0; i < delta.GetLength(1); ++i) {
+						for (var j = 0; j < delta.GetLength(0); ++j) {
+							h[i, j] = H[i, 0] + delta[i, j];
+						}
+					}
+				} else if (M == 2) {
+					for (var i = 0; i < delta.GetLength(1); ++i) {
+						int x = rand(1, 28);
+						for (var j = 0; j < delta.GetLength(0); ++j) {
+							if (j < x) {
+								h[i, j] = H[i, 0] + delta[i, j];
+							} else {
+								h[i, j] = H[i, 1] + delta[i, j];
+							}
+						}
+					}
+				}
+
+				return h;
+			}
+
+			int[,] MakeEdgeV()
+			{
+				int D = rand(100, 2000);
+				var v = new int[29, 30];
+				int M = rand(1, 2);
+
+				var V = new int[30, 2];
+				for (var i = 0; i < 30; ++i) {
+					for (var j = 0; j < M; ++j) {
+						V[i, j] = rand(1000 + D, 9000 - D);
+					}
+				}
+
+				var gamma = new int[29, 30];
+				for (var i = 0; i < gamma.GetLength(1); ++i) {
+					for (var j = 0; j < gamma.GetLength(0); ++j) {
+						gamma[i, j] = rand(-D, D);
+					}
+				}
+
+				if (M == 1) {
+					for (var i = 0; i < gamma.GetLength(1); ++i) {
+						for (var j = 0; j < gamma.GetLength(0); ++j) {
+							v[i, j] = V[j, 0] + gamma[i, j];
+						}
+					}
+				} else if (M == 2) {
+					for (var i = 0; i < gamma.GetLength(1); ++i) {
+						int y = rand(1, 28);
+						for (var j = 0; j < gamma.GetLength(0); ++j) {
+							if (j < y) {
+								v[i, j] = V[j, 0] + gamma[i, j];
+							} else {
+								v[i, j] = V[j, 1] + gamma[i, j];
+							}
+						}
+					}
+				}
+
+				return v;
+			}
 		}
 
 		public static void A()
