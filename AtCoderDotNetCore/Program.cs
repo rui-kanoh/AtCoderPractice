@@ -23,35 +23,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			string MakePath(int sx, int sy, int tx, int ty)
-			{
-				string str = "";
-				if (sx == tx && sy == ty) {
-					return str;
-				}
-
-				string strx = sx < tx ? "D" : "U";
-				int xcount = Math.Abs(tx - sx);
-				for (var i = 0; i < xcount; ++i) {
-					str += strx;
-				}
-
-				string stry = sy < ty ? "R" : "L";
-				int ycount = Math.Abs(ty - sy);
-				for (var i = 0; i < ycount; ++i) {
-					str += stry;
-				}
-
-				return str;
-			}
-
-			for (var i = 0; i < 1000; ++i) {
-				var st = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				string path = MakePath(st[0], st[1], st[2], st[3]);
-				Console.WriteLine(path);
-				Console.Out.Flush();
-				Console.ReadLine();
-			}
 		}
 	}
 }
