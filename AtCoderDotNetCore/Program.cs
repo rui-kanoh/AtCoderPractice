@@ -23,6 +23,22 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			string s = Console.ReadLine();
+			var answer = true;
+
+			var indexI = (s.IndexOf('I'), s.IndexOf('i'));
+			var indexC = (s.IndexOf('C'), s.IndexOf('c'));
+			var indexT = (s.IndexOf('T'), s.IndexOf('t'));
+			answer = (indexI.Item1 != -1 && indexC.Item1 != -1 && indexT.Item1 != -1 && indexI.Item1 < indexC.Item1 && indexC.Item1 < indexT.Item1)
+				|| (indexI.Item2 != -1 && indexC.Item1 != -1 && indexT.Item1 != -1 && indexI.Item2 < indexC.Item1 && indexC.Item1 < indexT.Item1)
+				|| (indexI.Item2 != -1 && indexC.Item2 != -1 && indexT.Item1 != -1 && indexI.Item2 < indexC.Item2 && indexC.Item2 < indexT.Item1)
+				|| (indexI.Item2 != -1 && indexC.Item2 != -1 && indexT.Item2 != -1 && indexI.Item2 < indexC.Item2 && indexC.Item2 < indexT.Item2)
+				|| (indexI.Item1 != -1 && indexC.Item2 != -1 && indexT.Item1 != -1 && indexI.Item1 < indexC.Item2 && indexC.Item2 < indexT.Item1)
+				|| (indexI.Item1 != -1 && indexC.Item2 != -1 && indexT.Item2 != -1 && indexI.Item1 < indexC.Item2 && indexC.Item2 < indexT.Item2)
+				|| (indexI.Item1 != -1 && indexC.Item1 != -1 && indexT.Item2 != -1 && indexI.Item1 < indexC.Item1 && indexC.Item1 < indexT.Item2)
+				|| (indexI.Item2 != -1 && indexC.Item1 != -1 && indexT.Item2 != -1 && indexI.Item2 < indexC.Item1 && indexC.Item1 < indexT.Item2);
+
+			Console.WriteLine(answer ? "YES" : "NO");
 		}
 	}
 }
@@ -143,65 +159,18 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int num = 3;
-			int town = 4;
-			var lists = new List<List<int>>();
-			for (var i = 0; i < town; ++i) {
-				lists.Add(new List<int>());
-			}
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = array[0];
+			var b = array[1];
+			var c = array[2];
+			var answer = (b - a) == (c - b);
+			Console.WriteLine(answer ? "YES" : "NO");
 
-			for (var i = 0; i < num; ++i) {
-				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				int a = ab[0] - 1;
-				int b = ab[1] - 1;
-				lists[a].Add(b);
-				lists[b].Add(a);
-			}
-
-			var indexes = new List<int>();
-
-			int first = 0;
-			if (lists[first].Any()) {
-				indexes.Add(first);
-				int next1 = lists[first][0];
-				indexes.Add(next1);
-				int next2 = 0;
-				for (var i = 0; i < lists[next1].Count; ++i) {
-					int index = lists[next1][i];
-					if (index != first && index != next1) {
-						next2 = index;
-						break;
-					}
-				}
-
-				indexes.Add(next2);
-
-				int next3 = 0;
-				for (var i = 0; i < lists[next2].Count; ++i) {
-					int index = lists[next2][i];
-					if (index != first && index != next1 && index != next2) {
-						next3 = index;
-						break;
-					}
-				}
-
-				indexes.Add(next3);
-			}
-
-			indexes = indexes.Distinct().ToList();
-
-			bool canReach = indexes.Count == town;
-
-			var answer = canReach ? "YES" : "NO";
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var answer = xy[0] > xy[1] ? xy[0] : xy[1];
-			Console.WriteLine($"{answer}");
+
 		}
 
 		public static void C()
