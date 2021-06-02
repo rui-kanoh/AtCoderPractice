@@ -23,29 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			string s = Console.ReadLine();
-			var answer = true;
-
-			var indexI = s.IndexOf('I', StringComparison.OrdinalIgnoreCase);
-			if (indexI == -1) {
-				answer = false;
-			} else {
-				s = s.Substring(indexI);
-				var indexC = s.IndexOf('C', StringComparison.OrdinalIgnoreCase);
-				if (indexC == -1) {
-					answer = false;
-				} else {
-					s = s.Substring(indexC);
-					var indexT = s.IndexOf('T', StringComparison.OrdinalIgnoreCase);
-					if (indexT == -1) {
-						answer = false;
-					} else {
-						answer = true;
-					}
-				}
-			}
-
-			Console.WriteLine(answer ? "YES" : "NO");
+			
 		}
 	}
 }
@@ -71,99 +49,6 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 
-		public static void MakeInputData()
-		{
-			int rand(int L, int U)
-			{
-				var random = new Random();
-				return random.Next(L, U);
-			}
-
-			int[,] MakeEdgeH()
-			{
-				int D = rand(100, 2000);
-				var h = new int[30, 29];
-				int M = rand(1, 2);
-
-				var H = new int[30, 2];
-				for (var i = 0; i < 30; ++i) {
-					for (var j = 0; j < M; ++j) {
-						H[i, j] = rand(1000 + D, 9000 - D);
-					}
-				}
-
-				var delta = new int[30, 29];
-				for (var i = 0; i < delta.GetLength(1); ++i) {
-					for (var j = 0; j < delta.GetLength(0); ++j) {
-						delta[i, j] = rand(-D, D);
-					}
-				}
-
-				if (M == 1) {
-					for (var i = 0; i < delta.GetLength(1); ++i) {
-						for (var j = 0; j < delta.GetLength(0); ++j) {
-							h[i, j] = H[i, 0] + delta[i, j];
-						}
-					}
-				} else if (M == 2) {
-					for (var i = 0; i < delta.GetLength(1); ++i) {
-						int x = rand(1, 28);
-						for (var j = 0; j < delta.GetLength(0); ++j) {
-							if (j < x) {
-								h[i, j] = H[i, 0] + delta[i, j];
-							} else {
-								h[i, j] = H[i, 1] + delta[i, j];
-							}
-						}
-					}
-				}
-
-				return h;
-			}
-
-			int[,] MakeEdgeV()
-			{
-				int D = rand(100, 2000);
-				var v = new int[29, 30];
-				int M = rand(1, 2);
-
-				var V = new int[30, 2];
-				for (var i = 0; i < 30; ++i) {
-					for (var j = 0; j < M; ++j) {
-						V[i, j] = rand(1000 + D, 9000 - D);
-					}
-				}
-
-				var gamma = new int[29, 30];
-				for (var i = 0; i < gamma.GetLength(1); ++i) {
-					for (var j = 0; j < gamma.GetLength(0); ++j) {
-						gamma[i, j] = rand(-D, D);
-					}
-				}
-
-				if (M == 1) {
-					for (var i = 0; i < gamma.GetLength(1); ++i) {
-						for (var j = 0; j < gamma.GetLength(0); ++j) {
-							v[i, j] = V[j, 0] + gamma[i, j];
-						}
-					}
-				} else if (M == 2) {
-					for (var i = 0; i < gamma.GetLength(1); ++i) {
-						int y = rand(1, 28);
-						for (var j = 0; j < gamma.GetLength(0); ++j) {
-							if (j < y) {
-								v[i, j] = V[j, 0] + gamma[i, j];
-							} else {
-								v[i, j] = V[j, 1] + gamma[i, j];
-							}
-						}
-					}
-				}
-
-				return v;
-			}
-		}
-
 		public static void A()
 		{
 			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -177,7 +62,29 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
+			string s = Console.ReadLine();
+			var answer = true;
 
+			var indexI = s.IndexOf('I', StringComparison.OrdinalIgnoreCase);
+			if (indexI == -1) {
+				answer = false;
+			} else {
+				s = s.Substring(indexI);
+				var indexC = s.IndexOf('C', StringComparison.OrdinalIgnoreCase);
+				if (indexC == -1) {
+					answer = false;
+				} else {
+					s = s.Substring(indexC);
+					var indexT = s.IndexOf('T', StringComparison.OrdinalIgnoreCase);
+					if (indexT == -1) {
+						answer = false;
+					} else {
+						answer = true;
+					}
+				}
+			}
+
+			Console.WriteLine(answer ? "YES" : "NO");
 		}
 
 		public static void C()
