@@ -26,49 +26,25 @@ namespace AtCoderDotNetCore
 			string s = Console.ReadLine();
 			var answer = true;
 
-			var indexI = new[] { s.IndexOf('I'), s.IndexOf('i') };
-			var indexC = new[] { s.IndexOf('C'), s.IndexOf('c') };
-			var indexT = new[] { s.IndexOf('T'), s.IndexOf('t') };
-
-			bool Dfs(List<int> items, int num)
-			{
-				if (items.Count == num) {
-					/*
-					foreach (var item in items) {
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-
-					if (indexI[items[0]] == -1
-						|| indexC[items[1]] == -1
-						|| indexT[items[2]] == -1) {
-						return false;
-					}
-
-					if (indexI[items[0]] < indexC[items[1]]
-						&& indexC[items[1]] < indexT[items[2]]) {
-						return true;
+			var indexI = s.IndexOf('I', StringComparison.OrdinalIgnoreCase);
+			if (indexI == -1) {
+				answer = false;
+			} else {
+				s = s.Substring(indexI);
+				var indexC = s.IndexOf('C', StringComparison.OrdinalIgnoreCase);
+				if (indexC == -1) {
+					answer = false;
+				} else {
+					s = s.Substring(indexC);
+					var indexT = s.IndexOf('T', StringComparison.OrdinalIgnoreCase);
+					if (indexT == -1) {
+						answer = false;
 					} else {
-						return false;
+						answer = true;
 					}
 				}
-
-				bool isFound = false;
-				for (var i = 0; i < 2; ++i) {
-					items.Add(i);
-					isFound = Dfs(items, num);
-					if (isFound) {
-						break;
-					}
-
-					items.RemoveAt(items.Count - 1);
-				}
-
-				return isFound;
 			}
 
-			answer = Dfs(new List<int>(), 3);
 			Console.WriteLine(answer ? "YES" : "NO");
 		}
 	}
