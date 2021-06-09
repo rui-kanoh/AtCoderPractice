@@ -23,7 +23,34 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			var answer = "";
+			string s = Console.ReadLine();
+			int K = int.Parse(Console.ReadLine());
+			var chars = s.ToCharArray();
+			var set = new SortedSet<string>();
+
+			if (K == 1) {
+				char min = chars.Min();
+				answer = $"{min}";
+			} else {
+				for (var i = 0; i < s.Length; ++i) {
+					for (var j = 1; j <= K; ++j) {
+						if (i + j > s.Length) {
+							continue;
+						}
+
+						var span = new Span<char>(chars, i, j);
+						var str = span.ToString();
+						if (set.Contains(str) == false) {
+							set.Add(str);
+						}
+					}
+				}
+
+				answer = set.ElementAt(K - 1);
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -51,40 +78,32 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var a = array[0];
-			var b = array[1];
-			var c = array[2];
-			var answer = (b - a) == (c - b);
-			Console.WriteLine(answer ? "YES" : "NO");
+			var answer = 0;
+			for (var i = 0; i < 3; ++i) {
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var s = array[0];
+				var e = array[1];
+				answer += s * e / 10;
+			}
 
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			var answer = "";
 			string s = Console.ReadLine();
-			var answer = true;
-
-			var indexI = s.IndexOf('I', StringComparison.OrdinalIgnoreCase);
-			if (indexI == -1) {
-				answer = false;
+			if (s == "a") {
+				answer = "-1";
 			} else {
-				s = s.Substring(indexI);
-				var indexC = s.IndexOf('C', StringComparison.OrdinalIgnoreCase);
-				if (indexC == -1) {
-					answer = false;
+				if (s.Length == 1) {
+					answer = ((char)(s[0] - 1)).ToString();
 				} else {
-					s = s.Substring(indexC);
-					var indexT = s.IndexOf('T', StringComparison.OrdinalIgnoreCase);
-					if (indexT == -1) {
-						answer = false;
-					} else {
-						answer = true;
-					}
+					answer = s.Substring(0, s.Length - 1);
 				}
 			}
 
-			Console.WriteLine(answer ? "YES" : "NO");
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
