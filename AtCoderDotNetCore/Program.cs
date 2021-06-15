@@ -23,51 +23,8 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-			var classRoom = new int[n + 1];
-			var list = new List<(int start, int terminal, int bound)>();
-			for (var i = 0; i < m; ++i) {
-				var st = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				list.Add((st[0] - 1, st[1] - 1, st[1] - st[0] + 1));
-				++classRoom[st[0] - 1];
-				--classRoom[st[1]];
-			}
-
-			var imos = new int[n + 1];
-			imos[0] = classRoom[0];
-			for (var i = 1; i <= n; ++i) {
-				imos[i] = imos[i - 1] + classRoom[i];
-			}
-
-			var classRoom2 = new int[n + 1];
-			classRoom2[0] = imos[0] > 1 ? 1 : 0;
-			for (var i = 1; i <= n; ++i) {
-				classRoom2[i] = classRoom2[i - 1] + (imos[i] > 1 ? 1 : 0);
-			}
-
-			var indexes = new List<int>();
-			for (var i = 0; i < m; ++i) {
-				int startIndex = list[i].start > 0 ? list[i].start - 1 : 0;
-				int endIndex = list[i].terminal;
-				if (startIndex > 0) {
-					if (classRoom2[endIndex] - classRoom2[startIndex] >= list[i].bound) {
-						indexes.Add(i);
-					}
-				} else if (startIndex == 0) {
-					if (classRoom2[endIndex] >= list[i].bound) {
-						indexes.Add(i);
-					}
-				}
-			}
-
-			Console.WriteLine($"{indexes.Count}");
-			if (indexes.Count > 0) {
-				foreach (var index in indexes) {
-					Console.WriteLine($"{index + 1}");
-				}
-			}
+			var answer = 0;
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -95,64 +52,17 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var answer = 0;
-			for (var i = 0; i < 3; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var s = array[0];
-				var e = array[1];
-				answer += s * e / 10;
-			}
 
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var answer = "";
-			string s = Console.ReadLine();
-			if (s == "a") {
-				answer = "-1";
-			} else {
-				if (s.Length == 1) {
-					answer = ((char)(s[0] - 1)).ToString();
-				} else {
-					answer = s.Substring(0, s.Length - 1);
-				}
-			}
 
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			var answer = "";
-			string s = Console.ReadLine();
-			int K = int.Parse(Console.ReadLine());
-			var chars = s.ToCharArray();
-			var set = new SortedSet<string>();
 
-			if (K == 1) {
-				char min = chars.Min();
-				answer = $"{min}";
-			} else {
-				for (var i = 0; i < s.Length; ++i) {
-					for (var j = 1; j <= K; ++j) {
-						if (i + j > s.Length) {
-							continue;
-						}
-
-						var span = new Span<char>(chars, i, j);
-						var str = span.ToString();
-						if (set.Contains(str) == false) {
-							set.Add(str);
-						}
-					}
-				}
-
-				answer = set.ElementAt(K - 1);
-			}
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
