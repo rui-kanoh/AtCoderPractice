@@ -23,8 +23,44 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var answer = 0;
-			Console.WriteLine($"{answer}");
+			var nq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
+			string s = Console.ReadLine();
+			for (var i = 0; i < q; ++i) {
+				var lr = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var l = lr[0];
+				var r = lr[1];
+				if (l + r >= n) {
+					r = n - l;
+				}
+
+				string str = s.Substring(l, r);
+				int count = CalcAcCount(str);
+				Console.WriteLine($"{count}");
+			}
+
+			int CalcAcCount(string str)
+			{
+				int count = 0;
+				bool isFound = true;
+				string str2 = str;
+				while (isFound) {
+					int index = str2.IndexOf("AC");
+					if (index == -1) {
+						isFound = false;
+						break;
+					} else {
+						str2 = str2.Substring(index, str2.Length - index);
+						++count;
+					}
+				}
+
+				return count;
+			}
+
+			//var answer = 0;
+			//Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -52,12 +88,42 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-
+			int n = int.Parse(Console.ReadLine());
+			var answer = n * 2;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var rlist = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				rlist.Add(int.Parse(Console.ReadLine()));
+			}
 
+			rlist.Sort();
+
+			var answer = 0.0;
+			for (var i = 0; i < n; ++i) {
+				int r = rlist[i];
+				if (IsOdd(n)) {
+					if (IsOdd(i)) {
+						answer -= r * r;
+					} else {
+						answer += r * r;
+					}
+				} else {
+					if (IsOdd(i)) {
+						answer += r * r;
+					} else {
+						answer -= r * r;
+					}
+				}
+			}
+
+			answer *= Math.PI;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
