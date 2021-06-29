@@ -19,11 +19,67 @@ namespace AtCoderDotNetCore
 		}
 	}
 
+	public class Vector
+	{
+		public long X;
+		public long Y;
+		public Vector(long x, long y)
+		{
+			X = x;
+			Y = y;
+		}
+	}
+
 	public static class Question
 	{
 		public static void Exec()
 		{
-			
+			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var o = oab[0];
+			var a = oab[1];
+			var b = oab[2];
+			int radius = o + a + b;
+			int radius2 = radius * radius;
+			if (o > (a + b)) {
+				radius2 -= (o - (a + b)) * (o - (a + b));
+			}
+
+			double area = Math.PI * radius2;
+
+			Console.WriteLine($"{area}");
+		}
+
+		public static long CrossVector(Vector a, Vector b)
+		{
+			return a.X * b.Y - a.Y * b.X;
+		}
+
+		public static void HentaiKamen()
+		{
+			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var x = xy[0];
+			var y = xy[1];
+			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+			var ss = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var sx = ss[0];
+			var sy = ss[1];
+			var tt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var tx = tt[0];
+			var ty = tt[1];
+			var AS = new Vector(sx - 0, sy - a);
+			var AB = new Vector(x, b - a);
+			var AT = new Vector(tx - 0, ty - a);
+			bool isCross = CrossVector(AS, AB) * CrossVector(AT, AB) < 0;
+			/*
+			var TA = new Vector(0 - tx, a - ty);
+			var TS = new Vector(sx - tx, sy - ty);
+			var TB = new Vector(x - tx, b - ty);
+			bool isCross2 = CrossVector(TA, TS) * CrossVector(TB, TS) < 0;
+			bool isCross = isCross1 && isCross2;
+			*/
+			Console.WriteLine(isCross ? "Yes" : "No");
 		}
 	}
 }
