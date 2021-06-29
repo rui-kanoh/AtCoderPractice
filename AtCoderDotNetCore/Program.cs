@@ -34,19 +34,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var o = oab[0];
-			var a = oab[1];
-			var b = oab[2];
-			int radius = o + a + b;
-			int radius2 = radius * radius;
-			if (o > (a + b)) {
-				radius2 -= (o - (a + b)) * (o - (a + b));
-			}
-
-			double area = Math.PI * radius2;
-
-			Console.WriteLine($"{area}");
+			
 		}
 
 		public static long CrossVector(Vector a, Vector b)
@@ -112,7 +100,22 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
-			
+			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var o = oab[0];
+			var a = oab[1];
+			var b = oab[2];
+			int radius = o + a + b;
+			long radius2 = radius * radius;
+
+			var list = new List<int>() { o, a, b };
+			list.Sort((a, b) => b.CompareTo(a));
+			if (list[0] > (list[1] + list[2])) {
+				radius2 -= (list[0] - (list[1] + list[2])) * (list[0] - (list[1] + list[2]));
+			}
+
+			double area = Math.PI * radius2;
+
+			Console.WriteLine($"{area}");
 		}
 
 		public static void C()
