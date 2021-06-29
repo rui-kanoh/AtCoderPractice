@@ -15,7 +15,7 @@ namespace AtCoderDotNetCore
 	{
 		static void Main(string[] args)
 		{
-			Question.Exec();
+			Question.HentaiKamen();
 		}
 	}
 
@@ -60,17 +60,6 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{area}");
 		}
 
-		public static long CrossVector(Vector a, Vector b)
-		{
-			return a.X * b.Y - a.Y * b.X;
-		}
-
-		public static int CrossVector2(Vector a, Vector b)
-		{
-			int value = a.X * b.Y - a.Y * b.X;
-			return value != 0 ? value / Math.Abs(value) : value;
-		}
-
 		public static void HentaiKamen()
 		{
 			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -88,6 +77,18 @@ namespace AtCoderDotNetCore
 			var AS = new Vector(sx - 0, sy - a);
 			var AB = new Vector(x, b - a);
 			var AT = new Vector(tx - 0, ty - a);
+
+			int CrossVector(Vector a, Vector b)
+			{
+				return a.X * b.Y - a.Y * b.X;
+			}
+
+			int CrossVector2(Vector a, Vector b)
+			{
+				int value = CrossVector(a, b);
+				return value != 0 ? value / Math.Abs(value) : value;
+			}
+
 			bool isCross1 = CrossVector2(AS, AB) * CrossVector2(AT, AB) < 0;
 			var TA = new Vector(0 - tx, a - ty);
 			var TS = new Vector(sx - tx, sy - ty);
