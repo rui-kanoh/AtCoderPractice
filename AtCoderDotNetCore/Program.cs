@@ -15,15 +15,15 @@ namespace AtCoderDotNetCore
 	{
 		static void Main(string[] args)
 		{
-			Question.Exec();
+			Question.HentaiKamen();
 		}
 	}
 
 	public class Vector
 	{
-		public long X;
-		public long Y;
-		public Vector(long x, long y)
+		public int X;
+		public int Y;
+		public Vector(int x, int y)
 		{
 			X = x;
 			Y = y;
@@ -40,6 +40,12 @@ namespace AtCoderDotNetCore
 		public static long CrossVector(Vector a, Vector b)
 		{
 			return a.X * b.Y - a.Y * b.X;
+		}
+
+		public static int CrossVector2(Vector a, Vector b)
+		{
+			int value = a.X * b.Y - a.Y * b.X;
+			return value != 0 ? value / Math.Abs(value) : value;
 		}
 
 		public static void HentaiKamen()
@@ -59,14 +65,12 @@ namespace AtCoderDotNetCore
 			var AS = new Vector(sx - 0, sy - a);
 			var AB = new Vector(x, b - a);
 			var AT = new Vector(tx - 0, ty - a);
-			bool isCross = CrossVector(AS, AB) * CrossVector(AT, AB) < 0;
-			/*
+			bool isCross1 = CrossVector2(AS, AB) * CrossVector2(AT, AB) < 0;
 			var TA = new Vector(0 - tx, a - ty);
 			var TS = new Vector(sx - tx, sy - ty);
 			var TB = new Vector(x - tx, b - ty);
-			bool isCross2 = CrossVector(TA, TS) * CrossVector(TB, TS) < 0;
+			bool isCross2 = CrossVector2(TA, TS) * CrossVector2(TB, TS) < 0;
 			bool isCross = isCross1 && isCross2;
-			*/
 			Console.WriteLine(isCross ? "Yes" : "No");
 		}
 	}
