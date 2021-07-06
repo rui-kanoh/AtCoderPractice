@@ -11,14 +11,6 @@ using System.Text;
 
 namespace AtCoderDotNetCore
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			Question.HentaiKamen();
-		}
-	}
-
 	public class Vector
 	{
 		public int X;
@@ -30,9 +22,104 @@ namespace AtCoderDotNetCore
 		}
 	}
 
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			Question.Exec();
+		}
+	}
+
 	public static class Question
 	{
 		public static void Exec()
+		{
+			int T = int.Parse(Console.ReadLine());
+
+			BigInteger ju = 0;
+			var list = new List<string>();
+			for (var i = 0; i < T; ++i) {
+				var canBuy = true;
+				var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var a = abcd[0];
+				var b = abcd[1];
+				var c = abcd[2];
+				var d = abcd[3];
+				ju = a;
+
+				int count = 0;
+				while (canBuy) {
+					if (ju < b) {
+						canBuy = false;
+						break;
+					}
+
+					ju -= b;
+
+					if (ju <= c) {
+						ju += d;
+					}
+
+					if (ju == a) {
+						break;
+					}
+
+					/*
+					if (i == 12) {
+						Console.WriteLine($"{ju}");
+					}
+					*/
+
+					++count;
+				}
+
+				list.Add(canBuy ? "Yes" : "No");
+				//Console.WriteLine(canBuy ? "Yes" : "No");
+			}
+
+			foreach (var item in list) {
+				Console.WriteLine(item);
+			}
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void Exec()
+		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void A()
+		{
+			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = oab[0];
+			var b = oab[1];
+			if (a + b == 15) {
+				Console.WriteLine("+");
+			} else if (a * b == 15) {
+				Console.WriteLine("*");
+			} else {
+				Console.WriteLine("x");
+			}
+		}
+
+		public static void B()
 		{
 			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var o = oab[0];
@@ -60,7 +147,7 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{area}");
 		}
 
-		public static void HentaiKamen()
+		public static void C()
 		{
 			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var x = xy[0];
@@ -97,68 +184,64 @@ namespace AtCoderDotNetCore
 			bool isCross = isCross1 && isCross2;
 			Console.WriteLine(isCross ? "Yes" : "No");
 		}
-	}
-}
-
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
-		public static void Exec()
-		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(" ");
-
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void A()
-		{
-			
-		}
-
-		public static void B()
-		{
-			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var o = oab[0];
-			var a = oab[1];
-			var b = oab[2];
-			int radius = o + a + b;
-			long radius2 = radius * radius;
-
-			var list = new List<int>() { o, a, b };
-			list.Sort((a, b) => b.CompareTo(a));
-			if (list[0] > (list[1] + list[2])) {
-				radius2 -= (list[0] - (list[1] + list[2])) * (list[0] - (list[1] + list[2]));
-			}
-
-			double area = Math.PI * radius2;
-
-			Console.WriteLine($"{area}");
-		}
-
-		public static void C()
-		{
-
-		}
 
 		public static void D()
 		{
+			//累積和かなあ
+			var nx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nx[0];
+			var x = nx[1];
 
+			//Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
 		{
+			int T = int.Parse(Console.ReadLine());
 
+			long ju = 0;
+			var list = new List<string>();
+			for (var i = 0; i < T; ++i) {
+				var canBuy = true;
+				var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var a = abcd[0];
+				var b = abcd[1];
+				var c = abcd[2];
+				var d = abcd[3];
+				ju = a;
+
+				int count = 0;
+				while (canBuy) {
+					if (ju < b) {
+						canBuy = false;
+						break;
+					}
+
+					ju -= b;
+
+					// ju == 0でループ
+					if (ju == 0) {
+						break;
+					}
+
+					if (ju <= c) {
+						ju += d;
+					}
+
+					++count;
+
+					if (ju < b) {
+						canBuy = false;
+						break;
+					}
+				}
+
+				list.Add(canBuy ? "Yes" : "No");
+			}
+
+			foreach (var item in list) {
+				Console.WriteLine(item);
+			}
 		}
 
 		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
