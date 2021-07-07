@@ -34,52 +34,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			int T = int.Parse(Console.ReadLine());
-
-			BigInteger ju = 0;
-			var list = new List<string>();
-			for (var i = 0; i < T; ++i) {
-				var canBuy = true;
-				var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				var a = abcd[0];
-				var b = abcd[1];
-				var c = abcd[2];
-				var d = abcd[3];
-				ju = a;
-
-				int count = 0;
-				while (canBuy) {
-					if (ju < b) {
-						canBuy = false;
-						break;
-					}
-
-					ju -= b;
-
-					if (ju <= c) {
-						ju += d;
-					}
-
-					if (ju == a) {
-						break;
-					}
-
-					/*
-					if (i == 12) {
-						Console.WriteLine($"{ju}");
-					}
-					*/
-
-					++count;
-				}
-
-				list.Add(canBuy ? "Yes" : "No");
-				//Console.WriteLine(canBuy ? "Yes" : "No");
-			}
-
-			foreach (var item in list) {
-				Console.WriteLine(item);
-			}
+			
 		}
 	}
 }
@@ -121,127 +76,22 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
-			var oab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var o = oab[0];
-			var a = oab[1];
-			var b = oab[2];
-
-			bool IsTriangle(int a, int b, int c)
-			{
-				return a < (b + c) && b < (c + a) && c < (a + b);
-			}
-
-			int radius = o + a + b;
-			long radius2 = radius * radius;
-
-			if (IsTriangle(o, a, b) == false) {
-				var list = new List<int>() { o, a, b };
-				list.Sort((a, b) => b.CompareTo(a));
-				if (list[0] > (list[1] + list[2])) {
-					radius2 -= (list[0] - (list[1] + list[2])) * (list[0] - (list[1] + list[2]));
-				}
-			}
-
-			double area = Math.PI * radius2;
-
-			Console.WriteLine($"{area}");
+			
 		}
 
 		public static void C()
 		{
-			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var x = xy[0];
-			var y = xy[1];
-			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var a = ab[0];
-			var b = ab[1];
-			var ss = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var sx = ss[0];
-			var sy = ss[1];
-			var tt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var tx = tt[0];
-			var ty = tt[1];
-			var AS = new Vector(sx - 0, sy - a);
-			var AB = new Vector(x, b - a);
-			var AT = new Vector(tx - 0, ty - a);
-
-			int CrossVector(Vector a, Vector b)
-			{
-				return a.X * b.Y - a.Y * b.X;
-			}
-
-			int CrossVector2(Vector a, Vector b)
-			{
-				int value = CrossVector(a, b);
-				return value != 0 ? value / Math.Abs(value) : value;
-			}
-
-			bool isCross1 = CrossVector2(AS, AB) * CrossVector2(AT, AB) < 0;
-			var TA = new Vector(0 - tx, a - ty);
-			var TS = new Vector(sx - tx, sy - ty);
-			var TB = new Vector(x - tx, b - ty);
-			bool isCross2 = CrossVector2(TA, TS) * CrossVector2(TB, TS) < 0;
-			bool isCross = isCross1 && isCross2;
-			Console.WriteLine(isCross ? "Yes" : "No");
+			
 		}
 
 		public static void D()
 		{
-			//累積和かなあ
-			var nx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nx[0];
-			var x = nx[1];
-
-			//Console.WriteLine($"{answer}");
+			
 		}
 
 		public static void E()
 		{
-			int T = int.Parse(Console.ReadLine());
-
-			long ju = 0;
-			var list = new List<string>();
-			for (var i = 0; i < T; ++i) {
-				var canBuy = true;
-				var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				var a = abcd[0];
-				var b = abcd[1];
-				var c = abcd[2];
-				var d = abcd[3];
-				ju = a;
-
-				int count = 0;
-				while (canBuy) {
-					if (ju < b) {
-						canBuy = false;
-						break;
-					}
-
-					ju -= b;
-
-					// ju == 0でループ
-					if (ju == 0) {
-						break;
-					}
-
-					if (ju <= c) {
-						ju += d;
-					}
-
-					++count;
-
-					if (ju < b) {
-						canBuy = false;
-						break;
-					}
-				}
-
-				list.Add(canBuy ? "Yes" : "No");
-			}
-
-			foreach (var item in list) {
-				Console.WriteLine(item);
-			}
+			
 		}
 
 		public static (bool isFound, int left, int right) BinarySearch(int value, List<int> list)
