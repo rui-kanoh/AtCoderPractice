@@ -23,7 +23,57 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+
+			if (m == 0) {
+				Console.WriteLine($"{n}");
+				return;
+			}
+
+			var lists = new List<List<int>>();
+			for (var i = 0; i < n; ++i) {
+				var list = new List<int>();
+				lists.Add(list);
+			}
+
+			var visited = new bool[n];
+
+			for (var i = 0; i < lists.Count; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				lists[ab[0] - 1].Add(ab[1] - 1);
+			}
+
+			var answer = 0;
+			void Dfs(int n)
+			{
+				if (visited[n]) {
+					return;
+				}
+
+				visited[n] = true;
+
+				foreach (var item in lists[n]) {
+					Dfs(item);
+				}
+			}
+
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < n; ++j) {
+					visited[j] = false;
+				}
+
+				Dfs(i);
+
+				for (var j = 0; j < n; ++j) {
+					if (visited[j]) {
+						++answer;
+					}
+				}
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -51,12 +101,36 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			
+			int n = int.Parse(Console.ReadLine());
+			int a = int.Parse(Console.ReadLine());
+
+			var answer = n * n - a;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+
+			int Count2Division(int n)
+			{
+				int count = 0;
+				while (n % 2 == 0) {
+					n /= 2;
+					++count;
+				}
+
+				return count;
+			}
+
+			var answer = 0;
+			for (var i = 0; i < a.Length; ++i) {
+				answer += Count2Division(a[i]);
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
