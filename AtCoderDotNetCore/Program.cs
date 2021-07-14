@@ -51,89 +51,22 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var x = xy[0];
-			var y = xy[1];
-
-			int answer = -1;
-			if (x % y == 0) {
-				answer = -1;
-			} else {
-				answer = x;
-			}
-
-			Console.WriteLine($"{answer}");
+			
 		}
 
 		public static void B()
 		{
-			var mas = new int[4 + 2, 4 + 2];
-			for (var i = 0; i < 4; ++i) {
-				var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				for (var j = 0; j < 4; ++j) {
-					mas[i + 1, j + 1] = a[j];
-				}
-			}
-
-			for (var i = 1; i <= 4; ++i) {
-				for (var j = 1; j <= 4; ++j) {
-					var ret = GetIndexes(mas, i, j);
-					if ((ret.center == ret.top && ret.top >= 2)
-						|| (ret.center == ret.bottom && ret.bottom >= 2)
-						|| (ret.center == ret.left && ret.left >= 2)
-						|| (ret.center == ret.right && ret.right >= 2)) {
-
-						Console.WriteLine("CONTINUE");
-						return;
-					}
-
-				}
-			}
-
-			Console.WriteLine("GAMEOVER");
+			
 		}
 
 		public static void C()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var hash = new HashSet<int>();
-			for (var i = 0; i < a.Length; ++i) {
-				hash.Add(a[i]);
-			}
-
-			int max = 0;
-			foreach (var item in hash) {
-				int sum = 0;
-				for (var i = 0; i < a.Length; ++i) {
-					if (a[i] >= item) {
-						sum += item;
-					} else {
-						sum = 0;
-					}
-
-					max = Math.Max(sum, max);
-				}
-			}
-
-			Console.WriteLine($"{max}");
+			
 		}
 
 		public static void D()
 		{
-			var nab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nab[0];
-			var a = nab[1];
-			var b = nab[2];
-			var x = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			long value = 0;
-			for (var i = 0; i < n - 1; ++i) {
-				var dist = x[i + 1] - x[i];
-				value += Math.Min(dist * a, b);
-			}
-
-			Console.WriteLine($"{value}");
+			
 		}
 
 		public static void E()
