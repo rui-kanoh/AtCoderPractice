@@ -23,7 +23,39 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			var RC = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var R = RC[0];
+			var C = RC[1];
+
+			var grid = new bool[R, C]; // true is black
+
+			var start = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var goal = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int n = int.Parse(Console.ReadLine());
+
+			for (var i = 0;i < n; ++i) {
+				var rchw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var r = rchw[0];
+				var c = rchw[1];
+				var h = rchw[2];
+				var w = rchw[3];
+				for (var j = 0; j < h; ++j) {
+					for (var k = 0; k < w; ++k) {
+						if (grid[r - 1 + j, c - 1 + k] == false) {
+							grid[r - 1 + j, c - 1 + k] = true;
+						}
+					}
+				}
+			}
+
+			var answer = false;
+			if (grid[start[0] - 1, start[1] - 1] == false || grid[start[0] - 1, start[1] - 1] == false) {
+				answer = false;
+			} else {
+				var visited = new bool[R, C];
+			}
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -52,9 +84,12 @@ namespace AtCoderDotNetCore
 		public static void A()
 		{
 			int n = int.Parse(Console.ReadLine());
-			int a = int.Parse(Console.ReadLine());
-
-			var answer = n * n - a;
+			var answer = 0;
+			if (IsOdd(n)) {
+				answer = n + 1;
+			} else {
+				answer = n - 1;
+			}
 
 			Console.WriteLine($"{answer}");
 		}
