@@ -23,13 +23,41 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
-		}
+			var n = int.Parse(Console.ReadLine());
+			long sumX = 0;
+			long sumY = 0;
+			var hash = new HashSet<(long x, long y)>();
+			var list = new List<(long x, long y)>();
+			for (var i = 0; i < n; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var x = xy[0];
+				var y = xy[1];
+				list.Add((x, y));
+				if (hash.Contains((x, y)) == false) {
+					hash.Add((x, y));
+					sumX += x;
+					sumY += y;
+				}
+			}
 
-		public static bool IsOdd(long n)
-		{
-			bool isOdd = (n & 0x1) == 0x1;
-			return isOdd;
+			//var pX = (long)Math.Ceiling((double)sumX / hash.Count);
+			//var pY = (long)Math.Ceiling((double)sumY / hash.Count);
+
+			//Console.WriteLine($"{pX} {pY}");
+
+			BigInteger sum = 0;
+			for (var i = 0; i < hash.Count; ++i) {
+				sum += CalcDist(sumX, sumY, hash.ElementAt(i).x * hash.Count, hash.ElementAt(i).y * hash.Count);
+			}
+
+			sum /= hash.Count;
+
+			long CalcDist(long x1, long y1, long x2, long y2)
+			{
+				return Math.Abs(x1 - x2) + Math.Abs(y2 - y1);
+			}
+
+			Console.WriteLine($"{sum}");
 		}
 	}
 }
@@ -57,49 +85,35 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var answer = 0;
-			if (IsOdd(n)) {
-				answer = n + 1;
-			} else {
-				answer = n - 1;
-			}
+			long n = long.Parse(Console.ReadLine());
+
+			long answer = Lcm(2, n);
 
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var RC = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var R = RC[0];
-			var C = RC[1];
-
-			var grid = new bool[R, C]; // true is black
-
-			var start = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var goal = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int n = int.Parse(Console.ReadLine());
-
-			for (var i = 0; i < n; ++i) {
-				var rchw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var r = rchw[0];
-				var c = rchw[1];
-				var h = rchw[2];
-				var w = rchw[3];
-				for (var j = 0; j < h; ++j) {
-					for (var k = 0; k < w; ++k) {
-						if (grid[r - 1 + j, c - 1 + k] == false) {
-							grid[r - 1 + j, c - 1 + k] = true;
-						}
+			var Q = int.Parse(Console.ReadLine());
+			var list = new List<int>();
+			var answers = new List<int>();
+			for (var i = 0; i < Q; ++i) {
+				var tx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var t = tx[0];
+				var x = tx[1];
+				if (t == 1) {
+					list.Insert(0, x);
+				} else if (t == 2) {
+					list.Add(x);
+				} else {
+					if (list.Count > x - 1) {
+						answers.Add(list[x - 1]);
 					}
 				}
 			}
 
-			var answer = false;
-			if (grid[start[0] - 1, start[1] - 1] == false || grid[start[0] - 1, start[1] - 1] == false) {
-				answer = false;
-			} else {
-				var visited = new bool[R, C];
+			foreach (var item in answers) {
+				Console.WriteLine($"{item}");
 			}
 		}
 
