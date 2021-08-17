@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AtCoderDotNetCore.Lib
+namespace AtCoderDotNetCore
 {
 	public class Element : IComparable
 	{
