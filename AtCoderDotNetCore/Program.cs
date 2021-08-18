@@ -23,21 +23,34 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nk[0];
-			var k = nk[1];
-			List<long> list = new();
-			for (var i = 0; i < n; ++i) {
-				var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				list.Add(ab[1]);
-				list.Add(ab[0] - ab[1]);
+			long Gcd(long a, long b)
+			{
+				if (b == 0) {
+					return a;
+				}
+
+				return Gcd(b, a % b);
 			}
 
-			list.Sort();
+			var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = abc[0];
+			var b = abc[1];
+			var c = abc[2];
 
 			long answer = 0;
-			for (var i = 0; i < k; ++i) {
-				answer += list[list.Count - 1 - i];
+			if (a == b && b == c) {
+				answer = 0;
+			} else {
+				// 2面の切る回数を考えれば良い
+				// a-b面
+				var gcdAB = Gcd(a, b);
+				var length = Gcd(gcdAB, c);
+				//Console.WriteLine($"{length}");
+				answer += a / length - 1;
+				answer += b / length - 1;
+
+				// b-c面
+				answer += c / length - 1;
 			}
 
 			Console.WriteLine($"{answer}");
@@ -89,7 +102,7 @@ namespace AtCoderDotNetCore
 			var b = abc[1];
 			var c = abc[2];
 
-			BigInteger answer = 0;
+			long answer = 0;
 			if (a == b && b == c) {
 				answer = 0;
 			} else {
