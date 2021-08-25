@@ -23,46 +23,35 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nl = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nl[0];
-			var l = nl[1];
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var mat = new int[h, w];
 
-			long deno = (long)(Math.Pow(10.0, 9.0) + 7.0);
-			BigInteger answer = 0;
-
-			long fact(long n, long r)
-			{
-				if (n == r) {
-					return r;
+			var rList = new int[h];
+			var cList = new int[w];
+			for (var i = 0; i < h; ++i) {
+				var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int rsum = 0;
+				for (var j = 0; j < a.Length; ++j) {
+					mat[i, j] = a[j];
+					rsum += a[j];
+					cList[j] += a[j];
 				}
 
-				return fact(n - 1, r) * n;
+				rList[i] = rsum;
 			}
 
-			long comb(long n, long r)
-			{
-				var fn = fact(n, r);
-				var fr =  fact(r, 1);
-				return fn / fr;
-			}
-
-			long lcount = n / l;
-
-			if (lcount == 0) {
-				answer = 1;
-			} else {
-				for (var i = 1; i <= lcount; ++i) {
-					long count = n - (i * l) + i;
-					answer += comb(count, i);
+			for (var i = 0; i < rList.Length; ++i) {
+				for (var j = 0; j < cList.Length; ++j) {
+					var matB = rList[i] + cList[j] - mat[i, j];
+					if (j < w - 1) {
+						Console.Write($"{matB} ");
+					} else {
+						Console.WriteLine($"{matB}");
+					}
 				}
-
-				// 全部1の場合を加算
-				++answer;
 			}
-
-			answer %= deno;
-
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -136,7 +125,46 @@ namespace AtCoderDotNetCore
 
 		public static void C()
 		{
+			var nl = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nl[0];
+			var l = nl[1];
 
+			long deno = (long)(Math.Pow(10.0, 9.0) + 7.0);
+			BigInteger answer = 0;
+
+			long fact(long n, long r)
+			{
+				if (n == r) {
+					return r;
+				}
+
+				return fact(n - 1, r) * n;
+			}
+
+			long comb(long n, long r)
+			{
+				var fn = fact(n, r);
+				var fr = fact(r, 1);
+				return fn / fr;
+			}
+
+			long lcount = n / l;
+
+			if (lcount == 0) {
+				answer = 1;
+			} else {
+				for (var i = 1; i <= lcount; ++i) {
+					long count = n - (i * l) + i;
+					answer += comb(count, i);
+				}
+
+				// 全部1の場合を加算
+				++answer;
+			}
+
+			answer %= deno;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void D()
@@ -154,6 +182,8 @@ namespace AtCoderDotNetCore
 
 			// n <= 100 なのでビット全探索は無理
 			// DPでやるんだろうけどどうやればいいんだ？
+
+
 		}
 
 		public static void E()
