@@ -23,48 +23,46 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
-			var mat = new int[h, w];
-			for (var i = 0; i < h; ++i) {
-				var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				for (var j = 0; j < a.Length; ++j) {
-					mat[i, j] = a[j];
-				}
-			}
+			var nl = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nl[0];
+			var l = nl[1];
 
-			var rList = new List<int>();
-			for (var i = 0; i < h; ++i) {
-				int sum = 0;
-				for (var j = 0; j < w; ++j) {
-					sum += mat[i, j];
+			long deno = (long)(Math.Pow(10.0, 9.0) + 7.0);
+			BigInteger answer = 0;
+
+			long fact(long n, long r)
+			{
+				if (n == r) {
+					return r;
 				}
 
-				rList.Add(sum);
+				return fact(n - 1, r) * n;
 			}
 
-			var cList = new List<int>();
-			for (var i = 0; i < w; ++i) {
-				int sum = 0;
-				for (var j = 0; j < h; ++j) {
-					sum += mat[j, i];
+			long comb(long n, long r)
+			{
+				var fn = fact(n, r);
+				var fr =  fact(r, 1);
+				return fn / fr;
+			}
+
+			long lcount = n / l;
+
+			if (lcount == 0) {
+				answer = 1;
+			} else {
+				for (var i = 1; i <= lcount; ++i) {
+					long count = n - (i * l) + i;
+					answer += comb(count, i);
 				}
 
-				cList.Add(sum);
+				// 全部1の場合を加算
+				++answer;
 			}
 
-			var matB = new int[h, w];
-			for (var i = 0; i < h; ++i) {
-				for (var j = 0; j < w; ++j) {
-					matB[i, j] = rList[i] + cList[j] - mat[i, j];
-					if (j < w - 1) {
-						Console.Write($"{matB[i, j]} ");
-					} else {
-						Console.WriteLine($"{matB[i, j]}");
-					}
-				}
-			}
+			answer %= deno;
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -104,7 +102,36 @@ namespace AtCoderDotNetCore
 
 		public static void B()
 		{
+			//TLE
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var mat = new int[h, w];
 
+			var rList = new int[h];
+			var cList = new int[w];
+			for (var i = 0; i < h; ++i) {
+				var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int rsum = 0;
+				for (var j = 0; j < a.Length; ++j) {
+					mat[i, j] = a[j];
+					rsum += a[j];
+					cList[j] += a[j];
+				}
+
+				rList[i] = rsum;
+			}
+
+			for (var i = 0; i < rList.Length; ++i) {
+				for (var j = 0; j < cList.Length; ++j) {
+					var matB = rList[i] + cList[j] - mat[i, j];
+					if (j < w - 1) {
+						Console.Write($"{matB} ");
+					} else {
+						Console.WriteLine($"{matB}");
+					}
+				}
+			}
 		}
 
 		public static void C()
@@ -114,7 +141,19 @@ namespace AtCoderDotNetCore
 
 		public static void D()
 		{
+			var ns = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = ns[0];
+			var s = ns[1];
+			var alist = new List<long>();
+			var blist = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				alist.Add(ab[0]);
+				blist.Add(ab[1]);
+			}
 
+			// n <= 100 なのでビット全探索は無理
+			// DPでやるんだろうけどどうやればいいんだ？
 		}
 
 		public static void E()
