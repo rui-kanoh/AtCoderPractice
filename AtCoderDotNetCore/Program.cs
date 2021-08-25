@@ -43,14 +43,17 @@ namespace AtCoderDotNetCore
 			}
 
 			for (var i = 0; i < rList.Length; ++i) {
+				var builder = new StringBuilder();
 				for (var j = 0; j < cList.Length; ++j) {
 					var matB = rList[i] + cList[j] - mat[i, j];
-					if (j < w - 1) {
-						Console.Write($"{matB} ");
+					if (j < cList.Length - 1) {
+						builder.Append($"{matB} ");
 					} else {
-						Console.WriteLine($"{matB}");
+						builder.Append($"{matB}");
 					}
 				}
+
+				Console.WriteLine(builder.ToString());
 			}
 		}
 	}
