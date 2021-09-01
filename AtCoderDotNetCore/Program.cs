@@ -23,6 +23,41 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void Exec()
+		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void A()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var answer = n >= 1200 ? "ARC" : "ABC";
+			Console.WriteLine(answer);
+		}
+
+		public static void B()
+		{
 			int n = int.Parse(Console.ReadLine());
 
 			var list1 = new List<long>();
@@ -67,41 +102,6 @@ namespace AtCoderDotNetCore
 				long b = listRui2[indexBr] - bl;
 				Console.WriteLine($"{a} {b}");
 			}
-		}
-	}
-}
-
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
-		public static void Exec()
-		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(" ");
-
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void A()
-		{
-			int n = int.Parse(Console.ReadLine());
-			var answer = n >= 1200 ? "ARC" : "ABC";
-			Console.WriteLine(answer);
-		}
-
-		public static void B()
-		{
-
 		}
 
 		public static void C()
