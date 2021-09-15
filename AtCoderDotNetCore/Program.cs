@@ -23,13 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nl = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nl[0];
-			var l = nl[1];
-			var k = long.Parse(Console.ReadLine());
 
-			// この時点で累積和になっている
-			var alist = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
 		}
 	}
 }
