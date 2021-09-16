@@ -23,7 +23,75 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var all = a.Sum();
+			var all_10 = all / 10;
+			var alist = new List<long>(a);
+			alist.AddRange(a);
+			/*
+			var rui = new long[alist.Count + 1];
+			rui[0] = alist[0];
+			for (var i = 1; i < alist.Count; ++i) {
+				rui[i] = rui[i - 1] + alist[i];
+			}
+			*/
 
+			bool exists = false;
+			/*
+			if (alist[0] == all_10) {
+				exists = true;
+			} else {
+				for (var left = 1; left < n && exists == false; ++left) {
+					if (alist[left] == all_10) {
+						exists = true;
+						break;
+					} else if (alist[left] > all_10) {
+						continue;
+					}
+
+					long sum = 0;
+					for (var j = 0; j < n && exists == false; ++j) {
+						int right = left + 1 + j;
+						sum = rui[right] - rui[left - 1];
+						if (sum == all_10) {
+							exists = true;
+							break;
+						} else if (sum > all_10) {
+							break;
+						}
+					}
+				}
+			}
+			*/
+
+			int end = 1;
+			long sum = 0;
+			for (int start = 0; start < n; ++start) {
+				// sum >= all_10になるまでendを伸ばす
+				sum = alist[start];
+				while (end < start + 1 + n) {
+					if (sum >= all_10) {
+						++end;
+						break;
+					}
+
+					sum += alist[end];
+					++end;
+				}
+
+				if (sum == all_10) {
+					exists = true;
+					break;
+				}
+
+				if (end == start) {
+					end = start;
+				}
+			}
+
+			var answer = exists ? "Yes" : "No";
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -51,84 +119,17 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var nab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nab[0];
-			var a = nab[1];
-			var b = nab[2];
-			if (a < b) {
-				var temp = a;
-				a = b;
-				b = temp;
-			}
+			var xt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var x = xt[0];
+			var t = xt[1];
 
-			var min = 0;
-			var max = 0;
-			if (a == n && b == n) {
-				min = n;
-				max = n;
-			} else {
-				max = b;
-				var temp = (n - a) - b;
-				min = temp > 0 ? 0 : Math.Abs(temp);
-			}
-
-			Console.WriteLine($"{max} {min}");
+			var answer = x - t >= 0 ? x - t : 0;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			(bool isFound, int left, int right) BinarySearch(long value, List<long> list)
-			{
-				int left = -1;
-				int right = list.Count;
-				while (right - left > 1) {
-					int mid = (right + left) / 2;
-					if (list[mid] == value
-						|| right - left <= 1) {
-						return (true, mid, mid);
-					} else if (list[mid] > value) {
-						right = mid;
-					} else {
-						left = mid;
-					}
-				}
 
-				if (right - left <= 1) {
-					return (true, left > 0 ? left : 0, right < list.Count ? right : list.Count - 1);
-				}
-
-				if (left == -1 && right == list.Count) {
-					return (false, 0, list.Count - 1);
-				} else if (left == -1) {
-					return (false, 0, 0);
-				} else if (right == list.Count) {
-					return (false, list.Count - 1, list.Count - 1);
-				}
-
-				return (false, left, right);
-			}
-
-			var n = long.Parse(Console.ReadLine());
-			var alist = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
-			var q = long.Parse(Console.ReadLine());
-			var blist = new List<long>();
-			for (var i = 0; i < q; ++i) {
-				blist.Add(long.Parse(Console.ReadLine()));
-			}
-
-			alist.Sort();
-
-			for (var i = 0; i < q; ++i) {
-				(bool isFound, int left, int right) = BinarySearch(blist[i], alist);
-				if (isFound) {
-					long value = Math.Abs(blist[i] - alist[left]);
-					long value2 = Math.Abs(blist[i] - alist[right]);
-					var answer = Math.Min(value, value2);
-					Console.WriteLine($"{answer}");
-				} else {
-					Console.WriteLine($"0");
-				}
-			}
 		}
 
 		public static void C()
