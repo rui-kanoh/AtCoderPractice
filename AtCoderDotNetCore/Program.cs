@@ -32,23 +32,17 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			var rDict = new Dictionary<int, int>();
-			var rDict2 = new Dictionary<int, int>();
+			var list = new List<(int a, int b)>();
 			int m = int.Parse(Console.ReadLine());
 			for (var i = 0; i < m; ++i) {
 				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				rDict[xy[0] - 1] = xy[1] - 1;
-				rDict[xy[1] - 1] = xy[0] - 1;
+				list.Add((xy[0] - 1, xy[1] - 1));
 			}
 
 			int min = int.MaxValue;
 			void Dfs(List<int> items, int num)
 			{
 				if (items.Count == num) {
-					if (items.Distinct().Count() != items.Count()) {
-						return;
-					}
-
 					/*
 					foreach (var item in items) {
 						Console.Write($"{item} ");
@@ -57,16 +51,14 @@ namespace AtCoderDotNetCore
 					*/
 
 					for (var i = 1; i < items.Count - 1; ++i) {
-						if (rDict.ContainsKey(items[i])) {
-							if (rDict[items[i]] == items[i - 1]
-								|| rDict[items[i]] == items[i + 1]) {
+						for (var j = 0; j < list.Count; ++j) {
+							if (items[i] == list[j].a
+								&& (items[i - 1] == list[j].b || items[i + 1] == list[j].b)) {
 								return;
 							}
-						}
 
-						if (rDict2.ContainsKey(items[i])) {
-							if (rDict2[items[i]] == items[i - 1]
-							|| rDict2[items[i]] == items[i + 1]) {
+							if (items[i] == list[j].b
+								&& (items[i - 1] == list[j].a || items[i + 1] == list[j].a)) {
 								return;
 							}
 						}
@@ -83,9 +75,11 @@ namespace AtCoderDotNetCore
 
 
 				for (var i = 0; i < num; ++i) {
-					items.Add(i);
-					Dfs(items, num);
-					items.RemoveAt(items.Count - 1);
+					if (items.Contains(i) == false) {
+						items.Add(i);
+						Dfs(items, num);
+						items.RemoveAt(items.Count - 1);
+					}
 				}
 			}
 
