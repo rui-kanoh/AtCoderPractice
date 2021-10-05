@@ -23,14 +23,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nk[0];
-			var k = nk[1];
-
-			long count = 0;
-
-			
-			Console.WriteLine($"{count}");
 		}
 	}
 }
@@ -58,37 +50,10 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var value = ab[0] * ab[1];
-			var answer = value % 2 == 1 ? "Odd" : "Even";
-			Console.WriteLine($"{answer}");
-		}
-
-		public static BigInteger Gcd(BigInteger a, BigInteger b)
-		{
-			if (b == 0) {
-				return a;
-			}
-
-			return Gcd(b, a % b);
-		}
-
-		public static BigInteger Lcm(BigInteger a, BigInteger b)
-		{
-			BigInteger g = Gcd(a, b);
-			return a / g * b;
 		}
 
 		public static void B()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => BigInteger.Parse(i)).ToArray();
-			var lcm = Lcm(ab[0], ab[1]);
-			var max = (BigInteger)Math.Pow(10.0, 18.0);
-			if (lcm > max) {
-				Console.WriteLine("Large");
-			} else {
-				Console.WriteLine($"{lcm}");
-			}
 		}
 
 		public static void C()
