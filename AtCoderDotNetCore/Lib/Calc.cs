@@ -536,5 +536,27 @@ namespace AtCoderDotNetCore
 
 			Console.WriteLine($"{answer}");
 		}
+
+		// https://algo-logic.info/prime-fact/
+		public static Dictionary<long, long> GetPrimeFactor(long n)
+		{
+			var ret = new Dictionary<long, long>();
+			for (long i = 2; i * i <= n; i++) {
+				if (n % i != 0) continue;
+				long tmp = 0;
+				while (n % i == 0) {
+					tmp++;
+					n /= i;
+				}
+
+				ret.Add(i, tmp);
+			}
+
+			if (n != 1) {
+				ret.Add(n, 1);
+			}
+
+			return ret;
+		}
 	}
 }
