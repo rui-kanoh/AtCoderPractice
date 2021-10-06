@@ -23,6 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			
 		}
 	}
 }
@@ -50,70 +51,45 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
+			int n = int.Parse(Console.ReadLine());
+			bool isOK = false;
+			if (n % 10 == n / 100) {
+				isOK = true;
+			}
+
+			var answer = isOK ? "Yes" : "No";
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
+			// 貪欲法
+			var n = long.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			a.Sort();
+			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			b.Sort();
+
+			if (n == 1) {
+				Console.WriteLine($"{Math.Abs(a[0] - b[0])}");
+				return;
+			}
+
+			long distance = 0;
+			var amb = new List<long>();
+			for (var i = 0; i < a.Count; ++i) {
+				distance += Math.Abs(a[i] - b[i]);
+			}
+
+			var answer = distance;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			bool IsPrime(long num)
-			{
-				if (num < 2) return false;
-				else if (num == 2) return true;
-				else if (num % 2 == 0) return false;
 
-				double sqrtNum = Math.Sqrt(num);
-				for (int i = 3; i <= sqrtNum; i += 2) {
-					if (num % i == 0) {
-						// 素数ではない
-						return false;
-					}
-				}
-
-				// 素数である
-				return true;
-			}
-
-
-			long n = long.Parse(Console.ReadLine());
-			if (IsPrime(n)) {
-				Console.WriteLine($"0");
-				return;
-			}
-
-			// https://algo-logic.info/prime-fact/
-			static Dictionary<long, long> GetPrimeFactor(long n)
-			{
-				var ret = new Dictionary<long, long>();
-				for (long i = 2; i * i <= n; i++) {
-					if (n % i != 0) continue;
-					long tmp = 0;
-					while (n % i == 0) {
-						tmp++;
-						n /= i;
-					}
-
-					ret.Add(i, tmp);
-				}
-
-				if (n != 1) {
-					ret.Add(n, 1);
-				}
-
-				return ret;
-			}
-
-			long count = 0;
-			var factors = GetPrimeFactor(n);
-			foreach (var item in factors) {
-				count += item.Value;
-			}
-
-			long devideNum = (long)Math.Ceiling(Math.Log2(count));
-
-			Console.WriteLine($"{devideNum}");
 		}
 
 		public static void D()

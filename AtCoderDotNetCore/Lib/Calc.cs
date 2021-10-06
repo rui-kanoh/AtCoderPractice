@@ -86,6 +86,24 @@ namespace AtCoderDotNetCore
 				});
 		}
 
+		public static bool IsPrime(long num)
+		{
+			if (num < 2) return false;
+			else if (num == 2) return true;
+			else if (num % 2 == 0) return false;
+
+			double sqrtNum = Math.Sqrt(num);
+			for (int i = 3; i <= sqrtNum; i += 2) {
+				if (num % i == 0) {
+					// 素数ではない
+					return false;
+				}
+			}
+
+			// 素数である
+			return true;
+		}
+
 		public static bool IsOdd(long n)
 		{
 			bool isOdd = (n & 0x1) == 0x1;
