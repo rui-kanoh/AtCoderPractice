@@ -51,40 +51,12 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int n = int.Parse(Console.ReadLine());
-			bool isOK = false;
-			if (n % 10 == n / 100) {
-				isOK = true;
-			}
 
-			var answer = isOK ? "Yes" : "No";
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			// 貪欲法
-			var n = long.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
-			a.Sort();
-			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
-			b.Sort();
 
-			if (n == 1) {
-				Console.WriteLine($"{Math.Abs(a[0] - b[0])}");
-				return;
-			}
-
-			long distance = 0;
-			var amb = new List<long>();
-			for (var i = 0; i < a.Count; ++i) {
-				distance += Math.Abs(a[i] - b[i]);
-			}
-
-			var answer = distance;
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
