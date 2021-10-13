@@ -27,9 +27,9 @@ namespace AtCoderDotNetCore
 			var n = nq[0];
 			var q = nq[1];
 			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var diffs = new long[a.Length - 1];
+			var diffs = new long[a.Length];
 			for (var i = 0; i < diffs.Length - 1; ++i) {
-				diffs[i] = a[i] - a[i + 1];
+				diffs[i + 1] = a[i + 1] - a[i];
 			}
 
 			long Calc(long[] e)
@@ -52,13 +52,15 @@ namespace AtCoderDotNetCore
 				var v = lrv[2];
 
 				if (l > 0) {
-					total += (-Math.Abs(diffs[l - 1]) + Math.Abs(diffs[l - 1] - v));
-					diffs[l - 1] -= v;
+					long newL = diffs[l] + v;
+					total += Math.Abs(newL) - Math.Abs(diffs[l]);
+					diffs[l] = newL;
 				}
 
-				if (r < a.Length - 1) {
-					total += (-Math.Abs(diffs[r]) + Math.Abs(diffs[r] + v));
-					diffs[r] += v;
+				if (r < n - 1) {
+					long newR = diffs[r + 1] - v;
+					total += Math.Abs(newR) - Math.Abs(diffs[r + 1]);
+					diffs[r + 1] = newR;
 				}
 
 				builder.Append($"{total}" + Environment.NewLine);
