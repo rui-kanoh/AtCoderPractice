@@ -51,16 +51,14 @@ namespace AtCoderDotNetCore
 				var r = lrv[1] - 1;
 				var v = lrv[2];
 
-				if (l != r) {
-					if (l > 0) {
-						total += (-Math.Abs(diffs[l - 1]) + Math.Abs(diffs[l - 1] - v));
-						diffs[l - 1] -= v;
-					}
+				if (l > 0) {
+					total += (-Math.Abs(diffs[l - 1]) + Math.Abs(diffs[l - 1] - v));
+					diffs[l - 1] -= v;
+				}
 
-					if (r < a.Length - 1) {
-						total += (-Math.Abs(diffs[r]) + Math.Abs(diffs[r] + v));
-						diffs[r] += v;
-					}
+				if (r < a.Length - 1) {
+					total += (-Math.Abs(diffs[r]) + Math.Abs(diffs[r] + v));
+					diffs[r] += v;
 				}
 
 				builder.Append($"{total}" + Environment.NewLine);
