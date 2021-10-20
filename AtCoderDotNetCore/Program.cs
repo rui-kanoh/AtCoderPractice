@@ -23,51 +23,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var nq = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nq[0];
-			var q = nq[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var diffs = new long[a.Length];
-			for (var i = 0; i < diffs.Length - 1; ++i) {
-				diffs[i + 1] = a[i + 1] - a[i];
-			}
 
-			long Calc(long[] e)
-			{
-				long value = 0;
-				for (var i = 0; i < e.Length - 1; ++i) {
-					value += Math.Abs(e[i] - e[i + 1]);
-				}
-
-				return value;
-			}
-
-			var total = Calc(a);
-
-			var builder = new StringBuilder();
-			for (var i = 0; i < q; ++i) {
-				var lrv = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var l = lrv[0] - 1;
-				var r = lrv[1] - 1;
-				var v = lrv[2];
-
-				if (l > 0) {
-					long newL = diffs[l] + v;
-					total += Math.Abs(newL) - Math.Abs(diffs[l]);
-					diffs[l] = newL;
-				}
-
-				if (r < n - 1) {
-					long newR = diffs[r + 1] - v;
-					total += Math.Abs(newR) - Math.Abs(diffs[r + 1]);
-					diffs[r + 1] = newR;
-				}
-
-				builder.Append($"{total}" + Environment.NewLine);
-			}
-
-			var answer = builder.ToString();
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -101,39 +57,12 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int n = int.Parse(Console.ReadLine());
 
-			long value = 10000;
-			long total = 0;
-			for (var i = 1; i <= n; ++i) {
-				total += value * i;
-			}
-
-			long answer = total / n;
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nk[0];
-			var k = nk[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			bool isOK = false;
-			long diff = 0;
-			for (var i = 0; i < n; ++i) {
-				diff += Math.Abs(a[i] - b[i]);
-			}
 
-			if (diff <= k) {
-				if (IsOdd(diff) == IsOdd(k)) {
-					isOK = true;
-				}
-			}
-
-			var answer = isOK ? "Yes" : "No";
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
