@@ -576,5 +576,25 @@ namespace AtCoderDotNetCore
 
 			return ret;
 		}
+
+		public static long[] GetDivisors(long k, bool doesSort = false)
+		{
+			var list = new List<long>();
+			long max = (long)Math.Sqrt(k);
+			for (var i = 1; i <= max; ++i) {
+				if (k % i == 0) {
+					list.Add(i);
+					if (i != k / i) {
+						list.Add(k / i);
+					}
+				}
+			}
+
+			if (doesSort) {
+				list.Sort();
+			}
+
+			return list.ToArray();
+		}
 	}
 }
