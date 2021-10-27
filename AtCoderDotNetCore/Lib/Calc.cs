@@ -577,6 +577,7 @@ namespace AtCoderDotNetCore
 			return ret;
 		}
 
+		// 約数かどうか
 		public static long[] GetDivisors(long k, bool doesSort = false)
 		{
 			var list = new List<long>();
