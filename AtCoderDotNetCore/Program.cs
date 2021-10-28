@@ -22,8 +22,82 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
+		public static (bool isFound, int left, int right) BinarySearch(long value, List<long> list)
+		{
+			int left = -1;
+			int right = list.Count;
+			while (right - left > 1) {
+				int mid = (right + left) / 2;
+				if (list[mid] == value) {
+					return (true, mid, mid);
+				} else if (list[mid] > value) {
+					right = mid;
+				} else {
+					left = mid;
+				}
+			}
+
+			if (left == -1 || right == list.Count) {
+				return (false, left, right);
+			} else {
+				return (true, left, right);
+			}
+		}
+		/*
+9
+3
+7
+5
+9
+8
+10
+10
+11
+9
+*/
+
 		public static void Exec()
 		{
+			var n = int.Parse(Console.ReadLine());
+			var alist = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				var a = long.Parse(Console.ReadLine());
+				alist.Add(a);
+			}
+
+			var lisTable = Enumerable.Repeat(long.MaxValue, n).ToList();
+			lisTable[0] = 0;
+
+			long max = 0;
+			long length = 0;
+
+			for (var i = 0; i < alist.Count; ++i) {
+				(bool isFound, int left, int right) = BinarySearch(alist[i], lisTable);
+				//Console.WriteLine($"{left},{right}");
+
+				if (isFound) {
+					if (lisTable[left] == 0
+						|| (lisTable[left] > alist[i] && length - 1 == left)) {
+						lisTable[left] = alist[i];
+					} else if (length == right) {
+						lisTable[right] = alist[i];
+					}
+				}
+
+				var limitedList = lisTable.Where(s => s != long.MaxValue).ToList();
+				max = limitedList.Max();
+				length = limitedList.Count;
+
+				/*
+				foreach (var item in lisTable) {
+					Console.Write(item == long.MaxValue ? "∞ " : $"{item} ");
+				}
+
+				Console.WriteLine($"");
+				*/
+			}
+
+			Console.WriteLine($"{length}");
 		}
 	}
 }
@@ -90,51 +164,9 @@ namespace AtCoderDotNetCore
 			var k = int.Parse(sk[1]);
 			var slist = s.ToCharArray();
 
-			// https://webbibouroku.com/Blog/Article/cs-permutation
-			List<T[]> AllPermutation<T>(params T[] array) where T : IComparable
-			{
-				var a = new List<T>(array).ToArray();
-				var res = new List<T[]>();
-				res.Add(new List<T>(a).ToArray());
-				var n = a.Length;
-				var next = true;
-				while (next) {
-					next = false;
-
-					// 1
-					int i;
-					for (i = n - 2; i >= 0; i--) {
-						if (a[i].CompareTo(a[i + 1]) < 0) break;
-					}
-					// 2
-					if (i < 0) break;
-
-					// 3
-					var j = n;
-					do {
-						j--;
-					} while (a[i].CompareTo(a[j]) > 0);
-
-					if (a[i].CompareTo(a[j]) < 0) {
-						// 4
-						var tmp = a[i];
-						a[i] = a[j];
-						a[j] = tmp;
-						Array.Reverse(a, i + 1, n - i - 1);
-						res.Add(new List<T>(a).ToArray());
-						next = true;
-					}
-				}
-				return res;
-			}
-
-			//var sw = new Stopwatch();
-			//sw.Start();
-
 			var strList = new List<string>();
-			var hash = new HashSet<string>();
 
-			var p = AllPermutation(Enumerable.Range(0, slist.Length).ToArray());
+			var p = Calc.AllPermutation(Enumerable.Range(0, slist.Length).ToArray());
 
 			foreach (var indexes in p) {
 				var sb = new StringBuilder();
@@ -144,26 +176,63 @@ namespace AtCoderDotNetCore
 				}
 
 				string str = sb.ToString();
-				if (hash.Contains(str) == false) {
-					strList.Add(str);
-					hash.Add(str);
-				}
+				strList.Add(str);
 			}
 
+			strList = strList.Distinct().ToList();
 			strList.Sort();
-
-			/*
-			foreach (var item in strList) {
-				Console.WriteLine($"{item}");
-			}
-			*/
 
 			Console.WriteLine($"{strList[k - 1]}");
 		}
 
 		public static void D()
 		{
+			var n = int.Parse(Console.ReadLine());
+			var alist = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				var a = long.Parse(Console.ReadLine());
+				alist.Add(a);
+			}
 
+			long max = 0;
+
+
+			void Dfs(List<int> items, int num, int start)
+			{
+				/*
+				if () {
+					foreach (var item in items) {
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+
+					max = Math.Max(items.Count, max);
+					return;
+				}
+				*/
+
+				for (var i = start + 1; i < n - 1; ++i) {
+					items.Add(i);
+					if (alist[i] >= alist[i + 1]) {
+
+						foreach (var item in items) {
+							Console.Write($"{item} ");
+						}
+
+						Console.WriteLine("");
+
+						max = Math.Max(items.Count, max);
+						break;
+					}
+
+					Dfs(items, num, i);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), n, -1);
+
+			Console.WriteLine($"{max}");
 		}
 
 		public static void E()
