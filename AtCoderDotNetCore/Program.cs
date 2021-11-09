@@ -68,24 +68,24 @@ namespace AtCoderDotNetCore
 			var lisTable = Enumerable.Repeat(long.MaxValue, n).ToList();
 			lisTable[0] = 0;
 
-			long max = 0;
 			long length = 0;
 
-			for (var i = 0; i < alist.Count; ++i) {
+			for (var i = 1; i < alist.Count; ++i) {
 				(bool isFound, int left, int right) = BinarySearch(alist[i], lisTable);
 				//Console.WriteLine($"{left},{right}");
 
 				if (isFound) {
-					if (lisTable[left] == 0
-						|| (lisTable[left] > alist[i] && length - 1 == left)) {
-						lisTable[left] = alist[i];
-					} else if (length == right) {
-						lisTable[right] = alist[i];
+					if (lisTable[left] != long.MaxValue
+						&& lisTable[right] == long.MaxValue) {
+						if (lisTable[left] > alist[i]) {
+							lisTable[left] = alist[i];
+						} else {
+							lisTable[right] = alist[i];
+						}
 					}
 				}
 
 				var limitedList = lisTable.Where(s => s != long.MaxValue).ToList();
-				max = limitedList.Max();
 				length = limitedList.Count;
 
 				/*
