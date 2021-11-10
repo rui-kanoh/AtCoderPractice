@@ -24,7 +24,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
 		}
 	}
 }
@@ -103,7 +102,32 @@ namespace AtCoderDotNetCore
 
 		public static void D()
 		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var tlist = new List<int>();
 
+			for (var i = 0; i < n; ++i) {
+				tlist.Add(int.Parse(Console.ReadLine()));
+			}
+
+
+			var answer = n;
+			if (n - k > 0) {
+				var diffList = new List<(int diff, int index)>();
+				for (var i = 0; i < n - 1; ++i) {
+					diffList.Add((tlist[i + 1] - tlist[i], i));
+				}
+
+				diffList.Sort((a, b) => a.diff.CompareTo(b.diff));
+
+				for (var i = 0; i < n - k; ++i) {
+					answer += diffList[i].diff - 1;
+				}
+			}
+
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
