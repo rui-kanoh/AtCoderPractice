@@ -24,9 +24,43 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
-		}
+			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var mas = new char[h, w];
+			for (var i = 0; i < h; ++i) {
+				string s = Console.ReadLine();
+				for (var j = 0; j < s.Length; ++j) {
+					mas[i, j] = s[j];
+				}
+			}
 
+			long count = 0;
+
+			for (var i = 0; i < h; ++i) {
+				for (var j = 0; j < w; ++j) {
+					if (mas[i, j] == 'J') {
+						int countI = 0;
+						for (var k = i + 1; k < h; ++k) {
+							if (mas[k, j] == 'I') {
+								++countI;
+							}
+						}
+
+						int countO = 0;
+						for (var k = j + 1; k < w; ++k) {
+							if (mas[i, k] == 'O') {
+								++countO;
+							}
+						}
+
+						count += (countI * countO);
+					}
+				}
+			}
+
+			Console.WriteLine($"{count}");
+		}
 	}
 }
 
@@ -53,7 +87,9 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-
+			int n = int.Parse(Console.ReadLine());
+			var answer = n % 3 == 0 ? "YES" : "NO";
+			Console.WriteLine($"{answer}");
 		}
 
 		public static long Gcd(long a, long b)
