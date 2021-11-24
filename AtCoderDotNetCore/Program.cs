@@ -83,7 +83,6 @@ namespace AtCoderDotNetCore
 			for (var a = 1; a <= k; ++a) {
 				for (var b = 1; b <= k; ++b) {
 					for (var c = 1; c <= k; ++c) {
-						var list = new List<long> { a, b, c };
 						long value = Gcd(a, b);
 						value = Gcd(value, c);
 						sum += value;
