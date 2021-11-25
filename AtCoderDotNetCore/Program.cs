@@ -24,42 +24,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
-			var mas = new char[h, w];
-			for (var i = 0; i < h; ++i) {
-				string s = Console.ReadLine();
-				for (var j = 0; j < s.Length; ++j) {
-					mas[i, j] = s[j];
-				}
-			}
-
-			long count = 0;
-
-			for (var i = 0; i < h; ++i) {
-				for (var j = 0; j < w; ++j) {
-					if (mas[i, j] == 'J') {
-						int countI = 0;
-						for (var k = i + 1; k < h; ++k) {
-							if (mas[k, j] == 'I') {
-								++countI;
-							}
-						}
-
-						int countO = 0;
-						for (var k = j + 1; k < w; ++k) {
-							if (mas[i, k] == 'O') {
-								++countO;
-							}
-						}
-
-						count += (countI * countO);
-					}
-				}
-			}
-
-			Console.WriteLine($"{count}");
 		}
 	}
 }
@@ -164,6 +128,55 @@ namespace AtCoderDotNetCore
 
 		public static void D()
 		{
+			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var mas = new char[h, w];
+
+
+			var ruiO = new int[h, w];
+			for (var i = 0; i < h; ++i) {
+				string s = Console.ReadLine();
+				for (var j = 0; j < s.Length; ++j) {
+					mas[i, j] = s[j];
+					if (j == 0) {
+						ruiO[i, j] = 0;
+					} else {
+						ruiO[i, j] = ruiO[i, j - 1];
+						if (s[j] == 'O') {
+							++ruiO[i, j];
+						}
+					}
+				}
+			}
+
+			var ruiI = new int[h, w];
+			for (var j = 0; j < w; ++j) {
+				for (var i = 0; i < h; ++i) {
+					if (i == 0) {
+						ruiI[i, j] = 0;
+					} else {
+						ruiI[i, j] = ruiI[i - 1, j];
+						if (mas[i, j] == 'I') {
+							++ruiI[i, j];
+						}
+					}
+				}
+			}
+
+			long count = 0;
+
+			for (var i = 0; i < h; ++i) {
+				for (var j = 0; j < w; ++j) {
+					if (mas[i, j] == 'J') {
+						long countI = ruiI[h - 1, j] - ruiI[i, j];
+						long countO = ruiO[i, w - 1] - ruiO[i, j];
+						count += countI * countO;
+					}
+				}
+			}
+
+			Console.WriteLine($"{count}");
 
 		}
 
