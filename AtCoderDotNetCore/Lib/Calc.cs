@@ -568,6 +568,53 @@ namespace AtCoderDotNetCore
 			return res;
 		}
 
+		// https://oraclesqlpuzzle.ninja-web.net/kyoupro-old/kyoupro-memo-006.html
+		public static bool NextPermutation(ref string pStr)
+		{
+			//右から左に見ていき、初めて小さくなった要素を求める
+			int WillChangeInd = -1;
+			char[] wkCharArr = pStr.ToCharArray();
+			for (int I = wkCharArr.GetUpperBound(0) - 1; I >= 0; I--) {
+				if (wkCharArr[I] < wkCharArr[I + 1]) {
+					WillChangeInd = I;
+					break;
+				}
+			}
+
+			if (WillChangeInd == -1) {
+				pStr = new string(wkCharArr.Reverse().ToArray());
+				return false;
+			}
+
+			//初めて小さくなった要素より右の変更すべき要素を求める
+			int MinCharInd = WillChangeInd + 1;
+			for (int I = WillChangeInd + 2; I <= wkCharArr.GetUpperBound(0); I++) {
+				if (wkCharArr[WillChangeInd] > wkCharArr[I]) continue;
+
+				if (wkCharArr[MinCharInd] > wkCharArr[I]) {
+					MinCharInd = I;
+				}
+			}
+
+			//変更すべき要素と3角交換
+			char wkChar = wkCharArr[WillChangeInd];
+			wkCharArr[WillChangeInd] = wkCharArr[MinCharInd];
+			wkCharArr[MinCharInd] = wkChar;
+
+			//正順で連結
+			var sb = new System.Text.StringBuilder();
+			for (int I = 0; I <= WillChangeInd; I++) {
+				sb.Append(wkCharArr[I]);
+			}
+			//逆順で連結
+			for (int I = wkCharArr.GetUpperBound(0); I >= WillChangeInd + 1; I--) {
+				sb.Append(wkCharArr[I]);
+			}
+
+			pStr = sb.ToString();
+			return true;
+		}
+
 		// 組み合わせ列挙
 		//https://qiita.com/gushwell/items/74a96f56ccb64db3660c
 		public static IEnumerable<T[]> Enumerate<T>(IEnumerable<T> items, int k, bool withRepetition)
