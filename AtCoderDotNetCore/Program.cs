@@ -24,6 +24,21 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			var nqst = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nqst[0];
+			var q = nqst[1];
+			var s = nqst[2];
+			var t = nqst[3];
+			var aarray = new long[n + 1];
+			for (var i = 1; i <= n + 1; ++i) {
+				aarray[i] = long.Parse(Console.ReadLine());
+			}
+
+			var lrx = new (long l, long r, long x)[q];
+			for (var i = 1; i <= q; ++i) {
+				var value = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				lrx[i] = (value[0], value[1], value[2]);
+			}
 		}
 	}
 }
