@@ -29,11 +29,11 @@ namespace AtCoderDotNetCore
 			var w = hw[1];
 			long q = long.Parse(Console.ReadLine());
 
-			var vecterX = new int[] { -1, 1, 0, 0 };
-			var vecterY = new int[] { 0, 0, -1, 1 };
-			bool canReach = false;
 
 			// https://c-taquna.hatenablog.com/entry/2020/01/15/014154
+			bool canReach = false;
+			int[] vx = { 0, 1, 0, -1 };
+			int[] vy = { 1, 0, -1, 0 };
 			int GridBFS(int sx, int sy, int gx, int gy, bool[,] map)
 			{
 				if (map[sx, sy] == false || map[gx, gy] == false) {
@@ -41,18 +41,16 @@ namespace AtCoderDotNetCore
 					return 0;
 				}
 
-				int[,] dist = new int[h, w];
-				for (int y = 0; y < w; y++) {
-					for (int x = 0; x < h; x++) {
-						dist[x, y] = -1;
-					}
+				if (sx == gx && sy == gy) {
+					canReach = true;
+					return 0;
 				}
+
+				var dist = new bool[h, w];
 				var tq = new Queue<(int, int, int)>();
 				int step = 0;
 				tq.Enqueue((sx, sy, step));
-				dist[sx, sy] = 0;
-				int[] vx = { 0, 1, 0, -1 };
-				int[] vy = { 1, 0, -1, 0 };
+				dist[sx, sy] = true;
 				while (0 < tq.Count) {
 					var q = tq.Dequeue();
 					int x = q.Item1;
@@ -67,8 +65,8 @@ namespace AtCoderDotNetCore
 					for (int i = 0; i < 4; i++) {
 						int nx = x + vx[i];
 						int ny = y + vy[i];
-						if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == -1) {
-							dist[nx, ny] = dist[x, y] + 1;
+						if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == false) {
+							dist[nx, ny] = true;
 							tq.Enqueue((nx, ny, step + 1));
 						}
 					}
