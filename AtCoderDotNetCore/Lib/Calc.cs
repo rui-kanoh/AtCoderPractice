@@ -355,7 +355,7 @@ namespace AtCoderDotNetCore
 			}
 		}
 
-		public static void SaitoBSF()
+		public static void SaitoBFS()
 		{
 			int n = 10;
 			var a = new bool[n, n];
