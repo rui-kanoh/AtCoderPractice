@@ -22,9 +22,156 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
+		public class UnionFind
+		{
+			// 親要素のインデックスを保持する
+			// 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
+			public int[] Parents { get; set; }
+			public UnionFind(int n)
+			{
+				Parents = new int[n];
+				for (int i = 0; i < n; i++) {
+					// 初期状態ではそれぞれが別のグループ(ルートは自分自身)
+					// ルートなのでマイナスで要素数(1個)を保持する
+					Parents[i] = -1;
+				}
+			}
+
+			// 要素xのルート要素はどれか
+			public int Find(int x)
+			{
+				// 親がマイナスの場合は自分自身がルート
+				if (Parents[x] < 0) return x;
+				// ルートが見つかるまで再帰的に探す
+				// 見つかったルートにつなぎかえる
+				Parents[x] = Find(Parents[x]);
+				return Parents[x];
+			}
+
+			// 要素xの属するグループの要素数を取得する
+			public int Size(int x)
+			{
+				// ルート要素を取得して、サイズを取得して返す
+				return -Parents[Find(x)];
+			}
+
+			// 要素x, yが同じグループかどうか判定する
+			public bool Same(int x, int y)
+			{
+				return Find(x) == Find(y);
+			}
+
+			// 要素x, yが属するグループを同じグループにまとめる
+			public bool Union(int x, int y)
+			{
+				// x, y のルート
+				x = Find(x);
+				y = Find(y);
+				// すでに同じグループの場合処理しない
+				if (x == y) return false;
+
+				// 要素数が少ないグループを多いほうに書き換えたい
+				if (Size(x) < Size(y)) {
+					var tmp = x;
+					x = y;
+					y = tmp;
+				}
+				// まとめる先のグループの要素数を更新
+				Parents[x] += Parents[y];
+				// まとめられるグループのルートの親を書き換え
+				Parents[y] = x;
+				return true;
+			}
+		}
+
+		public static (bool center, bool top, bool bottom, bool left, bool right) GetIndexes(bool[,] mas, int centerX, int centerY)
+		{
+			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
+				return (false, false, false, false, false);
+			}
+
+			bool center = mas[centerX, centerY];
+			var list = new List<bool>();
+			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
+				list.Add(mas[x + centerX, y + centerY]);
+			}
+
+			return (center, list[0], list[2], list[1], list[3]);
+		}
+
 		public static void Exec()
 		{
-			
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			long q = long.Parse(Console.ReadLine());
+
+			var grid = new bool[h + 2, w + 2];
+			var indexDict = new Dictionary<(int h, int w), int>();
+
+			int counter = 0;
+			for (var i = 0; i < h + 2; ++i) {
+				for (var j = 0; j < w + 2; ++j) {
+					indexDict.Add((i, j), counter);
+					++counter;
+				}
+			}
+
+			var unionFind = new UnionFind(counter - 1);
+
+			var answers = new List<string>();
+			for (var i = 0; i < q; ++i) {
+				var query = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				if (query[0] == 1) {
+					var r = query[1];
+					var c = query[2];
+					grid[r, c] = true;
+					var ret = GetIndexes(grid, r, c);
+					var center = indexDict[(r, c)];
+					if (ret.top) {
+						var index = indexDict[(r - 1, c)];
+						unionFind.Union(center, index);
+					}
+					if (ret.bottom) {
+						var index = indexDict[(r + 1, c)];
+						unionFind.Union(center, index);
+					}
+					if (ret.left) {
+						var index = indexDict[(r, c - 1)];
+						unionFind.Union(center, index);
+					}
+					if (ret.right) {
+						var index = indexDict[(r, c + 1)];
+						unionFind.Union(center, index);
+					}
+				} else {
+					var ra = query[1];
+					var ca = query[2];
+					var rb = query[3];
+					var cb = query[4];
+
+					if (grid[ra, ca] == false
+						&& grid[rb, cb] == false) {
+						answers.Add("No");
+					} else {
+						var start = indexDict[(ra, ca)];
+						var end = indexDict[(rb, cb)];
+						var isSame = unionFind.Same(start, end);
+						if (isSame) {
+							answers.Add("Yes");
+						} else {
+							answers.Add("No");
+						}
+					}
+				}
+			}
+
+			var builder = new StringBuilder();
+			foreach (var item in answers) {
+				builder.AppendLine(item);
+			}
+
+			Console.WriteLine(builder.ToString());
 		}
 	}
 }
@@ -119,13 +266,6 @@ namespace AtCoderDotNetCore
 
 			var answer = max;
 			Console.WriteLine($"{answer}");
-		}
-
-		public class Train
-		{
-			public long Front { get; set; }
-			public long Back { get; set; }
-			public long Value { get; set; }
 		}
 
 		public static void C()
