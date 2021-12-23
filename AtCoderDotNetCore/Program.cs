@@ -84,21 +84,6 @@ namespace AtCoderDotNetCore
 			}
 		}
 
-		public static (bool center, bool top, bool bottom, bool left, bool right) GetIndexes(bool[,] mas, int centerX, int centerY)
-		{
-			if (mas.GetLength(0) < 3 || mas.GetLength(1) < 3) {
-				return (false, false, false, false, false);
-			}
-
-			bool center = mas[centerX, centerY];
-			var list = new List<bool>();
-			for (int x = -1, y = 0, i = 0; i < 4; x += y, y = x - y, x = y - x, ++i) {
-				list.Add(mas[x + centerX, y + centerY]);
-			}
-
-			return (center, list[0], list[2], list[1], list[3]);
-		}
-
 		public static void Exec()
 		{
 			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -126,21 +111,21 @@ namespace AtCoderDotNetCore
 					var r = query[1];
 					var c = query[2];
 					grid[r, c] = true;
-					var ret = GetIndexes(grid, r, c);
+					
 					var center = indexDict[(r, c)];
-					if (ret.top) {
+					if (grid[r - 1, c]) {
 						var index = indexDict[(r - 1, c)];
 						unionFind.Union(center, index);
 					}
-					if (ret.bottom) {
+					if (grid[r + 1, c]) {
 						var index = indexDict[(r + 1, c)];
 						unionFind.Union(center, index);
 					}
-					if (ret.left) {
+					if (grid[r, c - 1]) {
 						var index = indexDict[(r, c - 1)];
 						unionFind.Union(center, index);
 					}
-					if (ret.right) {
+					if (grid[r, c + 1]) {
 						var index = indexDict[(r, c + 1)];
 						unionFind.Union(center, index);
 					}
