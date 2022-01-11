@@ -33,5 +33,35 @@ namespace AtCoderDotNetCore.Lib
 
 			return (false, left, right);
 		}
+
+		public static bool Check(long value, List<long> list, int count)
+		{
+			long position = 0;
+			for (var i = 0; i < list.Count; ++i) {
+				long length = list[i] - position;
+				if (length >= value) {
+					--count;
+					position = list[i];
+				}
+			}
+
+			return count > 0 ? false : true;
+		}
+
+		public static (long ok, long ng) BinarySearch(List<long> list, int count, long l)
+		{
+			long ok = 1;
+			long ng = l;
+			while (ng - ok > 1) {
+				long mid = (ng + ok) / 2;
+				if (Check(mid, list, count)) {
+					ok = mid;
+				} else {
+					ng = mid;
+				}
+			}
+
+			return (ok, ng);
+		}
 	}
 }
