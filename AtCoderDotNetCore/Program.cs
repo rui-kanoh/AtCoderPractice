@@ -21,142 +21,12 @@ namespace AtCoderDotNetCore
 	}
 
 	public static class Question
-	{
-		public class UnionFind
-		{
-			// 親要素のインデックスを保持する
-			// 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
-			public int[] Parents { get; set; }
-			public UnionFind(int n)
-			{
-				Parents = new int[n];
-				for (int i = 0; i < n; i++) {
-					// 初期状態ではそれぞれが別のグループ(ルートは自分自身)
-					// ルートなのでマイナスで要素数(1個)を保持する
-					Parents[i] = -1;
-				}
-			}
-
-			// 要素xのルート要素はどれか
-			public int Find(int x)
-			{
-				// 親がマイナスの場合は自分自身がルート
-				if (Parents[x] < 0) return x;
-				// ルートが見つかるまで再帰的に探す
-				// 見つかったルートにつなぎかえる
-				Parents[x] = Find(Parents[x]);
-				return Parents[x];
-			}
-
-			// 要素xの属するグループの要素数を取得する
-			public int Size(int x)
-			{
-				// ルート要素を取得して、サイズを取得して返す
-				return -Parents[Find(x)];
-			}
-
-			// 要素x, yが同じグループかどうか判定する
-			public bool Same(int x, int y)
-			{
-				return Find(x) == Find(y);
-			}
-
-			// 要素x, yが属するグループを同じグループにまとめる
-			public bool Union(int x, int y)
-			{
-				// x, y のルート
-				x = Find(x);
-				y = Find(y);
-				// すでに同じグループの場合処理しない
-				if (x == y) return false;
-
-				// 要素数が少ないグループを多いほうに書き換えたい
-				if (Size(x) < Size(y)) {
-					var tmp = x;
-					x = y;
-					y = tmp;
-				}
-				// まとめる先のグループの要素数を更新
-				Parents[x] += Parents[y];
-				// まとめられるグループのルートの親を書き換え
-				Parents[y] = x;
-				return true;
-			}
-		}
+	{	
+		
 
 		public static void Exec()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
-			long q = long.Parse(Console.ReadLine());
-
-			var grid = new bool[h + 2, w + 2];
-			var indexDict = new Dictionary<(int h, int w), int>();
-
-			int counter = 0;
-			for (var i = 0; i < h + 2; ++i) {
-				for (var j = 0; j < w + 2; ++j) {
-					indexDict.Add((i, j), counter);
-					++counter;
-				}
-			}
-
-			var unionFind = new UnionFind(counter - 1);
-
-			var answers = new List<string>();
-			for (var i = 0; i < q; ++i) {
-				var query = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				if (query[0] == 1) {
-					var r = query[1];
-					var c = query[2];
-					grid[r, c] = true;
-					
-					var center = indexDict[(r, c)];
-					if (grid[r - 1, c]) {
-						var index = indexDict[(r - 1, c)];
-						unionFind.Union(center, index);
-					}
-					if (grid[r + 1, c]) {
-						var index = indexDict[(r + 1, c)];
-						unionFind.Union(center, index);
-					}
-					if (grid[r, c - 1]) {
-						var index = indexDict[(r, c - 1)];
-						unionFind.Union(center, index);
-					}
-					if (grid[r, c + 1]) {
-						var index = indexDict[(r, c + 1)];
-						unionFind.Union(center, index);
-					}
-				} else {
-					var ra = query[1];
-					var ca = query[2];
-					var rb = query[3];
-					var cb = query[4];
-
-					if (grid[ra, ca] == false
-						&& grid[rb, cb] == false) {
-						answers.Add("No");
-					} else {
-						var start = indexDict[(ra, ca)];
-						var end = indexDict[(rb, cb)];
-						var isSame = unionFind.Same(start, end);
-						if (isSame) {
-							answers.Add("Yes");
-						} else {
-							answers.Add("No");
-						}
-					}
-				}
-			}
-
-			var builder = new StringBuilder();
-			foreach (var item in answers) {
-				builder.AppendLine(item);
-			}
-
-			Console.WriteLine(builder.ToString());
+			
 		}
 	}
 }
@@ -253,6 +123,68 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 
+		public class UnionFind
+		{
+			// 親要素のインデックスを保持する
+			// 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
+			public int[] Parents { get; set; }
+			public UnionFind(int n)
+			{
+				Parents = new int[n];
+				for (int i = 0; i < n; i++) {
+					// 初期状態ではそれぞれが別のグループ(ルートは自分自身)
+					// ルートなのでマイナスで要素数(1個)を保持する
+					Parents[i] = -1;
+				}
+			}
+
+			// 要素xのルート要素はどれか
+			public int Find(int x)
+			{
+				// 親がマイナスの場合は自分自身がルート
+				if (Parents[x] < 0) return x;
+				// ルートが見つかるまで再帰的に探す
+				// 見つかったルートにつなぎかえる
+				Parents[x] = Find(Parents[x]);
+				return Parents[x];
+			}
+
+			// 要素xの属するグループの要素数を取得する
+			public int Size(int x)
+			{
+				// ルート要素を取得して、サイズを取得して返す
+				return -Parents[Find(x)];
+			}
+
+			// 要素x, yが同じグループかどうか判定する
+			public bool Same(int x, int y)
+			{
+				return Find(x) == Find(y);
+			}
+
+			// 要素x, yが属するグループを同じグループにまとめる
+			public bool Union(int x, int y)
+			{
+				// x, y のルート
+				x = Find(x);
+				y = Find(y);
+				// すでに同じグループの場合処理しない
+				if (x == y) return false;
+
+				// 要素数が少ないグループを多いほうに書き換えたい
+				if (Size(x) < Size(y)) {
+					var tmp = x;
+					x = y;
+					y = tmp;
+				}
+				// まとめる先のグループの要素数を更新
+				Parents[x] += Parents[y];
+				// まとめられるグループのルートの親を書き換え
+				Parents[y] = x;
+				return true;
+			}
+		}
+
 		public static void C()
 		{
 			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -260,104 +192,62 @@ namespace AtCoderDotNetCore
 			var w = hw[1];
 			long q = long.Parse(Console.ReadLine());
 
+			var grid = new bool[h + 2, w + 2];
+			var indexDict = new Dictionary<(int h, int w), int>();
 
-			// https://c-taquna.hatenablog.com/entry/2020/01/15/014154
-			bool canReach = false;
-			var dist = new bool[h, w];
-			void Initialize()
-			{
-				for (int y = 0; y < w; y++) {
-					for (int x = 0; x < h; x++) {
-						dist[x, y] = false;
-					}
-				}
-			}
-
-			var islands = new Dictionary<int, HashSet<(int x, int y)>>();
 			int counter = 0;
-
-			int[] vx = { 0, 1, 0, -1 };
-			int[] vy = { 1, 0, -1, 0 };
-			int GridBFS(int sx, int sy, int gx, int gy, bool[,] map)
-			{
-				if (map[sx, sy] == false || map[gx, gy] == false) {
-					canReach = false;
-					return 0;
+			for (var i = 0; i < h + 2; ++i) {
+				for (var j = 0; j < w + 2; ++j) {
+					indexDict.Add((i, j), counter);
+					++counter;
 				}
-
-				if (sx == gx && sy == gy) {
-					canReach = true;
-					return 0;
-				}
-
-				foreach (var island in islands) {
-					if (island.Value.Contains((sx, sy))
-						&& island.Value.Contains((gx, gy))) {
-						canReach = true;
-						return 0;
-					}
-				}
-
-				var tq = new Queue<(int, int, int)>();
-				int step = 0;
-				tq.Enqueue((sx, sy, step));
-				dist[sx, sy] = true;
-				while (0 < tq.Count) {
-					var q = tq.Dequeue();
-					int x = q.Item1;
-					int y = q.Item2;
-					step = q.Item3;
-
-					if (x == gx && y == gy) {
-						canReach = true;
-						break;
-					}
-
-					var list = new HashSet<(int x, int y)>();
-					for (int i = 0; i < 4; i++) {
-						int nx = x + vx[i];
-						int ny = y + vy[i];
-						if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == false) {
-							dist[nx, ny] = true;
-							tq.Enqueue((nx, ny, step + 1));
-							list.Add((nx, ny));
-						}
-					}
-
-					islands.Add(counter, list);
-				}
-
-				return step;
 			}
 
-			// query1で島のデータを作って、query2で同じ島に属しているかどうか判定するのはどうか
+			var unionFind = new UnionFind(counter - 1);
 
-			var grid = new bool[h, w];
 			var answers = new List<string>();
 			for (var i = 0; i < q; ++i) {
 				var query = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 				if (query[0] == 1) {
-					var r = query[1] - 1;
-					var c = query[2] - 1;
+					var r = query[1];
+					var c = query[2];
 					grid[r, c] = true;
-				} else {
-					var ra = query[1] - 1;
-					var ca = query[2] - 1;
-					var rb = query[3] - 1;
-					var cb = query[4] - 1;
 
-					if (dist[rb, cb] && canReach) {
-						// 計算しない
-					} else {
-						canReach = false;
-						Initialize();
-						GridBFS(ra, ca, rb, cb, grid);
+					var center = indexDict[(r, c)];
+					if (grid[r - 1, c]) {
+						var index = indexDict[(r - 1, c)];
+						unionFind.Union(center, index);
 					}
+					if (grid[r + 1, c]) {
+						var index = indexDict[(r + 1, c)];
+						unionFind.Union(center, index);
+					}
+					if (grid[r, c - 1]) {
+						var index = indexDict[(r, c - 1)];
+						unionFind.Union(center, index);
+					}
+					if (grid[r, c + 1]) {
+						var index = indexDict[(r, c + 1)];
+						unionFind.Union(center, index);
+					}
+				} else {
+					var ra = query[1];
+					var ca = query[2];
+					var rb = query[3];
+					var cb = query[4];
 
-					if (canReach) {
-						answers.Add("Yes");
-					} else {
+					if (grid[ra, ca] == false
+						&& grid[rb, cb] == false) {
 						answers.Add("No");
+					} else {
+						var start = indexDict[(ra, ca)];
+						var end = indexDict[(rb, cb)];
+						var isSame = unionFind.Same(start, end);
+						if (isSame) {
+							answers.Add("Yes");
+						} else {
+							answers.Add("No");
+						}
 					}
 				}
 			}
@@ -370,6 +260,22 @@ namespace AtCoderDotNetCore
 			Console.WriteLine(builder.ToString());
 		}
 
+		public static long ModPow(long x, long e, long denominator)
+		{
+			long value = 1;
+
+			while (e != 0x0) {
+				if ((e & 0x1) != 0x0) {
+					value = (value * x) % denominator;
+				}
+
+				e >>= 1;
+				x = (x * x) % denominator;
+			}
+
+			return value;
+		}
+
 		public static void D()
 		{
 			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
@@ -377,6 +283,17 @@ namespace AtCoderDotNetCore
 			var k = nk[1];
 
 			long deno = (long)(Math.Pow(10, 9) + 7);
+
+			long answer = 0;
+			if (n == 1) {
+				answer = k % deno;
+			} else if (n == 2) {
+				answer = (k % deno) * ((k - 1) % deno);
+			} else {
+				answer = (((k % deno) * ((k - 1) % deno)) % deno) * ModPow(k - 2, n - 2, deno);
+			}
+
+			Console.WriteLine($"{answer % deno}");
 		}
 
 		public static void E()

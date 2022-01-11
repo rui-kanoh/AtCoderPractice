@@ -636,5 +636,22 @@ namespace AtCoderDotNetCore
 				}
 			}
 		}
+
+		// 2分累乗法とmod演算
+		public static long ModPow(long x, long e, long denominator)
+		{
+			long value = 1;
+
+			while (e != 0x0) {
+				if ((e & 0x1) != 0x0) {
+					value = (value * x) % denominator;
+				}
+
+				e >>= 1;
+				x = (x * x) % denominator;
+			}
+
+			return value;
+		}
 	}
 }
