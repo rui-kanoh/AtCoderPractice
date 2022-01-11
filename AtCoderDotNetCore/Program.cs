@@ -21,9 +21,7 @@ namespace AtCoderDotNetCore
 	}
 
 	public static class Question
-	{	
-		
-
+	{
 		public static void Exec()
 		{
 			
@@ -296,7 +294,51 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer % deno}");
 		}
 
+		public static bool Check(long value, List<long> list, int count)
+		{
+			long position = 0;
+			for (var i = 0; i < list.Count; ++i) {
+				long length = list[i] - position;
+				if (length >= value) {
+					--count;
+					position = list[i];
+				}
+			}
+
+			return count > 0 ? false : true;
+		}
+
+		public static (long ok, long ng) BinarySearch(List<long> list, int count, long l)
+		{
+			long ok = 1;
+			long ng = l;
+			while (ng - ok > 1) {
+				long mid = (ng + ok) / 2;
+				if (Check(mid, list, count)) {
+					ok = mid;
+				} else {
+					ng = mid;
+				}
+			}
+
+			return (ok, ng);
+		}
+
 		public static void E()
+		{
+			// 決め打ち2分探索
+			var nl = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nl[0];
+			var l = nl[1];
+			var k = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			a.Add(l);
+
+			(long ok, long ng) = BinarySearch(a, k + 1, l);
+			Console.WriteLine($"{ok}");
+		}
+
+		public static void F()
 		{
 			var nst = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var n = nst[0];
@@ -336,11 +378,6 @@ namespace AtCoderDotNetCore
 			} else {
 
 			}
-		}
-
-		public static void F()
-		{
-
 		}
 
 		public static void G()
