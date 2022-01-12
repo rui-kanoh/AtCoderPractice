@@ -144,7 +144,7 @@ namespace AtCoderDotNetCore
 			for (var i = 0; i < q; ++i) {
 				long n = long.Parse(Console.ReadLine());
 				int max = 1;
-				int index = 1000;
+				int index = 1;
 				for (var j = 1; j <= n; ++j) {
 					var divisors = GetDivisors(j);
 					if (max < divisors.Length) {
