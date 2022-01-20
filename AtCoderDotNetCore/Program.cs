@@ -20,102 +20,6 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class Deque<T> : IEnumerable<T>
-	{
-		public T this[int i]
-		{
-			get { return Buffer[(FirstIndex + i) % Capacity]; }
-			set
-			{
-				if (i < 0) throw new ArgumentOutOfRangeException();
-				Buffer[(FirstIndex + i) % Capacity] = value;
-			}
-		}
-
-		private T[] Buffer;
-		private int Capacity;
-		private int FirstIndex;
-		private int LastIndex
-		{
-			get { return (FirstIndex + Length) % Capacity; }
-		}
-
-		public int Length;
-
-		public Deque(int capacity = 16)
-		{
-			Capacity = capacity;
-			Buffer = new T[Capacity];
-			FirstIndex = 0;
-		}
-
-		public void PushBack(T data)
-		{
-			if (Length == Capacity) Resize();
-			Buffer[LastIndex] = data;
-			Length++;
-		}
-
-		public void PushFront(T data)
-		{
-			if (Length == Capacity) {
-				Resize();
-			}
-
-			var index = FirstIndex - 1;
-			if (index < 0) {
-				index = Capacity - 1;
-			}
-
-			Buffer[index] = data;
-			Length++;
-			FirstIndex = index;
-		}
-
-		public T PopBack()
-		{
-			if (Length == 0) throw new InvalidOperationException("データが空です。");
-			var data = this[Length - 1];
-			Length--;
-			return data;
-		}
-
-		public T PopFront()
-		{
-			if (Length == 0) throw new InvalidOperationException("データが空です。");
-			var data = this[0];
-			FirstIndex++;
-			FirstIndex %= Capacity;
-			Length--;
-			return data;
-		}
-
-		private void Resize()
-		{
-			var newArray = new T[Capacity * 2];
-			for (int i = 0; i < Length; i++) {
-				newArray[i] = this[i];
-			}
-			FirstIndex = 0;
-			Capacity *= 2;
-			Buffer = newArray;
-		}
-
-		public IEnumerator<T> GetEnumerator()
-		{
-			for (int i = 0; i < Length; i++) {
-				yield return this[i];
-			}
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			for (int i = 0; i < Length; i++) {
-				yield return this[i];
-			}
-		}
-	}
-
 	public static class Question
 	{
 		public static bool IsOdd(long n)
@@ -126,8 +30,84 @@ namespace AtCoderDotNetCore
 
 		public static void Exec()
 		{
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void Exec()
+		{
 			string s = Console.ReadLine();
-			var deq = new Deque<char>(s.Length);
+
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
+
+		public static void A()
+		{
+
+		}
+
+		public static void B()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var words = new string[n];
+			for (var i = 0; i < n; ++i) {
+				words[i] = Console.ReadLine();
+			}
+
+			bool wins = false;
+			bool isfinished = true;
+			if (n > 1) {
+				var hash = new HashSet<string>();
+				hash.Add(words[0]);
+
+				for (var i = 1; i < words.Length; ++i) {
+					if (hash.Contains(words[i])) {
+						wins = IsOdd(i) ? true : false;
+						isfinished = false;
+						break;
+					}
+
+					string old = words[i - 1];
+					if (old[old.Length - 1] != words[i][0]) {
+						wins = IsOdd(i) ? true : false;
+						isfinished = false;
+						break;
+					}
+
+					hash.Add(words[i]);
+				}
+			}
+
+			var answer = isfinished
+				? "DRAW"
+				: wins ? "WIN" : "LOSE";
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void C()
+		{
+			string s = Console.ReadLine();
+			var deq = new Deque.Deque<char>(s.Length);
 			int reverseCount = 0;
 
 			for (var i = 0; i < s.Length; ++i) {
@@ -166,43 +146,6 @@ namespace AtCoderDotNetCore
 			}
 
 			Console.WriteLine(t);
-		}
-	}
-}
-
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
-		public static void Exec()
-		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(" ");
-
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void A()
-		{
-
-		}
-
-		public static void B()
-		{
-
-		}
-
-		public static void C()
-		{
 		}
 
 		public static void D()
