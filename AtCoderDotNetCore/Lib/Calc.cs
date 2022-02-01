@@ -627,5 +627,56 @@ namespace AtCoderDotNetCore
 
 			return value;
 		}
+
+		// https://c-taquna.hatenablog.com/entry/2020/01/15/014154
+		static bool canReach = false;
+		static int[] vx = { 0, 1, 0, -1 };
+		static int[] vy = { 1, 0, -1, 0 };
+		public static int GridBFS(int h, int w, int sx, int sy, int gx, int gy, bool[,] map)
+		{
+			if (map[sx, sy] == false || map[gx, gy] == false)
+			{
+				canReach = false;
+				return 0;
+			}
+
+			if (sx == gx && sy == gy)
+			{
+				canReach = true;
+				return 0;
+			}
+
+			var dist = new bool[h, w];
+			var tq = new Queue<(int, int, int)>();
+			int step = 0;
+			tq.Enqueue((sx, sy, step));
+			dist[sx, sy] = true;
+			while (0 < tq.Count)
+			{
+				var q = tq.Dequeue();
+				int x = q.Item1;
+				int y = q.Item2;
+				step = q.Item3;
+
+				if (x == gx && y == gy)
+				{
+					canReach = true;
+					break;
+				}
+
+				for (int i = 0; i < 4; i++)
+				{
+					int nx = x + vx[i];
+					int ny = y + vy[i];
+					if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == false)
+					{
+						dist[nx, ny] = true;
+						tq.Enqueue((nx, ny, step + 1));
+					}
+				}
+			}
+
+			return step;
+		}
 	}
 }
