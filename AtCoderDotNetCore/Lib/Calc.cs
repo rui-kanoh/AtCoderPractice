@@ -629,20 +629,18 @@ namespace AtCoderDotNetCore
 		}
 
 		// https://c-taquna.hatenablog.com/entry/2020/01/15/014154
-		static bool canReach = false;
-		static int[] vx = { 0, 1, 0, -1 };
-		static int[] vy = { 1, 0, -1, 0 };
 		public static int GridBFS(int h, int w, int sx, int sy, int gx, int gy, bool[,] map)
 		{
+			int[] vx = { 0, 1, 0, -1 };
+			int[] vy = { 1, 0, -1, 0 };
+
 			if (map[sx, sy] == false || map[gx, gy] == false)
 			{
-				canReach = false;
 				return 0;
 			}
 
 			if (sx == gx && sy == gy)
 			{
-				canReach = true;
 				return 0;
 			}
 

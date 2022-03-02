@@ -41,7 +41,7 @@ namespace AtCoderDotNetCore
 
 			var answer = 0;
 
-			Console.WriteLine($"{answer}");
+			Console.WriteLine($"{answer}");	
 		}
 	}
 }
