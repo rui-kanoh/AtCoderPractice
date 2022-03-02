@@ -25,119 +25,10 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class UnionFind
-	{
-		List<int> parents;
-
-		public int GroupCount { get; private set; }
-
-		public UnionFind(int x)
-		{
-			parents = Enumerable.Repeat(-1, x).ToList();
-			GroupCount = x;
-		}
-
-		public int Find(int x)
-		{
-			if (parents[x] < 0) return x;
-			else
-			{
-				parents[x] = Find(parents[x]);
-				return parents[x];
-			}
-		}
-
-		public void Union(int x, int y)
-		{
-			(x, y) = (Find(x), Find(y));
-
-			if (x != y)
-			{
-				if (Count(x) < Count(y)) (x, y) = (y, x);
-				parents[x] += parents[y];
-				parents[y] = x;
-				GroupCount--;
-			}
-		}
-
-		public int Count(int x) => -parents[Find(x)];
-
-		public bool IsSame(int x, int y) => Find(x) == Find(y);
-	}
-
 	public static class Question
 	{
-		public static IReadOnlyList<T[]> AllPermutation<T>(params T[] array) where T : IComparable
-		{
-			var a = new List<T>(array).ToArray();
-			var res = new List<T[]>();
-			res.Add(new List<T>(a).ToArray());
-			var n = a.Length;
-			var next = true;
-			while (next)
-			{
-				next = false;
-
-				// 1
-				int i;
-				for (i = n - 2; i >= 0; i--)
-				{
-					if (a[i].CompareTo(a[i + 1]) < 0) break;
-				}
-				// 2
-				if (i < 0) break;
-
-				// 3
-				var j = n;
-				do
-				{
-					j--;
-				} while (a[i].CompareTo(a[j]) > 0);
-
-				if (a[i].CompareTo(a[j]) < 0)
-				{
-					// 4
-					var tmp = a[i];
-					a[i] = a[j];
-					a[j] = tmp;
-					Array.Reverse(a, i + 1, n - i - 1);
-					res.Add(new List<T>(a).ToArray());
-					next = true;
-				}
-			}
-			return res;
-		}
-
 		public static void Exec()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-
-			var unionAB = new UnionFind(n);
-			for (var i = 0; i < m; i++)
-			{
-				var val = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				unionAB.Union(val[0] - 1, val[1] - 1);
-			}
-
-			var unionCB = new UnionFind(n);
-			for (var i = 0; i < m; i++)
-			{
-				var val = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				unionAB.Union(val[0] - 1, val[1] - 1);
-			}
-
-			var list = AllPermutation<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7 });
-
-			foreach (var item in list)
-            {
-				// 順列を全列挙して同じ組み合わせの物が見つかったらbreak
-				if (false)
-                {
-					break;
-                }
-            }
 		}
 	}
 }
@@ -227,15 +118,70 @@ namespace AtCoderDotNetCore
 			var x1y1 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var x2y2 = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
-			int size = 100000;
-			var step = GridBFS(size, size, x1y1[0] - 1, x1y1[1] - 1, x2y2[0] - 1, x2y2[1] - 1);
+			var step = Math.Abs(x2y2[0] - x1y1[0]) + Math.Abs(x2y2[1] - x1y1[1]);
 			var answer = step + 1;
 			Console.WriteLine($"{answer}");
 		}
 
-
 		public static void C()
 		{
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+
+			var adjacencyAB = new int[n, n];
+			for (var i = 0; i < m; i++)
+			{
+				var val = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				adjacencyAB[val[0] - 1, val[1] - 1] = 1;
+				adjacencyAB[val[1] - 1, val[0] - 1] = 1;
+			}
+
+			var adjacencyCD = new int[n, n];
+			for (var i = 0; i < m; i++)
+			{
+				var val = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				adjacencyCD[val[0] - 1, val[1] - 1] = 1;
+				adjacencyCD[val[1] - 1, val[0] - 1] = 1;
+			}
+
+			var list = Calc.AllPermutation(Enumerable.Range(0, n).ToArray());
+
+			var answer = false;
+			foreach (var item in list)
+			{
+				bool isSame = true;
+				for (var i = 0; i < n; ++i)
+				{
+					for (var j = 0; j < n; ++j)
+					{
+						if (adjacencyAB[i, j] != adjacencyCD[item[i], item[j]])
+						{
+							isSame = false;
+							break;
+						}
+
+						if (isSame == false)
+						{
+							break;
+						}
+					}
+				}
+
+				// 順列を全列挙して同じ組み合わせの物が見つかったらbreak
+				if (isSame)
+				{
+					answer = true;
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			Console.WriteLine(answer ? "Yes" : "No");
+
 		}
 
 		public static void D()
