@@ -658,7 +658,6 @@ namespace AtCoderDotNetCore
 
 				if (x == gx && y == gy)
 				{
-					canReach = true;
 					break;
 				}
 
