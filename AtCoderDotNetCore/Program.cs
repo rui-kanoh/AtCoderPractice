@@ -29,6 +29,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
+			
 		}
 	}
 }
@@ -181,12 +182,33 @@ namespace AtCoderDotNetCore
 			}
 
 			Console.WriteLine(answer ? "Yes" : "No");
-
 		}
 
 		public static void D()
 		{
+			long n = long.Parse(Console.ReadLine());
 
+			var list = new List<(long a, long t)>();
+			for (var i = 0; i < n; i++)
+			{
+				var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				list.Add((array[0], array[1]));
+			}
+
+			list.Sort((x, y) => y.a.CompareTo(x.a));
+
+			long answer = 0;
+			long time = Math.Max(list[0].a, list[0].t);
+
+			for (var i = 1; i < list.Count; i++)
+			{
+				time = Math.Max(time + Math.Abs(list[i - 1].a - list[i].a), list[i].t);
+			}
+
+			time += list[list.Count - 1].a;
+			answer = time;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void E()
