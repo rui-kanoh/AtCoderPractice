@@ -29,7 +29,25 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			long n = long.Parse(Console.ReadLine());
+
+			var dict = new Dictionary<(long a, long b), long>();
+			for (var i = 0; i < n; i++)
+			{
+				var array = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var key = (array[0], array[1]);
+				if (dict.ContainsKey(key))
+                {
+					++dict[key];
+				}
+                else
+                {
+					dict[key] = 0;
+				}				
+			}
 		}
 	}
 }
