@@ -48,6 +48,13 @@ namespace AtCoderDotNetCore
 					dict[key] = 0;
 				}				
 			}
+
+			long max = 0;
+			foreach (var item in dict)
+            {
+				var x = item.Key.a;
+				var y = item.Key.b;
+			}
 		}
 	}
 }
