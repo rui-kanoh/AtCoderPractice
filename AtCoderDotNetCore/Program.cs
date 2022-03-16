@@ -29,33 +29,46 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			var wh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var w = wh[0];
-			var h = wh[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var origin = Enumerable.Range(0, w).ToArray();
-
-			for (var i = 0; i < a.Length; ++i)
-            {
-				if (origin.Length > a[i] + 1)
-				{
-					var temp = origin[a[i] + 1];
-					origin[a[i] + 1] = origin[a[i]];
-					origin[a[i]] = temp;
-				}
-			}
+			string s = Console.ReadLine();
+			long k = long.Parse(Console.ReadLine());
+			long deno = (long)(Math.Pow(10, 9) + 7);
 
 			int count = 0;
-			for (var i = 0; i < b.Length; ++i)
-            {
-				if (origin[i] != b[i])
-                {
-					++count;
-                }
-            }
+			void DfsBool(List<bool> items, int num)
+			{
+				if (items.Count == num)
+				{
+					/*
+					foreach (var item in items)
+					{
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
 
-			var answer = count / 2;
+					int rCount = items.Count(b => b);
+					int bCount = items.Count(b => b == false);
+
+					if (rCount == bCount)
+                    {
+						++count;
+                    }
+
+					return;
+				}
+
+				Array.ForEach(
+					new[] { true, false },
+					value => {
+						items.Add(value);
+						DfsBool(items, num);
+						items.RemoveAt(items.Count - 1);
+					});
+			}
+
+			DfsBool(new List<bool>(), s.Length);
+
+			var answer = count;
 
 			Console.WriteLine($"{answer}");
 		}
@@ -91,97 +104,131 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			var abc = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var a = abc[0];
-			var b = abc[1];
-			var c = abc[2];
+			int n = int.Parse(Console.ReadLine());
+			int tCount = 0;
+			int acount = 0;
+			for (var i = 0; i < n; i++)
+			{
+				string s = Console.ReadLine();
+				tCount += s.Count(c => c == 'R');
+				acount += s.Count(c => c == 'B');
+			}
 
-			var answer = c / (a > b ? b : a);
+
+			var answer = tCount > acount
+				? "TAKAHASHI"
+				: (tCount != acount ? "AOKI" : "DRAW");
 
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var y = int.Parse(Console.ReadLine());
-			var m = int.Parse(Console.ReadLine());
-			var d = int.Parse(Console.ReadLine());
-
-			int CalcDate(int y, int m, int d)
+			var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+			if (a == 0 || b == 0 || (a < 0 && b > 0))
 			{
-				if (m == 1 || m == 2)
-				{
-					y -= 1;
-					m += 12;
-				}
-
-				int date = 365 * y + (y / 4) - (y / 100) + (y / 400) + ((306 * (m + 1)) / 10) + d - 429;
-				return date;
+				Console.WriteLine($"Zero");
+				return;
 			}
 
-			var answer = CalcDate(2014, 5, 17) - CalcDate(y, m, d);
+			// a,bどっちも正
+			if (a > 0 && b > 0)
+			{
+				Console.WriteLine($"Positive");
+				return;
+			}
+
+
+			// a,bどっちも負
+			var count = Math.Abs(a - b);
+			var answer = IsOdd(count)
+				? "Positive"
+				: "Negative";
+
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var s = Console.ReadLine().ToCharArray();
-			long q = long.Parse(Console.ReadLine());
-
-			long t2Count = 0;
-			for (var i = 0; i < q; i++)
+			string s = Console.ReadLine();
+			var oklist = new List<int>();
+			var qlist = new List<int>();
+			var nglist = new List<int>();
+			for (var i = 0; i < s.Length; i++)
 			{
-				var tab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var t = tab[0];
-				var a = tab[1] - 1;
-				var b = tab[2] - 1;
-
-				if (t == 2)
+				if (s[i] == 'o')
 				{
-					++t2Count;
+					oklist.Add(i);
+				}
+				else if (s[i] == '?')
+				{
+					qlist.Add(i);
 				}
 				else
 				{
-					if (IsOdd(t2Count))
-					{
-						if (a >= s.Length / 2)
-						{
-							a -= s.Length / 2;
-						}
-						else
-						{
-							a += s.Length / 2;
-						}
-
-						if (b >= s.Length / 2)
-						{
-							b -= s.Length / 2;
-						}
-						else
-						{
-							b += s.Length / 2;
-						}
-
-						char temp = s[a];
-						s[a] = s[b];
-						s[b] = temp;
-					}
-					else
-					{
-						char temp = s[a];
-						s[a] = s[b];
-						s[b] = temp;
-					}
+					nglist.Add(i);
 				}
 			}
 
-			var answer = new string(s);
-			if (IsOdd(t2Count))
+			if (oklist.Count > 4)
 			{
-				answer = answer.Substring(answer.Length / 2, answer.Length / 2) + answer.Substring(0, answer.Length / 2);
+				Console.WriteLine("0");
+				return;
 			}
 
+			int count = 0;
+			void Dfs(List<int> items, int num)
+			{
+				if (items.Count == num)
+				{
+					/*
+					foreach (var item in items)
+					{
+						Console.Write($"{item} ");
+					}
+					Console.WriteLine("");
+					*/
+
+					bool isOK = true;
+					foreach (var item in items)
+					{
+						if (nglist.Contains(item))
+						{
+							isOK = false;
+							break;
+						}
+					}
+
+					foreach (var okitem in oklist)
+					{
+						if (items.Contains(okitem) == false)
+						{
+							isOK = false;
+							break;
+						}
+					}
+
+					if (isOK)
+					{
+						++count;
+					}
+
+					return;
+				}
+
+				for (var i = 0; i < 10; ++i)
+				{
+					items.Add(i);
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), 4);
+
+			var answer = count;
 
 			Console.WriteLine($"{answer}");
 		}
