@@ -29,45 +29,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			string s = Console.ReadLine();
-			long k = long.Parse(Console.ReadLine());
-			long deno = (long)(Math.Pow(10, 9) + 7);
-
-			int count = 0;
-			void DfsBool(List<bool> items, int num)
-			{
-				if (items.Count == num)
-				{
-					/*
-					foreach (var item in items)
-					{
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-
-					int rCount = items.Count(b => b);
-					int bCount = items.Count(b => b == false);
-
-					if (rCount == bCount)
-                    {
-						++count;
-                    }
-
-					return;
-				}
-
-				Array.ForEach(
-					new[] { true, false },
-					value => {
-						items.Add(value);
-						DfsBool(items, num);
-						items.RemoveAt(items.Count - 1);
-					});
-			}
-
-			DfsBool(new List<bool>(), s.Length);
-
 			var answer = count;
 
 			Console.WriteLine($"{answer}");
@@ -104,50 +65,11 @@ namespace AtCoderDotNetCore
 
 		public static void A()
 		{
-			int n = int.Parse(Console.ReadLine());
-			int tCount = 0;
-			int acount = 0;
-			for (var i = 0; i < n; i++)
-			{
-				string s = Console.ReadLine();
-				tCount += s.Count(c => c == 'R');
-				acount += s.Count(c => c == 'B');
-			}
 
-
-			var answer = tCount > acount
-				? "TAKAHASHI"
-				: (tCount != acount ? "AOKI" : "DRAW");
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void B()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var a = ab[0];
-			var b = ab[1];
-			if (a == 0 || b == 0 || (a < 0 && b > 0))
-			{
-				Console.WriteLine($"Zero");
-				return;
-			}
-
-			// a,bどっちも正
-			if (a > 0 && b > 0)
-			{
-				Console.WriteLine($"Positive");
-				return;
-			}
-
-
-			// a,bどっちも負
-			var count = Math.Abs(a - b);
-			var answer = IsOdd(count)
-				? "Positive"
-				: "Negative";
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void C()
