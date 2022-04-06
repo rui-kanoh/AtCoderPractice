@@ -29,7 +29,6 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
 		}
 	}
 }
@@ -38,7 +37,7 @@ namespace AtCoderDotNetCore
 {
 	public class Template
 	{
-		public static void Exec()
+		public static void ExecA()
 		{
 			string s = Console.ReadLine();
 
@@ -51,6 +50,44 @@ namespace AtCoderDotNetCore
 			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Candy()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			var answer = n * (n + 1) / 2;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Usagi()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var dict = new Dictionary<int, int>();
+			for (var i = 0; i < n; ++i)
+			{
+				dict[i] = a[i] - 1;
+			}
+
+			var answer = 0;
+			foreach (var item in dict)
+			{
+				var key = item.Key;
+				var value = item.Value;
+				if (dict.ContainsKey(value) && dict[value] == key)
+				{
+					++answer;
+				}
+			}
+
+			if (answer > 0)
+			{
+				answer /= 2;
+			}
 
 			Console.WriteLine($"{answer}");
 		}
@@ -164,6 +201,131 @@ namespace AtCoderDotNetCore
 
 			Console.WriteLine($"{answer}");
 		}
+
+		public static void Book()
+		{
+			var nh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nh[0];
+			var H = nh[1];
+			var hlist = new int[n];
+			for (var i = 0; i < n; i++)
+			{
+				var hh = int.Parse(Console.ReadLine());
+				hlist[i] = hh;
+			}
+
+			var rui = new int[n + 1];
+			rui[0] = 0;
+			for (var i = 1; i <= n; i++)
+			{
+				rui[i] = rui[i - 1] + hlist[i - 1];
+			}
+
+			// たぶんbit全探索
+			var count = 0;
+
+			void Dfs(List<int> items, int num)
+			{
+				if (items.Count == num)
+				{
+					var ruiTemp = new int[n + 1];
+					Array.Copy(rui, ruiTemp, n + 1);
+					for (var i = 0; i < items.Count; ++i)
+					{
+						var index = items[i];
+
+						if (ruiTemp[index + 1] > H)
+						{
+							return;
+						}
+
+						for (var j = index; j < num; ++j)
+						{
+							ruiTemp[j + 1] -= hlist[index];
+						}
+					}
+
+					++count;
+
+					return;
+				}
+
+				for (var i = 0; i < num; ++i)
+				{
+					if (items.Contains(i))
+					{
+						continue;
+					}
+
+					items.Add(i);
+					Dfs(items, num);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), n);
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static (int left, int right) BinarySearchOKNG(int value, List<int> list)
+		{
+			if (list is null || list.Count < 2)
+			{
+				return (-1, -1);
+			}
+
+			if (value < list.First())
+			{
+				return (-1, 0);
+			}
+
+			if (value > list.Last())
+			{
+				return (list.Count - 1, list.Count);
+			}
+
+			int ng = -1;
+			int ok = list.Count;
+			while (ok - ng > 1)
+			{
+				int mid = (ok + ng) / 2;
+				if (list[mid] == value)
+				{
+					return (mid, mid);
+				}
+				else if (list[mid] > value)
+				{
+					ok = mid;
+				}
+				else
+				{
+					ng = mid;
+				}
+			}
+
+			return (ng, ok);
+		}
+
+		public static void Saien()
+        {
+			var n = long.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			// とりあえず累積和
+			var rui = new long[n + 1];
+			rui[0] = 0;
+			for (var i = 1; i <= n; i++)
+            {
+				rui[i] = rui[i - 1] + a[i];
+            }
+
+			// kについての決め打ちニブタン？
+
+
+		}
+
 
 		public static void A()
 		{
