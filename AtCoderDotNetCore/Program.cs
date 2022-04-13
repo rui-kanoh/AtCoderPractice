@@ -27,26 +27,37 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void ExecTemp()
+		public static void OneChar()
 		{
+			int n = int.Parse(Console.ReadLine());
 			string s = Console.ReadLine();
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			int ren = 1;
+			int count = 0;
+			for (var i = 1; i < s.Length; ++i)
+			{
+				if (s[i] == s[i - 1])
+                {
+					++ren;
+                } else
+                {
+					count += (ren * (ren - 1)) / 2;
+					ren = 1;
+                }
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			if (ren > 1)
+            {
+				count += (ren * (ren - 1)) / 2;
+			}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
-
+			var answer = count;
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void Exec()
 		{
-
+			OneChar();
 		}
 	}
 }
@@ -343,6 +354,64 @@ namespace AtCoderDotNetCore
 
 
 		}
+
+		public static void Tako()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var tlist = new int[n];
+			for (var i = 0; i < n; i++)
+			{
+				tlist[i] = int.Parse(Console.ReadLine());
+			}
+
+			var answer = tlist.Min();
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void UpperLower()
+		{
+			string s = Console.ReadLine();
+			int n = s.Length + 1;
+			var list = new int[n];
+
+			var diff = new int[n - 1];
+			for (var i = 1; i < n; ++i)
+			{
+				diff[i - 1] = s[i - 1] == '<' ? 1 : -1;
+			}
+
+			for (var i = 1; i < n; ++i)
+			{
+				int value = list[i - 1] + diff[i - 1];
+				list[i] = value;
+			}
+
+			int sum = 0;
+			int sIndex = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				// 0より小さくなるまで伸ばす
+				if (list[i] >= 0)
+				{
+					if (i < n - 1 && s[i] == '<')
+					{
+						sIndex = i;
+					}
+
+					sum += list[i];
+				}
+				else
+				{
+					sum += (i - sIndex - 1) * Math.Abs(list[i]);
+				}
+			}
+
+			var answer = sum;
+
+			Console.WriteLine($"{answer}");
+		}
+
 	}
 }
 
