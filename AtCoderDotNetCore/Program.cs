@@ -32,8 +32,8 @@ namespace AtCoderDotNetCore
 			int n = int.Parse(Console.ReadLine());
 			string s = Console.ReadLine();
 
-			int ren = 1;
-			int count = 0;
+			long ren = 1;
+			long count = 0;
 			for (var i = 1; i < s.Length; ++i)
 			{
 				if (s[i] == s[i - 1])
