@@ -27,8 +27,94 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
+		public static IReadOnlyList<T[]> AllPermutation<T>(params T[] array) where T : IComparable
+		{
+			var a = new List<T>(array).ToArray();
+			var res = new List<T[]>();
+			res.Add(new List<T>(a).ToArray());
+			var n = a.Length;
+			var next = true;
+			while (next)
+			{
+				next = false;
+
+				// 1
+				int i;
+				for (i = n - 2; i >= 0; i--)
+				{
+					if (a[i].CompareTo(a[i + 1]) < 0) break;
+				}
+				// 2
+				if (i < 0) break;
+
+				// 3
+				var j = n;
+				do
+				{
+					j--;
+				} while (a[i].CompareTo(a[j]) > 0);
+
+				if (a[i].CompareTo(a[j]) < 0)
+				{
+					// 4
+					var tmp = a[i];
+					a[i] = a[j];
+					a[j] = tmp;
+					Array.Reverse(a, i + 1, n - i - 1);
+					res.Add(new List<T>(a).ToArray());
+					next = true;
+				}
+			}
+			return res;
+		}
+
+		public static void Book2()
+		{
+			var nh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nh[0];
+			var H = nh[1];
+			var hlist = new int[n];
+			for (var i = 0; i < n; i++)
+			{
+				var hh = int.Parse(Console.ReadLine());
+				hlist[i] = hh;
+			}
+
+			var rui = new int[n + 1];
+			rui[0] = 0;
+			for (var i = 1; i <= n; i++)
+			{
+				rui[i] = rui[i - 1] + hlist[i - 1];
+			}
+
+			var count = 0;
+
+			var list = AllPermutation(Enumerable.Range(0, 4).ToArray());
+			foreach (var items in list)
+            {
+				int pulledCount = 0;
+				for (var i = 0; i < items.Length; ++i)
+				{
+					var index = items[i];
+
+					if (rui[index + 1] - pulledCount > H)
+					{
+						break;
+					}
+
+					pulledCount += hlist[index];
+				}
+
+				++count;
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
 		public static void Exec()
 		{
+			Book2();
 		}
 	}
 }
