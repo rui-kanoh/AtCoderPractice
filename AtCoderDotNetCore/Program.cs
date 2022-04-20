@@ -27,37 +27,26 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void OneChar()
+		public static void ExecTemp()
 		{
-			int n = int.Parse(Console.ReadLine());
 			string s = Console.ReadLine();
 
-			long ren = 1;
-			long count = 0;
-			for (var i = 1; i < s.Length; ++i)
-			{
-				if (s[i] == s[i - 1])
-                {
-					++ren;
-                } else
-                {
-					count += (ren * (ren - 1)) / 2;
-					ren = 1;
-                }
-			}
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-			if (ren > 1)
-            {
-				count += (ren * (ren - 1)) / 2;
-			}
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			var answer = count;
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void Exec()
 		{
-			OneChar();
+			ExecTemp();
 		}
 	}
 }
