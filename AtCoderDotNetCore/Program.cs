@@ -27,17 +27,48 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void ExecTemp()
+		public static bool IsOdd(long n)
 		{
-			string s = Console.ReadLine();
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+		public static void Pyramid()
+		{
+			var whn = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var w = whn[0];
+			var h = whn[1];
+            var n = whn[2];
+			var list = new (int x, int y, int h)[n];
+			for (var i = 0; i < n; i++)
+            {
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				list[i] = (array[0], array[1], array[2]);
+            }
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			var map = new int[w, h];
+			long CalcStone(int centerX, int centerY, int height)
+            {
+				int value = height;
+				for (var i = -1; i <= 1; i++)
+                {
+					for (var j = -1; j <= 1; j++)
+                    {
+						if (i == 0 && j == 0)
+                        {
+							continue;
+                        }
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+						int x = centerX + i;
+						int y = centerY + j;
+						if (x >= 0 && x < w && y >= 0 && y < h)
+                        {
+                        }
+                    }
+                }
+
+				return value;
+            }
 
 			var answer = 0;
 
@@ -46,7 +77,7 @@ namespace AtCoderDotNetCore
 
 		public static void Exec()
 		{
-			ExecTemp();
+			
 		}
 	}
 }
@@ -71,6 +102,152 @@ namespace AtCoderDotNetCore
 
 			Console.WriteLine($"{answer}");
 		}
+
+		public static IReadOnlyList<T[]> AllPermutation<T>(params T[] array) where T : IComparable
+		{
+			var a = new List<T>(array).ToArray();
+			var res = new List<T[]>();
+			res.Add(new List<T>(a).ToArray());
+			var n = a.Length;
+			var next = true;
+			while (next)
+			{
+				next = false;
+
+				// 1
+				int i;
+				for (i = n - 2; i >= 0; i--)
+				{
+					if (a[i].CompareTo(a[i + 1]) < 0) break;
+				}
+				// 2
+				if (i < 0) break;
+
+				// 3
+				var j = n;
+				do
+				{
+					j--;
+				} while (a[i].CompareTo(a[j]) > 0);
+
+				if (a[i].CompareTo(a[j]) < 0)
+				{
+					// 4
+					var tmp = a[i];
+					a[i] = a[j];
+					a[j] = tmp;
+					Array.Reverse(a, i + 1, n - i - 1);
+					res.Add(new List<T>(a).ToArray());
+					next = true;
+				}
+			}
+			return res;
+		}
+
+		public static void CountOrder()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var p = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var q = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+
+			var list = AllPermutation(Enumerable.Range(1, n).ToArray());
+
+			int a = -1;
+			int b = -1;
+			for (var j = 0; j < list.Count; ++j)
+			{
+				bool isFoundA = true;
+				for (var i = 0; i < n; i++)
+				{
+					if (list[j][i] != p[i])
+					{
+						isFoundA = false;
+						break;
+					}
+				}
+
+				if (isFoundA)
+				{
+					a = j;
+				}
+
+				bool isFoundB = true;
+				for (var i = 0; i < n; i++)
+				{
+					if (list[j][i] != q[i])
+					{
+						isFoundB = false;
+						break;
+					}
+				}
+
+				if (isFoundB)
+				{
+					b = j;
+				}
+			}
+
+			var answer = Math.Abs(a - b);
+
+			Console.WriteLine($"{answer}");
+		}
+
+		
+
+		public static void A()
+		{
+			string w = Console.ReadLine();
+
+			var answer = $"{w}s";
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Cookie()
+		{
+			var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = abc[0];
+			var b = abc[1];
+			var c = abc[2];
+
+			long count = 0;
+
+			if (IsOdd(a) || IsOdd(b) || IsOdd(c))
+			{
+				count = 0;
+			}
+			else
+			{
+				if (a == b && c == a)
+				{
+					count = -1;
+				}
+				else
+				{
+					for (var i = 0; i < Math.Max(a, Math.Max(b, c)) / 2; ++i)
+					{
+						var tempa = b / 2 + c / 2;
+						var tempb = c / 2 + a / 2;
+						var tempc = a / 2 + c / 2;
+						a = tempa;
+						b = tempb;
+						c = tempc;
+						++count;
+
+						if (IsOdd(a) || IsOdd(b) || IsOdd(c))
+						{
+							break;
+						}
+					}
+				}
+			}
+
+
+			var answer = count;
+
+			Console.WriteLine($"{answer}");
+		}
+
 
 		public static void Candy()
 		{
