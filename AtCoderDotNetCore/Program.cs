@@ -27,73 +27,8 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-
-		public static void Password()
-        {
-			var n = BigInteger.Parse(Console.ReadLine());
-			var deno = (BigInteger)998244353;
-			BigInteger count = 0;
-
-			void Dfs(List<long> items)
-			{
-				if (items.Count == n)
-				{
-					/*
-					foreach (var item in items)
-					{
-						Console.Write($"{item} ");
-					}
-					Console.WriteLine("");
-					*/
-
-					// 計算ロジック
-					bool isOK = true;
-					for (var i = 0; i < items.Count - 1; i++)
-                    {
-						if (Math.Abs(items[i] - items[i + 1]) > 1)
-                        {
-							isOK = false;
-							break;
-                        }
-                    }
-
-					if (isOK)
-                    {
-						++count;
-                    }
-
-					return;
-				}
-
-				for (long i = 1; i <= 9; i++)
-				{
-					items.Add(i);
-					Dfs(items);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<long>());
-
-			var answer = count % deno;
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void Mame()
-        {
-			var n = long.Parse(Console.ReadLine());
-			var c = new long[n];
-			var a = new long[n];
-			for (var i = 0; i < n; ++i) {
-				var ca = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				c[i] = ca[0];
-				a[i] = ca[1];
-			}
-		}
-
 		public static void Exec()
 		{
-			//Password();
 		}
 	}
 }
