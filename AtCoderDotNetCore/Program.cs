@@ -30,55 +30,40 @@ namespace AtCoderDotNetCore
 		public static void Vote()
 		{
 			long n = long.Parse(Console.ReadLine());
-
-			var arrayX = new long[n];
-			var arrayY = new long[n];
-			var arrayAgree = new int[n];
 			var rui = new long[n + 1];
 			rui[0] = 0;
-			for (var i = 0; i < n; i++)
-			{
-				var xy = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				arrayX[i] = xy[0];
-				arrayY[i] = xy[1];
-
-			}
 
 			long count = 0;
 
 			for (var i = 0; i < n; i++)
 			{
-				if (arrayY[i] == 0)
+				var xy = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var x = xy[0];
+				var y = xy[1];
+				bool agrees = false;
+
+				if (y == 0)
                 {
-					arrayAgree[i] = 1;
+					agrees = true;
 					++count;
-				} else if (arrayX[i] + 1 == arrayY[i])
+				} else if (x + 1 == y)
 				{
-					arrayAgree[i] = 0;
-				} else if (arrayX[i] == i)
+					agrees = false;
+				} else if (x == i)
                 {
-					if (count >= arrayY[i])
+					if (count >= y)
 					{
-						arrayAgree[i] = 1;
+						agrees = true;
 						++count;
 					}
 				} else {
 					long right = i;
-					long left = i - arrayX[i] >= 0 ? i - arrayX[i] : 0;
-					long aCount = rui[right] - rui[left];
-					/*
-					for (var j = 1; j <= arrayX[i]; j++)
-                    {
-						if ((i - j) >= 0 && arrayAgree[i - j] != 0)
-                        {
-							++aCount;
-                        }
-                    }
-					*/
+					long left = i - xy[0] >= 0 ? i - xy[0] : 0;
+					long count2 = rui[right] - rui[left];
 
-					if (aCount >= arrayY[i])
+					if (count2 >= xy[1])
 					{
-						arrayAgree[i] = 1;
+						agrees = true;
 						++count;
 					}
 				}
