@@ -68,7 +68,7 @@ namespace AtCoderDotNetCore
 					}
 				}
 
-				rui[i + 1] = arrayAgree[i] + rui[i];
+				rui[i + 1] = (agrees ? 1 : 0) + rui[i];
 			}
 
 			var answer = count;
