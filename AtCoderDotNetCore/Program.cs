@@ -27,57 +27,23 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void Vote()
+		public static void Multiplication()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var rui = new long[n + 1];
-			rui[0] = 0;
+			var ab = Console.ReadLine().Split(" ");
+			var a = long.Parse(ab[0]);
+			double bb = double.Parse(ab[1]);
+			// Math.Roundが大事
+			var b = (long)(Math.Round(bb * 100.0));
 
-			long count = 0;
+			var answer = a * b;
+			answer /= 100;
 
-			for (var i = 0; i < n; i++)
-			{
-				var xy = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				var x = xy[0];
-				var y = xy[1];
-				bool agrees = false;
-
-				if (y == 0)
-                {
-					agrees = true;
-					++count;
-				} else if (x + 1 == y)
-				{
-					agrees = false;
-				} else if (x == i)
-                {
-					if (count >= y)
-					{
-						agrees = true;
-						++count;
-					}
-				} else {
-					long right = i;
-					long left = i - xy[0] >= 0 ? i - xy[0] : 0;
-					long count2 = rui[right] - rui[left];
-
-					if (count2 >= xy[1])
-					{
-						agrees = true;
-						++count;
-					}
-				}
-
-				rui[i + 1] = (agrees ? 1 : 0) + rui[i];
-			}
-
-			var answer = count;
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void Exec()
 		{
-			Vote();
+			Multiplication();
 		}
 	}
 }
@@ -102,7 +68,149 @@ namespace AtCoderDotNetCore
 
 			Console.WriteLine($"{answer}");
 		}
-				
+
+		public static void Rotation()
+		{
+			string s1 = Console.ReadLine();
+			string s2 = Console.ReadLine();
+
+			bool isOK = s1[2] == s2[0] && s1[1] == s2[1] && s1[0] == s2[2];
+			var answer = isOK ? "YES" : "NO";
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Nando()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			int count = 0;
+			for (var i = 0; i < n; ++i)
+			{
+				var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				int sum = array.Sum();
+				if (sum < 20)
+				{
+					++count;
+				}
+			}
+
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void MonSho()
+		{
+			var mn = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var m = mn[0];
+			var n = mn[1];
+			var flag = new char[m + 2, n + 2];
+			for (var i = 0; i < m; ++i)
+			{
+				var s = Console.ReadLine();
+				for (var j = 0; j < n; ++j)
+				{
+					flag[i + 1, j + 1] = s[j];
+				}
+			}
+
+			var mon = new char[2, 2];
+			for (var i = 0; i < 2; ++i)
+			{
+				var s = Console.ReadLine();
+				for (var j = 0; j < 2; ++j)
+				{
+					mon[i, j] = s[j];
+				}
+			}
+
+			var joi = new[] { 'J', 'O', 'I' };
+
+			bool Find2(int i, int j)
+			{
+				for (var k = 0; k < 2; ++k)
+				{
+					for (var l = 0; l < 2; ++l)
+					{
+						if (mon[k, l] != flag[i + k, j + l])
+						{
+							return false;
+						}
+					}
+				}
+
+				return true;
+			}
+
+			int Find()
+			{
+				int count = 0;
+
+				for (var i = 0; i < m; ++i)
+				{
+					for (var j = 0; j < n; ++j)
+					{
+						bool isFound = Find2(i, j);
+						if (isFound)
+						{
+							++count;
+						}
+					}
+				}
+
+				return count;
+			}
+
+			int Find3(int i, int j)
+			{
+				int count = 0;
+				for (var ii = -1; ii <= 0; ++ii)
+				{
+					for (var jj = -1; jj <= 0; ++jj)
+					{
+						bool isFound = Find2(i + ii, j + jj);
+						if (isFound)
+						{
+							++count;
+						}
+					}
+				}
+
+				return count;
+			}
+
+			int max = Find();
+			int count2 = max;
+			for (var i = 0; i < m; ++i)
+			{
+				for (var j = 0; j < n; ++j)
+				{
+					foreach (var item in joi)
+					{
+						if (flag[i + 1, j + 1] == item)
+						{
+							continue;
+						}
+
+						int countOld = Find3(i + 1, j + 1);
+
+						var old = flag[i + 1, j + 1];
+						flag[i + 1, j + 1] = item;
+
+						int countNew = Find3(i + 1, j + 1);
+						int count = count2 - countOld + countNew;
+
+						max = Math.Max(max, count);
+						flag[i + 1, j + 1] = old;
+					}
+				}
+			}
+
+			Console.WriteLine($"{max}");
+		}
+
+
 		public static bool IsOdd(long n)
 		{
 			bool isOdd = (n & 0x1) == 0x1;
