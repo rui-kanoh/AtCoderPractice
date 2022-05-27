@@ -31,71 +31,41 @@ namespace AtCoderDotNetCore
 		{
 			int n = int.Parse(Console.ReadLine());
 			var t = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-			t.Sort();
-
-			var rui = new int[n + 1];
-			rui[0] = 0;
-			for (var i = 1; i <= n; ++i) {
-				rui[i] = t[i - 1] + rui[i - 1];
-			}
-
 			int total = t.Sum();
-			int total2 = (int)Math.Ceiling((double)total / 2.0);
 
-			var dp = new int[n + 1, total + 1];
-
-			dp[0, 0] = 1;
-
-			void UpdateDP(int i, int j)
-			{
-				if (i == n)
-				{
-					return;
-				}
-				else
-				{
-					dp[i + 1, j] += dp[i, j];
-					UpdateDP(i + 1, j);
-
-					dp[i + 1, j + t[i]] += dp[i, j];
-					UpdateDP(i + 1, j + t[i]);
-				}
-			}
-
-			UpdateDP(0, 0);
-
-			/*
-			for (var j = 0; j <= total; ++j)
-			{
-				for (var i = 0; i <= n; ++i)
-				{
-					Console.Write($"{dp[i, j]} ");
-				}
-
-				Console.WriteLine("");
-			}
-			*/
+			var dp = new bool[n + 1, total + 1];
+			dp[0, 0] = true;
 
 			var answer = 0;
 
-			bool isFound = false;
-			for (var j = total2; j < total; ++j)
-            {
-				for (var i = 0; i <= n; ++i)
-                {
-					if (dp[i, j] > 0)
-                    {
-						isFound = true;
-						break;
-                    }
-                }
-
-				if (isFound)
-                {
-					answer = j;
-					break;
-                }
+			if (n == 1)
+			{
+				answer = t[0];
 			}
+			else
+			{
+				for (var i = 1; i <= n; ++i)
+				{
+					for (var j = 0; j <= total - t[i - 1]; ++j)
+					{
+						if (dp[i - 1, j])
+						{
+							dp[i, j] = true;
+							dp[i, j + t[i - 1]] = true;
+						}
+					}
+				}
+
+				answer = total;
+				for (var i = 0; i <= total; ++i)
+				{
+					if (dp[n, i])
+                    {
+						answer = Math.Min(answer, Math.Max(i, total - i));
+                    }
+				}
+			}
+
 
 			Console.WriteLine($"{answer}");
 		}
