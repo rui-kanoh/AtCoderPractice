@@ -27,22 +27,82 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void ExecTemp()
+		public static void Cooking()
 		{
-			var stamps = new[] { 'J', 'O', 'I' };
-			long n = long.Parse(Console.ReadLine());
-			string s = Console.ReadLine();
+			int n = int.Parse(Console.ReadLine());
+			var t = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			t.Sort();
 
-			// DPなんだろうけれど。。
-			long max = 0;
+			var rui = new int[n + 1];
+			rui[0] = 0;
+			for (var i = 1; i <= n; ++i) {
+				rui[i] = t[i - 1] + rui[i - 1];
+			}
+
+			int total = t.Sum();
+			int total2 = (int)Math.Ceiling((double)total / 2.0);
+
+			var dp = new int[n + 1, total + 1];
+
+			dp[0, 0] = 1;
+
+			void UpdateDP(int i, int j)
+			{
+				if (i == n)
+				{
+					return;
+				}
+				else
+				{
+					dp[i + 1, j] += dp[i, j];
+					UpdateDP(i + 1, j);
+
+					dp[i + 1, j + t[i]] += dp[i, j];
+					UpdateDP(i + 1, j + t[i]);
+				}
+			}
+
+			UpdateDP(0, 0);
+
+			/*
+			for (var j = 0; j <= total; ++j)
+			{
+				for (var i = 0; i <= n; ++i)
+				{
+					Console.Write($"{dp[i, j]} ");
+				}
+
+				Console.WriteLine("");
+			}
+			*/
 
 			var answer = 0;
+
+			bool isFound = false;
+			for (var j = total2; j < total; ++j)
+            {
+				for (var i = 0; i <= n; ++i)
+                {
+					if (dp[i, j] > 0)
+                    {
+						isFound = true;
+						break;
+                    }
+                }
+
+				if (isFound)
+                {
+					answer = j;
+					break;
+                }
+			}
+
 			Console.WriteLine($"{answer}");
 		}
 
 		public static void Exec()
 		{
-			ExecTemp();
+			Cooking();
 		}
 	}
 }
@@ -74,80 +134,27 @@ namespace AtCoderDotNetCore
 			return isOdd;
 		}
 
-		public static void Acrostic()
+		public static void GoHome()
 		{
-			string S = Console.ReadLine();
-			int w = int.Parse(Console.ReadLine());
-			int num = (S.Length / w) + (S.Length % w > 0 ? 1 : 0);
+			long x = long.Parse(Console.ReadLine());
 
-			var strs = new string[num];
-			for (int i = 0; i < num; i++)
+			// 1～nまでの和がXを超えるところを探せばOK
+			// 余った部分は取り除ける
+			long Calc(long l)
 			{
-				int length = (w * i + w) >= S.Length ? S.Length - (w * i) : w;
-				strs[i] = S.Substring(w * i, length);
+				return ((1 + l) * l) / 2;
 			}
 
-			string str = "";
-			foreach (var item in strs)
+			long answer = 0;
+
+			for (long i = 1; i <= x; ++i)
 			{
-				str += item[0].ToString();
-			}
-
-			var answer = str;
-
-			Console.WriteLine($"{answer}");
-		}
-
-
-		public static void Niko()
-		{
-			long n = long.Parse(Console.ReadLine());
-
-			long count = 0;
-			for (var i = 1; i <= n; ++i)
-			{
-				if (i % 25 == 0)
+				if (Calc(i) >= x)
 				{
-					++count;
+					answer = i;
+					break;
 				}
 			}
-
-			var answer = count;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void StreamLine()
-		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-			var x = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-			x.Sort();
-
-			int count = 0;
-			if (n >= m)
-			{
-				count = 0;
-			}
-			else
-			{
-				// Sortして、外れ値を n - 1個除去してから、残りのグループの最小と最大の差が答え？
-				// ただ、グループが複数個の分散していた場合は対応できない。
-				long remain = m - n;
-
-				// n個のグループをつくる
-				// グループ分けのアルゴリズムが全く分からない
-				var groups = new List<int>[n];
-				var lengthArray = new long[m];
-				for (var i = 0; i < m - 1; ++i)
-				{
-					lengthArray[i] = x[i + 1] - x[i];
-				}
-			}
-
-
-			var answer = count;
 
 			Console.WriteLine($"{answer}");
 		}
