@@ -34,11 +34,9 @@ namespace AtCoderDotNetCore
 
 			if (n <= 2)
 			{
-				if (n == 1)
-				{
-                    Console.WriteLine($"{t[0]}");
-				} else
-                {
+				if (n == 1)	{
+					Console.WriteLine($"{t[0]}");
+				} else {
 					Console.WriteLine($"{Math.Max(t[0], t[1])}");
 				}
 			}
@@ -58,10 +56,10 @@ namespace AtCoderDotNetCore
 						if (value != 0)
 						{
 							// longですらオーバーフローするので対応
-							dp[i, j] = (long)((BigInteger)(dp[i, j] + value) % (BigInteger)long.MaxValue);
+							dp[i, j] = (long)(((BigInteger)dp[i, j] + value) % (BigInteger)long.MaxValue);
 							if (j < total - t[i - 1])
 							{
-								dp[i, j + t[i - 1]] = (long)((BigInteger)(dp[i, j + t[i - 1]] + value) % (BigInteger)long.MaxValue);
+								dp[i, j + t[i - 1]] = (long)(((BigInteger)dp[i, j + t[i - 1]] + value) % (BigInteger)long.MaxValue);
 							}
 						}
 					}
