@@ -29,43 +29,62 @@ namespace AtCoderDotNetCore
 	{
 		public static void Cooking()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var t = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			int total = t.Sum();
-			int total2 = (int)Math.Ceiling(total / 2.0m);
+			var n = int.Parse(Console.ReadLine());
+			var t = Console.ReadLine().Split(" ").Select(i => BigInteger.Parse(i)).ToArray();
 
-			// dpテーブル作成
-			var dp = new int[n + 1, total + 1];
-			dp[0, 0] = 1;
-			for (var i = 1; i <= n; ++i)
-            {
-				for (var j = 0; j <= total; ++j)
+			if (n <= 2)
+			{
+				if (n == 1)
 				{
-					int value = dp[i - 1, j];
-					if (value > 0)
+                    Console.WriteLine($"{t[0]}");
+				} else
+                {
+					Console.WriteLine((t[0] > t[1]) ? $"{t[0]}" : $"{t[1]}");
+				}
+			}
+			else
+			{
+				BigInteger total = 0;
+				for (var i = 0; i < t.Length; ++i)
+                {
+					total += t[i];
+                }
+
+				BigInteger total2 = total % 2 == 1 ? total / 2 + 1 : total / 2;
+
+				// dpテーブル作成
+				var dp = new BigInteger[n + 1, (long)total + 1];
+				dp[0, 0] = 1;
+				for (long i = 1; i <= n; ++i)
+				{
+					for (long j = 0; j <= total; ++j)
 					{
-						dp[i, j] += value;
-						if (j <= total - (j + t[i - 1]))
+						BigInteger value = dp[i - 1, j];
+						if (value > 0)
 						{
-							dp[i, j + t[i - 1]] += value;
+							dp[i, j] += value;
+							if (j < total - t[i - 1])
+							{
+								dp[i, j + (long)t[i - 1]] += value;
+							}
 						}
 					}
 				}
+
+				BigInteger answer = 0;
+
+				// i == nのときのtotal2以降で0より大きい物があればOK
+				for (long j = (long)total2; j < total; ++j)
+				{
+					if (dp[n, j] > 0)
+					{
+						answer = j;
+						break;
+					}
+				}
+
+				Console.WriteLine($"{answer}");
 			}
-
-			var answer = 0;
-
-			// i == nのときのtotal2以降で0より大きい物があればOK
-			for (var j = total2; j < total; ++j)
-			{
-				if (dp[n, j] > 0)
-                {
-					answer = j;
-					break;
-                }
-			}
-
-			Console.WriteLine($"{answer}");
 		}
 
 		public static void Exec()
@@ -80,7 +99,7 @@ namespace AtCoderDotNetCore
 	public class Template
 	{
 		public static void ExecTemp()
-		{
+	{
 			string s = Console.ReadLine();
 
 			long ln = long.Parse(Console.ReadLine());
