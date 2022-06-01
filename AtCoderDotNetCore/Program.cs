@@ -29,8 +29,8 @@ namespace AtCoderDotNetCore
 	{
 		public static void Cooking()
 		{
-			long n = int.Parse(Console.ReadLine());
-			var t = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			int n = int.Parse(Console.ReadLine());
+			var t = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
 			if (n <= 2)
 			{
@@ -42,33 +42,33 @@ namespace AtCoderDotNetCore
 			}
 			else
 			{
-				long total = t.Sum();
-				long total2 = (long)Math.Ceiling(total / 2.0m);
+				int total = t.Sum();
+				int total2 = (int)Math.Ceiling(total / 2.0m);
 
 				// dpテーブル作成
-				var dp = new long[n + 1, total + 1];
+				var dp = new int[n + 1, total + 1];
 				dp[0, 0] = 1;
-				for (long i = 1; i <= n; ++i)
+				for (int i = 1; i <= n; ++i)
 				{
-					for (long j = 0; j <= total; ++j)
+					for (int j = 0; j <= total; ++j)
 					{
-						long value = dp[i - 1, j];
+						int value = dp[i - 1, j];
 						if (value != 0)
 						{
-							// longですらオーバーフローするので対応
-							dp[i, j] = (long)(((BigInteger)dp[i, j] + value) % (BigInteger)long.MaxValue);
+							// intですらオーバーフローするので対応
+							dp[i, j] = (int)((((long)dp[i, j] % (long)int.MaxValue) + ((long)value % (long)int.MaxValue)) % (long)int.MaxValue);
 							if (j < total - t[i - 1])
 							{
-								dp[i, j + t[i - 1]] = (long)(((BigInteger)dp[i, j + t[i - 1]] + value) % (BigInteger)long.MaxValue);
+								dp[i, j + t[i - 1]] = (int)((((long)dp[i, j + t[i - 1]] % (long)int.MaxValue) + ((long)value % (long)int.MinValue)) % (long)int.MaxValue);
 							}
 						}
 					}
 				}
 
-				long answer = 0;
+				int answer = 0;
 
 				// i == nのときのtotal2以降で0より大きい物があればOK
-				for (long j = total2; j < total; ++j)
+				for (int j = total2; j < total; ++j)
 				{
 					if (dp[n, j] > 0)
 					{
