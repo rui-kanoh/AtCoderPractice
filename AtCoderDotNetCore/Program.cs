@@ -29,67 +29,18 @@ namespace AtCoderDotNetCore
 	{
 		public static void ExecTemp()
 		{
-			var nl = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nl[0];
-			var l = nl[1];
-			var a = new long[n];
-			var diff = new long[n];
-			for (var i = 0; i < n; ++i)
-			{
-                a[i] = long.Parse(Console.ReadLine());
-				if (i > 0)
-                {
-					diff[i] = a[i] - a[i - 1];
-                }
-			}
+			string s = Console.ReadLine();
 
-			long time = 0;
-			bool isAllZero = false;
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-			do
-			{
-				var indexes = new List<int>();
-				for (var i = 0; i < n; ++i)
-				{
-					if (i == 0)
-					{
-						if (a[i] > a[i + 1])
-						{
-							indexes.Add(i);
-						}
-					}
-					else if (i < n - 1)
-					{
-						if (a[i] > a[i + 1] && a[i] > a[i - 1])
-						{
-							indexes.Add(i);
-						}
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-					}
-					else
-					{
-						if (a[i] > a[i - 1])
-						{
-							indexes.Add(i);
-						}
-					}
-				}
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-				foreach (var item in indexes)
-				{
-					++a[item];
-					if (a[item] == l)
-					{
-						a[item] = 0;
-					}
-				}
+			var answer = 0;
 
-				++time;
-
-				isAllZero = (a.Count(x => x != 0) == 0);
-			} while (isAllZero == false);
-
-			var answer = time;
 			Console.WriteLine($"{answer}");
 		}
 
