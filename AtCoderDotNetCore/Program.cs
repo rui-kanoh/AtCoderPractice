@@ -29,17 +29,76 @@ namespace AtCoderDotNetCore
 	{
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
+			long n = long.Parse(Console.ReadLine());
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			var list = new (long a, long b, long c)[n];
+			long total = 0;
+			for (var i = 0; i < n; ++i) {
+				var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var a = abc[0];
+				var b = abc[1];
+				var c = abc[2];
+				list[i] = (a, b, c);
+				if ((BigInteger)total + (BigInteger)abc.Max() < (BigInteger)long.MaxValue) {
+					total += abc.Max();
+				}
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			var dp = new bool[n + 1, total + 1, 3];
+			dp[0, 0, 0] = true;
+			dp[1, list[0].a, 0] = true;
+			dp[1, list[0].b, 1] = true;
+			dp[1, list[0].c, 2] = true;
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			for (var i = 2; i <= n; ++i) {
+				var a = list[i - 1].a;
+				var b = list[i - 1].b;
+				var c = list[i - 1].c;
 
-			var answer = 0;
+				for (int j = 0; j <= total; ++j) {
+					for (int k = 0; k < 3; ++k) {
+						if (dp[i - 1, j, k]) {
+							if (k == 0) {
+								if (j <= total - b) {
+									dp[i, j + b, 1] = true;
+								}
+
+								if (j <= total - c) {
+									dp[i, j + c, 2] = true;
+								}
+							} else if (k == 1) {
+								if (j <= total - c) {
+									dp[i, j + c, 2] = true;
+								}
+
+								if (j <= total - a) {
+									dp[i, j + a, 0] = true;
+								}
+							} else {
+								if (j <= total - a) {
+									dp[i, j + a, 0] = true;
+								}
+
+								if (j <= total - b) {
+									dp[i, j + b, 1] = true;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			long max = 0;
+			for (int j = 0; j <= total; ++j)
+			{
+				for (int k = 0; k < 3; ++k) {
+					if (dp[n, j, k]) {
+						max = Math.Max(max, j);
+					}
+				}
+			}
+
+			var answer = max;
 
 			Console.WriteLine($"{answer}");
 		}
@@ -77,6 +136,24 @@ namespace AtCoderDotNetCore
 			bool isOdd = (n & 0x1) == 0x1;
 			return isOdd;
 		}
+
+		public static void Index()
+		{
+			string s = Console.ReadLine();
+			int i = int.Parse(Console.ReadLine());
+			var answer = s[i - 1];
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Takahashi()
+		{
+			string X = Console.ReadLine();
+			string s = Console.ReadLine();
+			var answer = s.Replace(X, "");
+			Console.WriteLine($"{answer}");
+		}
+
 
 		public static void A()
 		{
