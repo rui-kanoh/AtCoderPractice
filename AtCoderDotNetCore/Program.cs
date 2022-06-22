@@ -29,78 +29,217 @@ namespace AtCoderDotNetCore
 	{
 		public static void ExecTemp()
 		{
-			long n = long.Parse(Console.ReadLine());
+			long num = long.Parse(Console.ReadLine());
 
-			var list = new (long a, long b, long c)[n];
-			long total = 0;
-			for (var i = 0; i < n; ++i) {
-				var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				var a = abc[0];
-				var b = abc[1];
-				var c = abc[2];
-				list[i] = (a, b, c);
-				if ((BigInteger)total + (BigInteger)abc.Max() < (BigInteger)long.MaxValue) {
-					total += abc.Max();
+			// indexエラー対応で周り5マス余裕を取る
+			var map = new bool[num + 10, num + 10];
+			var mapOrigin = new bool[num + 10, num + 10];
+
+			for (int i = 0; i < num; ++i) {
+				string s = Console.ReadLine();
+				for (int j = 0; j < num; ++j) {
+					if (s[j] == '#') {
+						map[i + 5, j + 5] = mapOrigin[i + 5, j + 5] = true;
+					}
 				}
 			}
 
-			var dp = new bool[n + 1, total + 1, 3];
-			dp[0, 0, 0] = true;
-			dp[1, list[0].a, 0] = true;
-			dp[1, list[0].b, 1] = true;
-			dp[1, list[0].c, 2] = true;
+			// mapの初期化
+			void InitializeMap()
+			{
+				for (int k = 0; k < num + 10; ++k) {
+					for (int l = 0; l < num + 10; ++l) {
+						map[k, l] = mapOrigin[k, l];
+					}
+				}
+			}
 
-			for (var i = 2; i <= n; ++i) {
-				var a = list[i - 1].a;
-				var b = list[i - 1].b;
-				var c = list[i - 1].c;
+			// 最初から連結成分が1つの場合
 
-				for (int j = 0; j <= total; ++j) {
-					for (int k = 0; k < 3; ++k) {
-						if (dp[i - 1, j, k]) {
-							if (k == 0) {
-								if (j <= total - b) {
-									dp[i, j + b, 1] = true;
-								}
+			bool isOK = false;
 
-								if (j <= total - c) {
-									dp[i, j + c, 2] = true;
-								}
-							} else if (k == 1) {
-								if (j <= total - c) {
-									dp[i, j + c, 2] = true;
-								}
+			// 任意のマスを黒にして（もともと黒の場合は何もせず）、そこを基点に6つの連続要素があるかを探す
+			// 探索範囲は指定したマスを基点に10x10のマスで探索する
+			int changeNum = 2;
+			for (int i = 5; i < num + 5 && isOK == false; ++i) {
+				for (int j = 5; j < num + 5 && isOK == false; ++j) {
+					//InitializeMap();
 
-								if (j <= total - a) {
-									dp[i, j + a, 0] = true;
-								}
+					changeNum = map[i, j] == false ? 1 : 2;
+
+					// 上下左右ナナメの4パターンみればOK
+
+					// upper
+					int blackCount = 1;
+					for (int k = i + 1; k <= i + 5; ++k) {
+						if (map[k, j]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
 							} else {
-								if (j <= total - a) {
-									dp[i, j + a, 0] = true;
-								}
-
-								if (j <= total - b) {
-									dp[i, j + b, 1] = true;
-								}
+								break;
 							}
 						}
 					}
-				}
-			}
 
-			long max = 0;
-			for (int j = 0; j <= total; ++j)
-			{
-				for (int k = 0; k < 3; ++k) {
-					if (dp[n, j, k]) {
-						max = Math.Max(max, j);
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// lower
+					changeNum = map[i, j] == false ? 1 : 2;
+
+					blackCount = 1;
+					for (int k = i - 1; k > i - 5; --k) {
+						if (map[k, j]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// left
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int l = j + 1; l <= i + 5; ++l) {
+						if (map[i, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// right
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int l = j - 1; l > i + 5; --l) {
+						if (map[i, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// topleft
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int k = i + 1, l = j + 1; k <= j + 5 && l <= i + 5; ++k, ++l) {
+						if (map[k, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// topleft
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int k = i + 1, l = j - 1; k <= i + 5 && l > l - 5 ; ++k, --l) {
+						if (map[k, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// bottomleft
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int k = i - 1, l = j + 1; k > j - 5 && l <= l + 5; --k, ++l) {
+						if (map[k, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
+					}
+
+					// bottomright
+					changeNum = map[i, j] == false ? 1 : 2;
+					blackCount = 1;
+					for (int k = i - 1, l = j - 1; k > j - 5 && l > l - 5; --k, --l) {
+						if (map[k, l]) {
+							++blackCount;
+						} else {
+							if (changeNum > 0) {
+								++blackCount;
+								--changeNum;
+							} else {
+								break;
+							}
+						}
+					}
+
+					if (blackCount == 6) {
+						Console.WriteLine("Yes");
+						return;
 					}
 				}
 			}
 
-			var answer = max;
-
-			Console.WriteLine($"{answer}");
+			Console.WriteLine("No");
 		}
 
 		public static void Exec()
@@ -135,6 +274,42 @@ namespace AtCoderDotNetCore
 		{
 			bool isOdd = (n & 0x1) == 0x1;
 			return isOdd;
+		}
+
+		public static void Poker()
+		{
+			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = ab[0] == 1 ? 14 : ab[0];
+			var b = ab[1] == 1 ? 14 : ab[1];
+
+			var answer = "Draw";
+			if (a > b) {
+				answer = "Alice";
+			} else if (a < b) {
+				answer = "Bob";
+			}
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Snow()
+		{
+			var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+			var diff = b - a;
+
+			long index = 0;
+			for (var i = 1; i <= 999; ++i) {
+				if (i + 1 == diff) {
+					index = i;
+					break;
+				}
+			}
+
+			var answer = index * (index + 1) / 2 - a;
+
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void Index()
