@@ -28,11 +28,12 @@ namespace AtCoderDotNetCore
 	{
 		public static void ExecTemp()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var h = hw[0];
 			var w = hw[1];
 			long n = long.Parse(Console.ReadLine());
-			var abDict = new Dictionary<(int a, int b), int>();
+
+			var abDict = new Dictionary<(long a, long b), int>();
 
 			for (var j = 0; j < n; ++j) {
 				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -40,7 +41,7 @@ namespace AtCoderDotNetCore
 				var b = ab[1] - 1;
 				int[] vx = { 0, 0, 1, 0, -1, -1, 1, 1, -1 };
 				int[] vy = { 0, 1, 0, -1, 0, 1, 1, -1, -1 };
-				for (int i = 0; i < vx.Length; i++) {
+				for (int i = 0; i < vx.Length; ++i) {
 					int nx = a + vx[i];
 					int ny = b + vy[i];
 
@@ -60,14 +61,18 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			int Find(int x, int y)
+			long Find(long x, long y)
 			{
+				if (abDict.ContainsKey((x, y)) == false) {
+					return 0;
+				}
+
 				int count = abDict[(x, y)];
 				int[] vx = { 0, 1, 0, -1, -1, 1, 1, -1};
 				int[] vy = { 1, 0, -1, 0, 1,  1, -1,-1};
-				for (int i = 0; i < vx.Length; i++) {
-					int nx = x + vx[i];
-					int ny = y + vy[i];
+				for (int i = 0; i < vx.Length; ++i) {
+					long nx = x + vx[i];
+					long ny = y + vy[i];
 					if (abDict.ContainsKey((nx, ny))) {
 						count += abDict[(nx, ny)];
 					}
@@ -76,12 +81,21 @@ namespace AtCoderDotNetCore
 				return count;
 			}
 
-			int max = 0;
-			foreach (var pos in abDict) {
-				int x = pos.Key.a;
-				int y = pos.Key.b;
-				int count = Find(x, y);
-				max = Math.Max(max, count);
+			long max = 0;
+			if (h <= 1000 && w <= 1000) {
+				for (var i = 0; i < h; ++i) {
+					for (var j = 0; j < w; ++j) {
+						long count = Find(i, j);
+						max = Math.Max(max, count);
+					}
+				}
+			} else {
+				foreach (var pos in abDict) {
+					long x = pos.Key.a;
+					long y = pos.Key.b;
+					long count = Find(x, y);
+					max = Math.Max(max, count);
+				}
 			}
 
 			var answer = max;
