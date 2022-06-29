@@ -44,25 +44,11 @@ namespace AtCoderDotNetCore
 				}
 			}
 
-			// mapの初期化
-			void InitializeMap()
-			{
-				for (int k = 0; k < num + 10; ++k) {
-					for (int l = 0; l < num + 10; ++l) {
-						map[k, l] = mapOrigin[k, l];
-					}
-				}
-			}
-
-			// 最初から連結成分が1つの場合
-
-			bool isOK = false;
-
 			// 任意のマスを黒にして（もともと黒の場合は何もせず）、そこを基点に6つの連続要素があるかを探す
 			// 探索範囲は指定したマスを基点に10x10のマスで探索する
 			int changeNum = 2;
-			for (int i = 5; i < num + 5 && isOK == false; ++i) {
-				for (int j = 5; j < num + 5 && isOK == false; ++j) {
+			for (int i = 5; i < num + 5; ++i) {
+				for (int j = 5; j < num + 5; ++j) {
 					//InitializeMap();
 
 					changeNum = map[i, j] == false ? 1 : 2;
@@ -93,7 +79,7 @@ namespace AtCoderDotNetCore
 					changeNum = map[i, j] == false ? 1 : 2;
 
 					blackCount = 1;
-					for (int k = i - 1; k > i - 5; --k) {
+					for (int k = i - 1; k >= i - 5; --k) {
 						if (map[k, j]) {
 							++blackCount;
 						} else {
@@ -114,7 +100,7 @@ namespace AtCoderDotNetCore
 					// left
 					changeNum = map[i, j] == false ? 1 : 2;
 					blackCount = 1;
-					for (int l = j + 1; l <= i + 5; ++l) {
+					for (int l = j + 1; l <= j + 5; ++l) {
 						if (map[i, l]) {
 							++blackCount;
 						} else {
@@ -135,7 +121,7 @@ namespace AtCoderDotNetCore
 					// right
 					changeNum = map[i, j] == false ? 1 : 2;
 					blackCount = 1;
-					for (int l = j - 1; l > i + 5; --l) {
+					for (int l = j - 1; l >= j - 5; --l) {
 						if (map[i, l]) {
 							++blackCount;
 						} else {
@@ -177,7 +163,7 @@ namespace AtCoderDotNetCore
 					// topleft
 					changeNum = map[i, j] == false ? 1 : 2;
 					blackCount = 1;
-					for (int k = i + 1, l = j - 1; k <= i + 5 && l > l - 5 ; ++k, --l) {
+					for (int k = i + 1, l = j - 1; k <= i + 5 && l >= l - 5 ; ++k, --l) {
 						if (map[k, l]) {
 							++blackCount;
 						} else {
@@ -198,7 +184,7 @@ namespace AtCoderDotNetCore
 					// bottomleft
 					changeNum = map[i, j] == false ? 1 : 2;
 					blackCount = 1;
-					for (int k = i - 1, l = j + 1; k > j - 5 && l <= l + 5; --k, ++l) {
+					for (int k = i - 1, l = j + 1; k >= j - 5 && l <= l + 5; --k, ++l) {
 						if (map[k, l]) {
 							++blackCount;
 						} else {
@@ -219,7 +205,7 @@ namespace AtCoderDotNetCore
 					// bottomright
 					changeNum = map[i, j] == false ? 1 : 2;
 					blackCount = 1;
-					for (int k = i - 1, l = j - 1; k > j - 5 && l > l - 5; --k, --l) {
+					for (int k = i - 1, l = j - 1; k >= j - 5 && l >= l - 5; --k, --l) {
 						if (map[k, l]) {
 							++blackCount;
 						} else {
