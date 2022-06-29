@@ -33,10 +33,10 @@ namespace AtCoderDotNetCore
 			var w = hw[1];
 			long n = long.Parse(Console.ReadLine());
 
-			var abDict = new Dictionary<(long a, long b), int>();
+			var abDict = new Dictionary<(int a, int b), int>();
 
 			for (var j = 0; j < n; ++j) {
-				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var ab = Console.ReadLine().Split(" ").Select(k => int.Parse(k)).ToArray();
 				var a = ab[0] - 1;
 				var b = ab[1] - 1;
 				int[] vx = { 0, 0, 1, 0, -1, -1, 1, 1, -1 };
@@ -44,58 +44,17 @@ namespace AtCoderDotNetCore
 				for (int i = 0; i < vx.Length; ++i) {
 					int nx = a + vx[i];
 					int ny = b + vy[i];
-
-					if (abDict.ContainsKey((nx, ny)) == false) {
-						if ((0 <= nx && nx < h) && (0 <= ny && ny < w)) {
-							if (vx[i] == 0 && vy[i] == 0) {
-								abDict[(nx, ny)] = 1;
-							} else {
-								abDict[(nx, ny)] = 0;
-							}
-						}
-					} else {
-						if (vx[i] == 0 && vy[i] == 0) {
-							++abDict[(nx, ny)];
-						}
-					}
-				}
-			}
-
-			long Find(long x, long y)
-			{
-				if (abDict.ContainsKey((x, y)) == false) {
-					return 0;
-				}
-
-				int count = abDict[(x, y)];
-				int[] vx = { 0, 1, 0, -1, -1, 1, 1, -1};
-				int[] vy = { 1, 0, -1, 0, 1,  1, -1,-1};
-				for (int i = 0; i < vx.Length; ++i) {
-					long nx = x + vx[i];
-					long ny = y + vy[i];
 					if (abDict.ContainsKey((nx, ny))) {
-						count += abDict[(nx, ny)];
+						++abDict[(nx, ny)];
+					} else {
+						abDict[(nx, ny)] = 1;
 					}
 				}
-
-				return count;
 			}
 
 			long max = 0;
-			if (h <= 1000 && w <= 1000) {
-				for (var i = 0; i < h; ++i) {
-					for (var j = 0; j < w; ++j) {
-						long count = Find(i, j);
-						max = Math.Max(max, count);
-					}
-				}
-			} else {
-				foreach (var pos in abDict) {
-					long x = pos.Key.a;
-					long y = pos.Key.b;
-					long count = Find(x, y);
-					max = Math.Max(max, count);
-				}
+			foreach (var value in abDict.Values) {
+				max = Math.Max(max, value);
 			}
 
 			var answer = max;
