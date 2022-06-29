@@ -44,13 +44,13 @@ namespace AtCoderDotNetCore
 					int nx = a + vx[i];
 					int ny = b + vy[i];
 
-					if (abDict.ContainsKey((nx, ny)) == false
-						&& (0 <= nx && nx < h)
-						&& (0 <= ny && ny < w)) {
-						if (vx[i] == 0 && vy[i] == 0) {
-							abDict[(nx, ny)] = 1;
-						} else {
-							abDict[(nx, ny)] = 0;
+					if (abDict.ContainsKey((nx, ny)) == false) {
+						if ((0 <= nx && nx < h) && (0 <= ny && ny < w)) {
+							if (vx[i] == 0 && vy[i] == 0) {
+								abDict[(nx, ny)] = 1;
+							} else {
+								abDict[(nx, ny)] = 0;
+							}
 						}
 					} else {
 						if (vx[i] == 0 && vy[i] == 0) {
@@ -62,10 +62,6 @@ namespace AtCoderDotNetCore
 
 			int Find(int x, int y)
 			{
-				if (abDict.ContainsKey((x, y)) == false) {
-					return 0;
-				}
-
 				int count = abDict[(x, y)];
 				int[] vx = { 0, 1, 0, -1, -1, 1, 1, -1};
 				int[] vy = { 1, 0, -1, 0, 1,  1, -1,-1};
@@ -81,41 +77,15 @@ namespace AtCoderDotNetCore
 			}
 
 			int max = 0;
-
-			if (h <= 1000 && w <= 1000) {
-				for (var i = 0; i < h; ++i) {
-					for (var j = 0; j < w; ++j) {
-						int count = Find(i, j);
-						max = Math.Max(max, count);
-					}
-				}
-			} else {
-				foreach (var pos in abDict) {
-					int x = pos.Key.a;
-					int y = pos.Key.b;
-					if (abDict.ContainsKey((x, y))) {
-						int count = Find(x, y);
-						max = Math.Max(max, count);
-					}
-				}
+			foreach (var pos in abDict) {
+				int x = pos.Key.a;
+				int y = pos.Key.b;
+				int count = Find(x, y);
+				max = Math.Max(max, count);
 			}
 
 			var answer = max;
 			Console.WriteLine($"{answer}");
-
-			/*
-			for (var i = 0; i < h; ++i) {
-				for (var j = 0; j < w; ++j) {
-					var str = "0 ";
-					if (abDict.ContainsKey((i, j))) {
-						str = $"{abDict[(i, j)]} ";
-					}
-
-					Console.Write($"{str}");
-				}
-				Console.WriteLine("");
-			}
-			*/
 		}
 
 		public static void Exec()
