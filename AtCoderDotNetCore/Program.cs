@@ -51,7 +51,6 @@ namespace AtCoderDotNetCore
 			var q = nq[1];
 			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
 			a.Sort();
-			long aMax = a.Max();
 
 			var k = new long[q];
 			for (var i = 0; i < q; ++i) {
@@ -67,6 +66,7 @@ namespace AtCoderDotNetCore
 					Console.WriteLine($"{value + a.Count}");
 				} else {
 					value += left + 1;
+
 					for (var j = left + 1; j < a.Count; ++j) {
 						if (a[j] > value) {
 							break;
