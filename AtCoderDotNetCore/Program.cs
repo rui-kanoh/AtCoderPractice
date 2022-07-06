@@ -26,39 +26,58 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static void ExecTemp()
+		public static (int ok, int ng) BinarySearch(List<long> list, long value)
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
-			long n = long.Parse(Console.ReadLine());
-
-			var abDict = new Dictionary<(int a, int b), int>();
-
-			for (var j = 0; j < n; ++j) {
-				var ab = Console.ReadLine().Split(" ").Select(k => int.Parse(k)).ToArray();
-				var a = ab[0] - 1;
-				var b = ab[1] - 1;
-				int[] vx = { 0, 0, 1, 0, -1, -1, 1, 1, -1 };
-				int[] vy = { 0, 1, 0, -1, 0, 1, 1, -1, -1 };
-				for (int i = 0; i < vx.Length; ++i) {
-					int nx = a + vx[i];
-					int ny = b + vy[i];
-					if (abDict.ContainsKey((nx, ny))) {
-						++abDict[(nx, ny)];
-					} else {
-						abDict[(nx, ny)] = 1;
-					}
+			int left = -1;
+			int right = list.Count;
+			while (right - left > 1) {
+				int mid = (right + left) / 2;
+				if (list[mid] == value) {
+					return (mid, mid);
+				} else if (list[mid] > value) {
+					right = mid;
+				} else {
+					left = mid;
 				}
 			}
 
-			long max = 0;
-			foreach (var value in abDict.Values) {
-				max = Math.Max(max, value);
-			}
+			return (left, right);
+		}
 
-			var answer = max;
-			Console.WriteLine($"{answer}");
+		public static void ExecTemp()
+		{
+			var nq = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			a.Sort();
+			long aMax = a.Max();
+
+			var k = new long[q];
+			for (var i = 0; i < q; ++i) {
+				k[i] = long.Parse(Console.ReadLine());
+			}	
+
+			for (var i = 0; i < q; ++i) {
+				long value = k[i];
+				(int left, int right) = BinarySearch(a, value);
+				if (left == -1) {
+					Console.WriteLine($"{value}");
+				} else if (right == a.Count) {
+					Console.WriteLine($"{value + a.Count}");
+				} else {
+					value += left + 1;
+					for (var j = left + 1; j < a.Count; ++j) {
+						if (a[j] > value) {
+							break;
+						}
+
+						++value;
+					}
+
+					Console.WriteLine($"{value}");
+				}
+			}
 		}
 
 		public static void Exec()
@@ -94,6 +113,57 @@ namespace AtCoderDotNetCore
 			bool isOdd = (n & 0x1) == 0x1;
 			return isOdd;
 		}
+
+		public static void Kazoe()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var answer = "1";
+			for (var i = 0; i < n - 1; i++) {
+				answer += $"{0}";
+			}
+
+			answer += "7";
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Simulation()
+		{
+			var nab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nab[0];
+			var a = nab[1];
+			var b = nab[2];
+			string s = Console.ReadLine();
+
+			int outCount = 0;
+			int okCount = 0;
+
+			var answer = "No";
+			for (var i = 0; i < n; i++) {
+				if (s[i] == 'a') {
+					if (okCount < a + b) {
+						++okCount;
+						answer = "Yes";
+					} else {
+						answer = "No";
+					}
+				} else if (s[i] == 'b') {
+					++outCount;
+					if (okCount < a + b && outCount <= b) {
+						++okCount;
+						answer = "Yes";
+					} else {
+						answer = "No";
+					}
+				} else {
+					answer = "No";
+				}
+
+				Console.WriteLine($"{answer}");
+			}
+		}
+
+
 
 		public static void SwapP()
 		{
