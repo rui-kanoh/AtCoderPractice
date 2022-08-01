@@ -77,6 +77,28 @@ namespace AtCoderDotNetCore
 			return isOdd;
 		}
 
+		// わざとTLE
+		public static void AntiDivisionTLE()
+		{
+			var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = abcd[0];
+			var b = abcd[1];
+			var c = abcd[2];
+			var d = abcd[3];
+
+			var cdlcm = Lcm(c, d);
+
+			long count = 0;
+			for (var i = a; i <= b; ++i) {
+				if (i % c != 0 && i % d != 0 && i % cdlcm != 0) {
+					++count;
+				}
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
 		public static void AntiDivision()
 		{
 			var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
@@ -86,9 +108,9 @@ namespace AtCoderDotNetCore
 			var d = abcd[3];
 
 			var cdlcm = Lcm(c, d);
-			long cCount = (b / c) - (a / c) + ((a % c == 0) ? 1 : 0);
-			long dCount = (b / d) - (a / d) + ((a % d == 0) ? 1 : 0);
-			long cdCount = (b / cdlcm) - (a / cdlcm) + ((a % cdlcm) == 0 ? 1 : 0);
+			long cCount = (b / c) - ((a - 1) / c);
+			long dCount = (b / d) - ((a - 1) / d);
+			long cdCount = (b / cdlcm) - ((a - 1) / cdlcm);
 			long bar = cCount + dCount - cdCount;
 
 			var answer = (long)(b - a - bar + 1);
