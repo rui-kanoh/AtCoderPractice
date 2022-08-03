@@ -33,18 +33,59 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
+			long n = long.Parse(Console.ReadLine());
+			var a = new List<long>();
+			for (var i = 0; i < n; i++) {
+				a.Add(long.Parse(Console.ReadLine()));
+			}
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			long totalA = a.Sum();
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			// リングバッファなので後ろにもう一つ付ける
+			a.AddRange(a);
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var rui = new long[a.Count + 1];
+			rui[0] = 0;
+			for (var i = 0; i < a.Count; i++) {
+				rui[i + 1] = a[i] + rui[i];
+			}
 
-			var answer = 0;
+			long max = 0;
 
+			// 小課題1 切る場所を2つ選ぶのに3重ループで回す
+			if (n <= 400) {
+				for (var i = 0; i < a.Count; i++) {
+					for (var j = 0; j < a.Count; j++) {
+						if (j == i) {
+							continue;
+						}
+
+						for (var k = 0; k < a.Count; k++) {
+							if (k == i || k == j) {
+								continue;
+							}
+
+							var chank = new List<long> { 0, 0, 0, };
+
+							chank[0] = rui[j] - rui[i];
+							if (chank[0] > totalA) {
+								chank[0] -= totalA;
+							}
+
+
+							chank[1] = rui[k] - rui[j];
+							if (chank[1] > totalA) {
+								chank[1] -= totalA;
+							}
+
+							chank[2] = totalA - (chank[0] + chank[1]);
+							max = Math.Max(max, chank.Min());
+						}
+					}
+				}
+			}
+
+			var answer = max;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -75,6 +116,29 @@ namespace AtCoderDotNetCore
 		{
 			bool isOdd = (n & 0x1) == 0x1;
 			return isOdd;
+		}
+
+		public static void Tenka()
+		{
+			long total = 130000000;
+			long member = 42;
+			for (var i = 0; i < total; ++i) {
+				member += member;
+				if (member > total) {
+					break;
+				}
+			}
+
+			Console.WriteLine($"{member}");
+		}
+
+		public static void Tashizan()
+		{
+			var ab = Console.ReadLine().Split(" ");
+			var a = ab[0];
+			var b = ab[1];
+			var answer = int.Parse(a + b) * 2;
+			Console.WriteLine($"{answer}");
 		}
 
 		// わざとTLE
@@ -169,8 +233,8 @@ namespace AtCoderDotNetCore
 					}
 				}
 
+				// ここが大事
 				list.Sort();
-				list.Insert(0, 0);
 
 				int countA = s.Count(s => s == '1');
 				int countC = 0;
