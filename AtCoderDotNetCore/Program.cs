@@ -52,20 +52,15 @@ namespace AtCoderDotNetCore
 
 			long max = 0;
 
-			// 小課題1 切る場所を2つ選ぶのに3重ループで回す
+			// 小課題1,2 切る場所を2つ選ぶのに3重ループで回す
 			if (n <= 400) {
+				var chank = new List<long> { 0, 0, 0, };
 				for (var i = 0; i < a.Count; i++) {
-					for (var j = 0; j < a.Count; j++) {
-						if (j == i) {
-							continue;
-						}
-
-						for (var k = 0; k < a.Count; k++) {
-							if (k == i || k == j) {
-								continue;
-							}
-
-							var chank = new List<long> { 0, 0, 0, };
+					for (var j = i + 1; j < a.Count; j++) {
+						for (var k = j + 1; k < a.Count; k++) {
+							chank[0] = 0;
+							chank[1] = 0;
+							chank[2] = 0;
 
 							chank[0] = rui[j] - rui[i];
 							if (chank[0] > totalA) {
