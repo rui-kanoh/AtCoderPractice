@@ -675,5 +675,38 @@ namespace AtCoderDotNetCore
 
 			return step;
 		}
+
+		// https://qiita.com/asksaito/items/8fe448d21b394eb35582
+		public static List<int> GeneratePrime(int max)
+		{
+			System.Diagnostics.Debug.Assert(max >= 2);  // maxは2以上の数
+
+			int prime;
+			double sqrtMax = Math.Sqrt(max);
+			var primeList = new List<int>();
+
+			// ■ステップ 1
+			// 探索リストに2からxまでの整数を昇順で入れる。
+			var searchList = Enumerable.Range(2, max - 1).ToList();
+
+			do {
+				// ■ステップ 2
+				// 探索リストの先頭の数を素数リストに移動し、その倍数を探索リストから篩い落とす。
+				prime = searchList.First();
+				// 素数リストに追加
+				primeList.Add(prime);
+				// 倍数をふるい落とす
+				searchList.RemoveAll(n => n % prime == 0);
+
+				// ■ステップ 3
+				// 上記の篩い落とし操作を探索リストの先頭値がxの平方根に達するまで行う。
+			} while (prime < sqrtMax);
+
+			// ■ステップ 4
+			// 探索リストに残った数を素数リストに移動して処理終了。
+			primeList.AddRange(searchList);
+
+			return primeList;
+		}
 	}
 }
