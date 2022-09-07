@@ -31,11 +31,54 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static bool IsOdd(long n)
+		public static void ExecTemp()
 		{
-			bool isOdd = (n & 0x1) == 0x1;
-			return isOdd;
-		}		
+			long n = long.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var dict = new Dictionary<long, long[]>();
+			for (var i = 0; i < n; ++i) {
+				if (dict.ContainsKey(a[i]) == false) {
+					var array = new long[n];
+					array[i] = 1;
+					dict.Add(a[i], array);
+				} else {
+					dict[a[i]][i] = 1;
+				}
+			}
+
+			for (var i = 0; i < dict.Count; ++i) {
+				var rui = new long[n + 1];
+				rui[0] = 0;
+				for (var j = 0; j < n; ++j) {
+					rui[j + 1] = rui[j] + dict.ElementAt(i).Value[j];
+				}
+
+				var key = dict.ElementAt(i).Key;
+				dict[key] = rui;
+			}
+
+			var builder = new StringBuilder();
+
+			long q = long.Parse(Console.ReadLine());
+			for (var i = 0; i < q; ++i) {
+				var lrx = Console.ReadLine().Split(" ").Select(j => int.Parse(j)).ToArray();
+				var l = lrx[0] - 1;
+				var r = lrx[1] - 1;
+				var x = lrx[2];
+
+				long count = 0;
+				if (dict.ContainsKey(x) == false) {
+					count = 0;
+				} else {
+					count = dict[x][r] - dict[x][l];
+				}
+
+				builder.AppendLine($"{count}");
+			}
+
+			var answer = builder.ToString();
+			Console.WriteLine($"{answer}");
+		}
 	}
 }
 
@@ -79,6 +122,60 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void NotFound()
+		{
+			string s = Console.ReadLine();
+
+			char answer = (char)0;
+			for (var i = 0; i < 26; i++) {
+				char c = (char)('a' + (char)i);
+				if (s.Contains(c) == false) {
+					answer = c;
+					break;
+				}
+			}
+
+			if (answer == (char)0) {
+				Console.WriteLine($"None");
+			} else {
+				Console.WriteLine($"{answer}");
+			}
+		}
+
+			public static void Shoes()
+		{
+			var lr = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var l = lr[0];
+			var r = lr[1];
+			var larray = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			var rarray = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			larray.Sort();
+			rarray.Sort();
+
+			int count = 0;
+			int nexti = 0;
+			int nextj = 0;
+			for (var i = nexti; i < larray.Count; ++i) {
+				bool isFound = false;
+				for (var j = nextj; j < rarray.Count; ++j) {
+					if (larray[i] == rarray[j]) {
+						++count;
+						nexti = i + 1;
+						nextj = j + 1;
+						isFound = true;
+						break;
+					}
+				}
+
+				if (isFound) {
+					continue;
+				}
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void Mujin()

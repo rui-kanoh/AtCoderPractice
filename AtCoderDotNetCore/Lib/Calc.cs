@@ -649,24 +649,20 @@ namespace AtCoderDotNetCore
 			int step = 0;
 			tq.Enqueue((sx, sy, step));
 			dist[sx, sy] = true;
-			while (0 < tq.Count)
-			{
+			while (0 < tq.Count) {
 				var q = tq.Dequeue();
 				int x = q.Item1;
 				int y = q.Item2;
 				step = q.Item3;
 
-				if (x == gx && y == gy)
-				{
+				if (x == gx && y == gy) {
 					break;
 				}
 
-				for (int i = 0; i < 4; i++)
-				{
+				for (int i = 0; i < 4; i++) {
 					int nx = x + vx[i];
 					int ny = y + vy[i];
-					if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == false)
-					{
+					if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && map[nx, ny] && dist[nx, ny] == false) {
 						dist[nx, ny] = true;
 						tq.Enqueue((nx, ny, step + 1));
 					}
