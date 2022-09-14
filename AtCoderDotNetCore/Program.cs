@@ -14,7 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Intrinsics.X86;
 using System.Reflection;
-using AtCoderDotNetCore.Deque;
 
 namespace AtCoderDotNetCore
 {
@@ -35,18 +34,72 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
+			var nml = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nml[0];
+			var m = nml[1];
+			var l = nml[2];
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			var ablist = new List<(int a, int b)>();
+			for (var i = 0; i < n; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var a = ab[0];
+				var b = ab[1];
+				ablist.Add((a, b));
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			var cdlist = new List<(int c, int d)>();
+			for (var i = 0; i < m; ++i) {
+				var cd= Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var c = cd[0];
+				var d = cd[1];
+				cdlist.Add((c, d));
+			}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			long max = 0;
 
-			var answer = 0;
+			var dp = new long[m + 1, l + 1];
+			for (var j = 0; j <= m; ++j) {
+				for (var k = 0; k <= l; ++k) {
+					dp[j, k] = -1;
+				}
+			}
 
+			dp[0, 0] = 0;
+			for (var j = 0; j < m; ++j) {
+				for (var k = 0; k <= l; ++k) {
+					if (dp[j, k] != -1) {
+						dp[j + 1, k] = dp[j, k];
+						if (k + cdlist[j].c <= l) {
+							dp[j + 1, k + cdlist[j].c] = dp[j, k] + cdlist[j].d;
+						}
+					}
+				}
+			}
+
+			// dp[m, k]について累積max
+			var ruiMax = new long[l + 1];
+			ruiMax[0] = 0;
+			for (var k = 0; k < l; ++k) {
+				ruiMax[k + 1] = Math.Max(ruiMax[k], dp[m, k]);
+			}
+
+			for (var i = 0; i < n; ++i) {
+				long h = ablist[i].b;
+				long cost = ablist[i].a;
+
+				if (cost >= l) {
+					continue;
+				}
+
+				int costMax = l - ablist[i].a;
+
+				// 0から順じゃなくて、コストが最大になるように選ぶ
+				// 1000個あるので全探索はできない
+				// cdについてDPで最大評価の物を見つける
+				max = Math.Max(max, ruiMax[costMax + 1] + ablist[i].b);
+			}
+
+			var answer = max;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -73,11 +126,39 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 
+		public static void AntBug()
+		{
+			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+
+			var answer = "Draw";
+
+			if (Math.Abs(a) > Math.Abs(b)) {
+				answer = "Bug";
+			} else if (Math.Abs(a) < Math.Abs(b)) {
+				answer = "Ant";
+			}
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void TakahashiAverage()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var list = a.Where(x => x > 0).ToList();
+			double average = Math.Ceiling(list.Average());
+
+			var answer = $"{average:f0}";
+			Console.WriteLine($"{answer}");
+		}
+
 		public static void StringFormation()
 		{
 			string s = Console.ReadLine();
 			var q = int.Parse(Console.ReadLine());
-			var deq = new Deque<char>(s.Length + q);
+			var deq = new Deque.Deque<char>(s.Length + q);
 			for (var i = 0; i < s.Length; ++i) {
 				deq.PushBack(s[i]);
 			}
@@ -118,77 +199,6 @@ namespace AtCoderDotNetCore
 			var answer = builder.ToString();
 			Console.WriteLine($"{answer}");
 		}
-
-		public static void Rotation()
-		{
-			var nq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nq[0];
-			var q = nq[1];
-			string s = Console.ReadLine();
-
-			var builder = new StringBuilder();
-
-			int count = 0;
-			for (var i = 0; i < q; ++i) {
-				var query = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var command = query[0];
-				var x = query[1];
-				if (command == 1) {
-					count += x;
-				} else {
-					int index = (x - 1) - (count % n);
-					if (index < 0) {
-						index = s.Length + index;
-					}
-
-					builder.AppendLine($"{s[index]}");
-				}
-			}
-
-			var answer = builder.ToString();
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void Cylinder()
-		{
-			int q = int.Parse(Console.ReadLine());
-
-			var builder = new StringBuilder();
-
-			Deque<long> deq = null;
-			for (var i = 0; i < q; ++i) {
-				var query = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				if (query[0] == 1) {
-					var x = query[1];
-					var c = query[2];
-					var list = Enumerable.Repeat(x, (int)c).ToArray();
-					if (deq != null) {
-						var length = deq.Length + list.Length;
-						deq = new Deque<long>(length);
-					} else {
-						deq = new Deque<long>(list.Length);
-					}
-
-					for (var j = 0; j < c; ++j) {
-						deq.PushBack(x);
-					}
-				} else {
-					if (deq != null) {
-						var c = query[1];
-						long count = 0;
-						for (var j = 0; j < c; ++j) {
-							count += deq.PopFront();
-						}
-
-						builder.AppendLine($"{count}");
-					}
-				}
-			}
-
-			var answer = builder.ToString();
-			Console.WriteLine($"{answer}");
-		}
-
 
 		public static bool IsOdd(long n)
 		{
