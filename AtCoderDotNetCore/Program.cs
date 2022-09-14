@@ -68,9 +68,9 @@ namespace AtCoderDotNetCore
 			for (var j = 0; j < m; ++j) {
 				for (var k = 0; k <= l; ++k) {
 					if (dp[j, k] != -1) {
-						dp[j + 1, k] = dp[j, k];
+						dp[j + 1, k] = Math.Max(dp[j + 1, k], dp[j, k]);
 						if (k + cdlist[j].c <= l) {
-							dp[j + 1, k + cdlist[j].c] = dp[j, k] + cdlist[j].d;
+							dp[j + 1, k + cdlist[j].c] = Math.Max(dp[j + 1, k + cdlist[j].c], dp[j, k] + cdlist[j].d);
 						}
 					}
 				}
@@ -84,9 +84,7 @@ namespace AtCoderDotNetCore
 			}
 
 			for (var i = 0; i < n; ++i) {
-				long h = ablist[i].b;
 				long cost = ablist[i].a;
-
 				if (cost >= l) {
 					continue;
 				}
