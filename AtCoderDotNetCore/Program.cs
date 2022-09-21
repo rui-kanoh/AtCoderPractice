@@ -34,72 +34,82 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			var nml = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nml[0];
-			var m = nml[1];
-			var l = nml[2];
+			var kr = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var k = kr[0];
+			var r = kr[1];
 
-			var ablist = new List<(int a, int b)>();
-			for (var i = 0; i < n; ++i) {
-				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var a = ab[0];
-				var b = ab[1];
-				ablist.Add((a, b));
+			var mizu = new bool[r];
+			var odist = new List<long>();
+			var fdist = new List<long>();
+			for (var i = 0; i < r; ++i) {
+				var ta = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			}
 
-			var cdlist = new List<(int c, int d)>();
-			for (var i = 0; i < m; ++i) {
-				var cd= Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var c = cd[0];
-				var d = cd[1];
-				cdlist.Add((c, d));
-			}
-
-			long max = 0;
-
-			var dp = new long[m + 1, l + 1];
-			for (var j = 0; j <= m; ++j) {
-				for (var k = 0; k <= l; ++k) {
-					dp[j, k] = -1;
+			if (r == 0) {
+				var dp = new long[k  + 1, k  + 1];
+				for (var i = 0; i < k + 1; ++i) {
+					for (var j = 0; j < k + 1; ++j) {
+						dp[i, j] = 0;
+					}
 				}
-			}
 
-			dp[0, 0] = 0;
-			for (var j = 0; j < m; ++j) {
-				for (var k = 0; k <= l; ++k) {
-					if (dp[j, k] != -1) {
-						dp[j + 1, k] = Math.Max(dp[j + 1, k], dp[j, k]);
-						if (k + cdlist[j].c <= l) {
-							dp[j + 1, k + cdlist[j].c] = Math.Max(dp[j + 1, k + cdlist[j].c], dp[j, k] + cdlist[j].d);
+				dp[0, 0] = 1;
+				for (var j = 0; j < k; ++j) {
+					for (var l = 0; l < k + 1; ++l) {
+						if (dp[j, l] > 0) {
+							dp[j + 1, l] += dp[j, l];
+							if (l + 1 < k + 1) {
+								dp[j + 1, l + 1] += dp[j, l];
+							}
+
+							if (l + 2 < k + 1) {
+								dp[j + 1, l + 2] += dp[j, l];
+							}
 						}
 					}
 				}
-			}
 
-			// dp[m, k]について累積max
-			var ruiMax = new long[l + 1];
-			ruiMax[0] = 0;
-			for (var k = 0; k < l; ++k) {
-				ruiMax[k + 1] = Math.Max(ruiMax[k], dp[m, k]);
-			}
-
-			for (var i = 0; i < n; ++i) {
-				long cost = ablist[i].a;
-				if (cost >= l) {
-					continue;
+				long total = 0;
+				for (var j = 0; j < k + 1; ++j) {
+					total = Math.Max(total, dp[j, k]);
+				}
+				/*
+				for (var i = 0; i < k + 1; ++i) {
+					for (var j = 0; j < k + 1; ++j) {
+						dp[i, j] = 0;
+					}
 				}
 
-				int costMax = l - ablist[i].a;
+				dp[0, 0] = total;
+				for (var j = 0; j < k + 1; ++j) {
+					for (var l = 0; l < k + 1; ++l) {
+						if (dp[j, l] > 0) {
+							if (l + 1 < k + 1) {
+								dp[j + 1, l + 1] += dp[j, l];
+							}
 
-				// 0から順じゃなくて、コストが最大になるように選ぶ
-				// 1000個あるので全探索はできない
-				// cdについてDPで最大評価の物を見つける
-				max = Math.Max(max, ruiMax[costMax + 1] + ablist[i].b);
+							if (l + 2 < k + 1) {
+								dp[j + 1, l + 2] += dp[j, l];
+							}
+						}
+					}
+				}
+
+				total = 0;
+				for (var j = 0; j < k + 1; ++j) {
+					total = Math.Max(total, dp[j, k]);
+				}
+				*/
+
+				var answer = total;
+				Console.WriteLine($"{answer}");
+			} else {
+				var answer = 0;
+				Console.WriteLine($"{answer}");
 			}
-
-			var answer = max;
-			Console.WriteLine($"{answer}");
 		}
+
+		
 	}
 }
 
@@ -124,79 +134,42 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 
-		public static void AntBug()
+		public static void SumAndProduct()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var a = ab[0];
-			var b = ab[1];
+			var sp = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var s = sp[0];
+			var p = sp[1];
 
-			var answer = "Draw";
+			bool isOK = true;
 
-			if (Math.Abs(a) > Math.Abs(b)) {
-				answer = "Bug";
-			} else if (Math.Abs(a) < Math.Abs(b)) {
-				answer = "Ant";
-			}
+			var answer = isOK ? "Yes" : "No";
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void KSwap()
+		{
+			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
 
 			Console.WriteLine($"{answer}");
 		}
 
-		public static void TakahashiAverage()
+		public static void BathTime()
 		{
 			int n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var list = a.Where(x => x > 0).ToList();
-			double average = Math.Ceiling(list.Average());
+			int min = n / 60;
+			int hour = min / 60;
+			min = min % 60;
+			int sec = n % 60;
 
-			var answer = $"{average:f0}";
+			var answer = $"{hour:d2}:{min:d2}:{sec:d2}";
 			Console.WriteLine($"{answer}");
 		}
 
-		public static void StringFormation()
-		{
-			string s = Console.ReadLine();
-			var q = int.Parse(Console.ReadLine());
-			var deq = new Deque.Deque<char>(s.Length + q);
-			for (var i = 0; i < s.Length; ++i) {
-				deq.PushBack(s[i]);
-			}
-
-			int rotationCount = 0;
-			for (var i = 0; i < q; ++i) {
-				var query = Console.ReadLine().Split(" ");
-				if (query[0] == "1") {
-					++rotationCount;
-				} else {
-					var f = query[1];
-					var c = query[2];
-					if (f == "1") {
-						if (IsOdd(rotationCount) == false) {
-							deq.PushFront(c[0]);
-						} else {
-							deq.PushBack(c[0]);
-						}
-					} else {
-						if (IsOdd(rotationCount) == false) {
-							deq.PushBack(c[0]);
-						} else {
-							deq.PushFront(c[0]);
-						}
-					}
-				}
-			}
-
-			var builder = new StringBuilder();
-			for (var i = 0; i < deq.Length; ++i) {
-				if (IsOdd(rotationCount) == false) {
-					builder.Append(deq[i]);
-				} else {
-					builder.Append(deq[deq.Length - 1 - i]);
-				}
-			}
-
-			var answer = builder.ToString();
-			Console.WriteLine($"{answer}");
-		}
 
 		public static bool IsOdd(long n)
 		{
