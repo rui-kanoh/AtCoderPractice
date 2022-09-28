@@ -27,73 +27,11 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public class UnionFind
-		{
-			List<int> parents;
-
-			public int GroupCount { get; private set; }
-
-			public UnionFind(int x)
-			{
-				parents = Enumerable.Repeat(-1, x).ToList();
-				GroupCount = x;
-			}
-
-			public int Find(int x)
-			{
-				if (parents[x] < 0) return x;
-				else {
-					parents[x] = Find(parents[x]);
-					return parents[x];
-				}
-			}
-
-			public void Union(int x, int y)
-			{
-				(x, y) = (Find(x), Find(y));
-
-				if (x != y) {
-					if (Count(x) < Count(y)) (x, y) = (y, x);
-					parents[x] += parents[y];
-					parents[y] = x;
-					GroupCount--;
-				}
-			}
-
-			public int Count(int x) => -parents[Find(x)];
-
-			public bool IsSame(int x, int y) => Find(x) == Find(y);
-		}
-
 		public static void Exec()
 		{
-			ExecTemp();
+			
 		}
 
-		public static void ExecTemp()
-		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-
-			var union = new UnionFind(n);
-			for (var j = 0; j < m; ++j) {
-				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var a = ab[0] - 1;
-				var b = ab[1] - 1;
-				union.Union(a, b);
-			}
-
-			int count = union.GroupCount;
-
-			int max = 0;
-			for (var i = 0; i < count; ++i) {
-				max = Math.Max(max, union.Count(i));
-			}
-
-			var answer = max;
-			Console.WriteLine($"{answer}");
-		}
 	}
 }
 
@@ -169,6 +107,31 @@ namespace AtCoderDotNetCore
 			}
 
 			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Friends()
+		{
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+
+			var union = new Lib.UnionFind(n);
+			for (var j = 0; j < m; ++j) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var a = ab[0] - 1;
+				var b = ab[1] - 1;
+				union.Union(a, b);
+			}
+
+			int count = union.GroupCount;
+
+			int max = 0;
+			for (var i = 0; i < count; ++i) {
+				max = Math.Max(max, union.Count(i));
+			}
+
+			var answer = max;
 			Console.WriteLine($"{answer}");
 		}
 	}
