@@ -29,9 +29,44 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			
+			ExecTemp();
 		}
 
+		public static void ExecTemp()
+		{
+			var nm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var sushi = new long[n];
+			var list = new long[m];
+
+			for (int i = 0; i < list.Length; i++) {
+				list[i] = -1;
+			}
+
+			for (int i = 0; i < sushi.Length; i++) {
+				sushi[i] = -1;
+			}
+
+			for (int j = 0; j < m; ++j) {
+				for (int i = 0; i < n; ++i) {
+					if (sushi[i] == -1 || sushi[i] < a[j]) {
+						sushi[i] = a[j];
+						list[j] = i + 1;
+						break;
+					}
+				}
+			}
+
+			var builder = new StringBuilder();
+			for (int i = 0; i < list.Length; ++i) {
+				builder.AppendLine($"{list[i]}");
+			}
+
+			var answer = builder.ToString();
+			Console.Write($"{answer}");
+		}
 	}
 }
 
@@ -75,6 +110,38 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void Eating()
+		{
+			string s = Console.ReadLine();
+
+			var answer = 0;
+			for (var i = 0; i < s.Length; ++i) {
+				if (s[i] == '+') {
+					++answer;
+				} else {
+					--answer;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void TakahashiOtsukai()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			int count = 0;
+			for (var i = 0; i < n; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				count += ab[0] * ab[1];
+			}
+
+			count = (int)Math.Floor(count * 1.05);
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
