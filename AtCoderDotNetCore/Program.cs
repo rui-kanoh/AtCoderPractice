@@ -32,40 +32,69 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static void ExecTemp()
+
+		// https://c-taquna.hatenablog.com/entry/2020/01/15/014154
+		public static int GridBFS(int h, int w, int sx, int sy, int gx, int gy, bool[,] map)
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var sushi = new long[n];
-			var list = new long[m];
+			int[] vx = { 0, 1, 0, -1 };
+			int[] vy = { 1, 0, -1, 0 };
 
-			for (int i = 0; i < list.Length; i++) {
-				list[i] = -1;
+			/*
+			if (map[sx, sy] == false || map[gx, gy] == false) {
+				return 0;
+			}
+			*/
+
+			if (sx == gx && sy == gy) {
+				return 0;
 			}
 
-			for (int i = 0; i < sushi.Length; i++) {
-				sushi[i] = -1;
-			}
+			var dist = new bool[h, w];
+			var tq = new Queue<(int, int, int)>();
+			int step = 0;
+			tq.Enqueue((sx, sy, step));
+			dist[sx, sy] = true;
+			while (0 < tq.Count) {
+				var q = tq.Dequeue();
+				int x = q.Item1;
+				int y = q.Item2;
+				step = q.Item3;
 
-			for (int j = 0; j < m; ++j) {
-				for (int i = 0; i < n; ++i) {
-					if (sushi[i] == -1 || sushi[i] < a[j]) {
-						sushi[i] = a[j];
-						list[j] = i + 1;
-						break;
+				if (x == gx && y == gy) {
+					break;
+				}
+
+				for (int i = 0; i < 4; i++) {
+					int nx = x + vx[i];
+					int ny = y + vy[i];
+					if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && (map[nx, ny] != map[x, y]) && dist[nx, ny] == false) {
+						dist[nx, ny] = true;
+						tq.Enqueue((nx, ny, step + 1));
 					}
 				}
 			}
 
-			var builder = new StringBuilder();
-			for (int i = 0; i < list.Length; ++i) {
-				builder.AppendLine($"{list[i]}");
+			return step;
+		}
+
+		public static void ExecTemp()
+		{
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var map = new bool[h, w];
+			for (int i = 0; i < h; i++) {
+				var array = Console.ReadLine();
+				for (var j = 0; j < w; ++j) {
+					map[i, j] = array[j] == '.';
+				}
 			}
 
-			var answer = builder.ToString();
-			Console.Write($"{answer}");
+			int step = GridBFS(h, w, 0, 0, h - 1, w - 1, map);
+
+			var answer = step == 0 ? -1 : step;
+
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -88,6 +117,62 @@ namespace AtCoderDotNetCore
 
 			var answer = 0;
 
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void AC()
+		{
+			string s = Console.ReadLine();
+			var answer = s.Contains("AC") ? "Yes" : "No";
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void String25()
+		{
+			string s = Console.ReadLine();
+			int n = int.Parse(Console.ReadLine());
+			var list = new List<string>();
+
+			for (var i = 0; i < s.Length; i++) {
+				for (var j = 0; j < s.Length; j++) {
+					var str2 = $"{s[i]}{s[j]}";
+					list.Add(str2);
+				}
+			}
+
+			var answer = list[n - 1];
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Iroha()
+		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var d = Console.ReadLine().Split(" ").Select(i => char.Parse(i)).ToList();
+
+			int number = 0;
+			for (var i = n; i <= 10000 * 10; ++i) {
+				var chars = i.ToString().ToCharArray();
+				bool next = false;
+				for (var j = 0; j < chars.Length; ++j) {
+					if (d.Contains(chars[j])) {
+						next = true;
+						break;
+					}
+				}
+
+				if (next) {
+					continue;
+				}
+
+				if (i >= n) {
+					number = i;
+					break;
+				}
+			}
+
+			var answer = number;
 			Console.WriteLine($"{answer}");
 		}
 

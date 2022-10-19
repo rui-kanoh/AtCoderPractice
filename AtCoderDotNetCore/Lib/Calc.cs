@@ -9,6 +9,15 @@ namespace AtCoderDotNetCore
 {
 	public static class Calc
 	{
+		public static long Factrial(long i)
+		{
+			if (i == 0) {
+				return 1;
+			}
+
+			return i * Factrial(i - 1);
+		}
+
 		/// <summary>
 		/// x / a以上の最大の整数を求める
 		/// </summary>
