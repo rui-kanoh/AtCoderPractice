@@ -29,26 +29,46 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			ExecTemp();
+			Annaijo();
 		}
 
-		public static void ExecTemp()
+		public static void Annaijo()
 		{
-			string s = Console.ReadLine();
+			var nmq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nmq[0];
+			var m = nmq[1];
+			var q = nmq[2];
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			var slist = new List<string>();
+			var indexList = new int[n];
+			for (var i = 0; i < n; ++i) {
+				string s = Console.ReadLine();
+				var item = s.Where(c => c != '*').ToArray();
+				if (item != null && item.Any()) {
+					string str = new string(item);
+					int index = s.IndexOf(str);
+					slist.Add(str);
+					indexList[i] = index + 1;
+				} else {
+					slist.Add("*");
+				}
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			var builder = new StringBuilder();
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			for (var i = 0; i < q; ++i) {
+				string qq = Console.ReadLine();
+				if (slist.Contains(qq)) {
+					int index = slist.IndexOf(qq);
+					builder.AppendLine($"{index + 1} {indexList[index]}");
+				} else {
+					builder.AppendLine("NA");
+				}
+			}
 
-			var answer = 0;
-
-			Console.WriteLine($"{answer}");
+			var answer = builder.ToString();
+			Console.Write($"{answer}");
 		}
-
 	}
 }
 
@@ -94,59 +114,63 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
-		public static long CalcTotal(long d)
+		public static void MaximumDiff()
 		{
-			return d * (d + 1) / 2;
-		}
+			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-		public static void FizzBuzzSumHard()
-		{
-			var nab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nab[0];
-			var a = nab[1];
-			var b = nab[2];
-			var ab = Lcm(a, b);
-			var total = CalcTotal(n);
-			var countA = n / a;
-			var setA = CalcTotal(countA) * a;
-			var countB = n / b;
-			var setB = CalcTotal(countB) * b;
-			var countAB = n / ab;
-			var setAB = CalcTotal(countAB) * ab;
-			var setAorB = setA + setB - setAB;
-
-			var answer = total - setAorB;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void NazoX()
-		{
-			var rcd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var r = rcd[0];
-			var c = rcd[1];
-			var d = rcd[2];
-
-			var mat = new int[r, c];
-
-			for (var i = 0; i < r; ++i) {
-				var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				for (var j = 0; j < c; ++j) {
-					mat[i, j] = a[j];
-				}
-			}
-
-			var max = 0;
-			bool dIsOdd = IsOdd(d);
-			for (var i = 0; i < r; ++i) {
-				for (var j = 0; j < c; ++j) {
-					if (i + j <= d && dIsOdd == IsOdd(i + j)) {
-						max = Math.Max(max, mat[i, j]);
+			long max = 0;
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < n; ++j) {
+					if (i == j) {
+						continue;
 					}
+
+					max = Math.Max(max, Math.Abs(a[i] - a[j]));
 				}
 			}
 
 			var answer = max;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void ChooseElement()
+		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			bool isOK = false;
+
+			var dp = new bool[n + 1, 2];
+			for (int i = 0; i <= n; ++i) {
+				dp[i, 0] = false;
+				dp[i, 1] = false;
+			}
+
+			dp[0, 0] = true;
+			dp[0, 1] = true;
+
+			for (int i = 0; i < n; ++i) {
+				if (i < n - 1) {
+					if (dp[i, 0]) {
+						dp[i + 1, 0] = Math.Abs(a[i] - a[i + 1]) <= k;
+						dp[i + 1, 1] = Math.Abs(a[i] - b[i + 1]) <= k;
+					}
+
+					if (dp[i, 1]) {
+						dp[i + 1, 0] = dp[i + 1, 0] || Math.Abs(b[i] - a[i + 1]) <= k;
+						dp[i + 1, 1] = dp[i + 1, 1] || Math.Abs(b[i] - b[i + 1]) <= k;
+					}
+				}
+			}
+
+			isOK = dp[n - 1, 0] || dp[n - 1, 1];
+
+			var answer = isOK ? "Yes" : "No";
 			Console.WriteLine($"{answer}");
 		}
 	}
