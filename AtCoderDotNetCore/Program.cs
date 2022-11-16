@@ -29,45 +29,7 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			Annaijo();
-		}
-
-		public static void Annaijo()
-		{
-			var nmq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nmq[0];
-			var m = nmq[1];
-			var q = nmq[2];
-
-			var slist = new List<string>();
-			var indexList = new int[n];
-			for (var i = 0; i < n; ++i) {
-				string s = Console.ReadLine();
-				var item = s.Where(c => c != '*').ToArray();
-				if (item != null && item.Any()) {
-					string str = new string(item);
-					int index = s.IndexOf(str);
-					slist.Add(str);
-					indexList[i] = index + 1;
-				} else {
-					slist.Add("*");
-				}
-			}
-
-			var builder = new StringBuilder();
-
-			for (var i = 0; i < q; ++i) {
-				string qq = Console.ReadLine();
-				if (slist.Contains(qq)) {
-					int index = slist.IndexOf(qq);
-					builder.AppendLine($"{index + 1} {indexList[index]}");
-				} else {
-					builder.AppendLine("NA");
-				}
-			}
-
-			var answer = builder.ToString();
-			Console.Write($"{answer}");
+			//ChooseElement();
 		}
 	}
 }
@@ -135,6 +97,77 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 
+		public static void Annaijo()
+		{
+			var nmq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nmq[0];
+			var m = nmq[1];
+			var q = nmq[2];
+
+			var dict = new Dictionary<string, (int x, int y)>();
+
+			var mat = new string[n, m];
+			for (var i = 0; i < n; ++i) {
+				string s = Console.ReadLine();
+				for (var j = 0; j < s.Length; ++j) {
+					mat[i, j] = s[j].ToString();
+				}
+			}
+
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < m; ++j) {
+					if (mat[i, j] != "*" && dict.ContainsKey(mat[i, j]) == false) {
+						dict.Add(mat[i, j], (i + 1, j + 1));
+					}
+				}
+			}
+
+			var builder = new StringBuilder();
+			for (var k = 0; k < q; ++k) {
+				string qq = Console.ReadLine();
+
+				if (dict.ContainsKey(qq)) {
+					builder.AppendLine($"{dict[qq].x} {dict[qq].y}");
+				} else {
+					builder.AppendLine("NA");
+				}
+			}
+
+			// 愚直にやってみる
+			/*
+			for (var k = 0; k < q; ++k) {
+				string qq = Console.ReadLine();
+
+				bool isFound = false;
+				int x = 0;
+				int y = 0;
+				for (var i = 0; i < n; ++i) {
+					for (var j = 0; j < m; ++j) {
+						if (qq == mat[i, j]) {
+							isFound = true;
+							x = i + 1;
+							y = j + 1;
+							break;
+						}
+					}
+
+					if (isFound) {
+						break;
+					}
+				}
+
+				if (isFound) {
+					builder.AppendLine($"{x} {y}");
+				} else {
+					builder.AppendLine("NA");
+				}
+			}
+			*/
+
+			var answer = builder.ToString();
+			Console.Write($"{answer}");
+		}
+
 		public static void ChooseElement()
 		{
 			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
@@ -145,12 +178,7 @@ namespace AtCoderDotNetCore
 
 			bool isOK = false;
 
-			var dp = new bool[n + 1, 2];
-			for (int i = 0; i <= n; ++i) {
-				dp[i, 0] = false;
-				dp[i, 1] = false;
-			}
-
+			var dp = new bool[n, 2];
 			dp[0, 0] = true;
 			dp[0, 1] = true;
 
