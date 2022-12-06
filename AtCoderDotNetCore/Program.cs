@@ -35,25 +35,131 @@ namespace AtCoderDotNetCore
 
 		public static void Exec()
 		{
-			ExecTemp();
+			SecondGreatest();
 		}
 
-		public static void ExecTemp()
+		public static void SecondGreatest()
 		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
 			int n = int.Parse(Console.ReadLine());
+			var xlist = new List<(int index, long value)>();
+			var ylist = new List<(int index, long value)>();
+			for (var i = 0; i < n; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(j => long.Parse(j)).ToArray();
+				xlist.Add((i, xy[0]));
+				ylist.Add((i, xy[1]));
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			/* 愚直
+			var hash = new HashSet<(int x, int y)>();
+			var set = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				for (var j = 1; j < n; ++j) {
+					if (i == j) {
+						continue;
+					}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+					if (hash.Contains((i, j)) || hash.Contains((j, i))) {
+						continue;
+					}
 
-			var answer = 0;
+					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
+					set.Add(dist);
+					hash.Add((i, j));
+					hash.Add((j, i));
+				}
+			}
+
+			set.Sort((a, b) => b.CompareTo(a));
+
+			var answer = set[1];
+			Console.WriteLine($"{answer}");
+			*/
+
+			/* 愚直2
+			var set = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				for (var j = i + 1; j < n; ++j) {
+					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
+					set.Add(dist);
+				}
+			}
+
+			set.Sort((a, b) => b.CompareTo(a));
+
+			var answer = set[1];
+			Console.WriteLine($"{answer}");
+			*/
+
+			xlist.Sort((a, b) => b.value.CompareTo(a.value));
+			ylist.Sort((a, b) => b.value.CompareTo(a.value));
+
+			long distMax = 0;
+			var indexes = new HashSet<(int i, int j)>();
+			if (Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value) >= Math.Abs(xlist[ylist.Count - 1].value - ylist[0].value)) {
+				distMax = Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value);
+				indexes.Add((xlist[0].index, xlist[xlist.Count - 1].index));
+				indexes.Add((xlist[xlist.Count - 1].index, xlist[0].index));
+			} else {
+				distMax = Math.Abs(ylist[xlist.Count - 1].value - ylist[0].value);
+				indexes.Add((ylist[0].index, ylist[xlist.Count - 1].index));
+				indexes.Add((ylist[xlist.Count - 1].index, ylist[0].index));
+			}
+
+			long secondMax = 0;
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((xlist[xlist.Count - i - 1].index, xlist[0].index)) == false
+					&& indexes.Contains((xlist[0].index, xlist[xlist.Count - i - 1].index)) == false) {
+					long dist = Math.Abs(xlist[xlist.Count - i - 1].value - xlist[0].value);
+					if (distMax < dist && secondMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						
+						break;
+					}
+				}
+			}
+
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((xlist[xlist.Count - 1].index, xlist[i].index)) == false
+					&& indexes.Contains((xlist[i].index, xlist[xlist.Count - 1].index)) == false) {
+					long dist = Math.Abs(xlist[xlist.Count - 1].value - xlist[i].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+
+			long secondMaxY = 0;
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((ylist[ylist.Count - i - 1].index, ylist[0].index)) == false
+					&& indexes.Contains((ylist[0].index, ylist[ylist.Count - i - 1].index)) == false) {
+					long dist = Math.Abs(ylist[ylist.Count - i - 1].value - ylist[0].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((ylist[ylist.Count - 1].index, ylist[i].index)) == false
+					&& indexes.Contains((ylist[i].index, ylist[ylist.Count - 1].index)) == false) {
+					long dist = Math.Abs(ylist[ylist.Count - 1].value - ylist[i].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+			Math.Max(
+				Math.Abs(ylist[ylist.Count - 2].value - ylist[0].value),
+				Math.Abs(ylist[ylist.Count - 1].value - ylist[1].value));
+
+			var answer = Math.Max(secondMaxX, secondMaxY);
 
 			Console.WriteLine($"{answer}");
 		}
+
 	}
 }
 
@@ -99,12 +205,63 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
+		public static void IsKaibun()
+		{
+			string s = Console.ReadLine();
+
+			bool isKaibun(string s)
+			{
+				bool isOK = true;
+				for (var i = 0; i < s.Length / 2; ++i) {
+					if (s[i] != s[s.Length - i - 1]) {
+						isOK = false;
+						return isOK;
+					}
+				}
+
+				return isOK;
+			}
+
+			bool isOK = isKaibun(s);
+			var answer = isOK ? "YES" : "NO";
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Month()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var answer = n == 12 ? 1 : n + 1;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Orca()
+		{
+			var st = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var sx = st[0] + 1000;
+			var sy = st[1] + 1000;
+			var gx = st[2] + 1000;
+			var gy = st[3] + 1000;
+
+			var h = 2001;
+			var w = 2001;
+			var map = new bool[h, w];
+			for (var i = 0; i < h; ++i) {
+				for (var j = 1; j < w; ++j) {
+					map[i, j] = true;
+				}
+			}
+
+
+		}
+
+
 		public static void Restricted()
 		{
-			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var a = ab[0];
-			var b = ab[1];
-			var answer = (a + b >= 10) ? "error" : $"{a + b}";
+			var	ab = Console.ReadLine().Split("	").Select(i	=> int.Parse(i)).ToArray();
+			var	a =	ab[0];
+			var	b =	ab[1];
+			var	answer = (a	+ b	>= 10) ? "error" : $"{a	+ b}";
 			Console.WriteLine($"{answer}");
 		}
 
@@ -179,7 +336,7 @@ namespace AtCoderDotNetCore
 					Console.WriteLine("");
 					*/
 
-					int count = items.Count(s => s != false);
+			int count = items.Count(s => s != false);
 					if (count == 0) {
 						// 全部営業しないのは無し
 						return;
