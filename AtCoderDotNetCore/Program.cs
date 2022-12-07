@@ -35,10 +35,30 @@ namespace AtCoderDotNetCore
 
 		public static void Exec()
 		{
-			SecondGreatest();
+			ExecTemp();
 		}
 
-		
+		public static void ExecTemp()
+		{
+			var rnm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var r = rnm[0];
+			var n = rnm[1];
+			var m = rnm[2];
+
+			double Calc(double r, double angle_rad)
+			{
+				return 2 * r * Math.Sin(angle_rad / 2.0);
+			}
+
+			if (m == 1) {
+				var cutCount = n - 1;
+				var center = n / 2;
+			}
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
 	}
 }
 
@@ -77,6 +97,86 @@ namespace AtCoderDotNetCore
 
 			return Gcd(b, a % b);
 		}
+
+		public static void TV()
+		{
+			var wh = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var w = wh[0];
+			var h = wh[1];
+
+			var answer = Math.Abs(((double)h / w) - (3.0 / 4.0)) < 1e-9 ? "4:3" : "16:9";
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void OOmoji()
+		{
+			var Cc = Console.ReadLine().Split(" ");
+
+			var answer = Cc[0].ToLower() == Cc[1] ? "Yes" : "No";
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Renketsu()
+		{
+			var builder = new StringBuilder();
+
+			var nq = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
+
+			var seen = new bool[n];
+			bool DFS(HashSet<int>[] lists, int v, int goal)
+			{
+				if (v == goal) {
+					return true;
+				}
+
+				seen[v] = true;
+
+				foreach (var next_v in lists[v]) {
+					if (seen[next_v]) {
+						continue;
+					}
+
+					bool isOK = DFS(lists, next_v, goal);
+					if (isOK) {
+						return isOK;
+					}
+				}
+
+				return false;
+			}
+
+			var lists = new HashSet<int>[n];
+			for (var i = 0; i < n; ++i) {
+				lists[i] = new HashSet<int>();
+			}
+
+			for (var i = 0; i < q; ++i) {
+				var query = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var num = query[0];
+				var u = query[1] - 1;
+				var v = query[2] - 1;
+				if (num == 1) {
+					if (lists[u].Contains(v)) {
+						lists[u].Remove(v);
+						lists[v].Remove(u);
+					} else {
+						lists[u].Add(v);
+						lists[v].Add(u);
+					}
+				} else {
+					seen = new bool[n];
+					bool isOK = DFS(lists, u, v);
+					builder.AppendLine(isOK ? "Yes" : "No");
+				}
+			}
+
+			var answer = builder.ToString();
+			Console.WriteLine($"{answer}");
+		}
+
 
 		public static long Lcm(long a, long b)
 		{
