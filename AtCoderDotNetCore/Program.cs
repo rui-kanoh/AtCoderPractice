@@ -38,128 +38,7 @@ namespace AtCoderDotNetCore
 			SecondGreatest();
 		}
 
-		public static void SecondGreatest()
-		{
-			int n = int.Parse(Console.ReadLine());
-			var xlist = new List<(int index, long value)>();
-			var ylist = new List<(int index, long value)>();
-			for (var i = 0; i < n; ++i) {
-				var xy = Console.ReadLine().Split(" ").Select(j => long.Parse(j)).ToArray();
-				xlist.Add((i, xy[0]));
-				ylist.Add((i, xy[1]));
-			}
-
-			/* 愚直
-			var hash = new HashSet<(int x, int y)>();
-			var set = new List<long>();
-			for (var i = 0; i < n; ++i) {
-				for (var j = 1; j < n; ++j) {
-					if (i == j) {
-						continue;
-					}
-
-					if (hash.Contains((i, j)) || hash.Contains((j, i))) {
-						continue;
-					}
-
-					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
-					set.Add(dist);
-					hash.Add((i, j));
-					hash.Add((j, i));
-				}
-			}
-
-			set.Sort((a, b) => b.CompareTo(a));
-
-			var answer = set[1];
-			Console.WriteLine($"{answer}");
-			*/
-
-			/* 愚直2
-			var set = new List<long>();
-			for (var i = 0; i < n; ++i) {
-				for (var j = i + 1; j < n; ++j) {
-					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
-					set.Add(dist);
-				}
-			}
-
-			set.Sort((a, b) => b.CompareTo(a));
-
-			var answer = set[1];
-			Console.WriteLine($"{answer}");
-			*/
-
-			xlist.Sort((a, b) => b.value.CompareTo(a.value));
-			ylist.Sort((a, b) => b.value.CompareTo(a.value));
-
-			long distMax = 0;
-			var indexes = new HashSet<(int i, int j)>();
-			if (Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value) >= Math.Abs(xlist[ylist.Count - 1].value - ylist[0].value)) {
-				distMax = Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value);
-				indexes.Add((xlist[0].index, xlist[xlist.Count - 1].index));
-				indexes.Add((xlist[xlist.Count - 1].index, xlist[0].index));
-			} else {
-				distMax = Math.Abs(ylist[xlist.Count - 1].value - ylist[0].value);
-				indexes.Add((ylist[0].index, ylist[xlist.Count - 1].index));
-				indexes.Add((ylist[xlist.Count - 1].index, ylist[0].index));
-			}
-
-			long secondMax = 0;
-			for (var i = 1; i < n; ++i) {
-				if (indexes.Contains((xlist[xlist.Count - i - 1].index, xlist[0].index)) == false
-					&& indexes.Contains((xlist[0].index, xlist[xlist.Count - i - 1].index)) == false) {
-					long dist = Math.Abs(xlist[xlist.Count - i - 1].value - xlist[0].value);
-					if (distMax < dist && secondMax < dist) {
-						secondMax = Math.Max(secondMax, dist);
-						
-						break;
-					}
-				}
-			}
-
-			for (var i = 1; i < n; ++i) {
-				if (indexes.Contains((xlist[xlist.Count - 1].index, xlist[i].index)) == false
-					&& indexes.Contains((xlist[i].index, xlist[xlist.Count - 1].index)) == false) {
-					long dist = Math.Abs(xlist[xlist.Count - 1].value - xlist[i].value);
-					if (distMax < dist) {
-						secondMax = Math.Max(secondMax, dist);
-						break;
-					}
-				}
-			}
-
-			long secondMaxY = 0;
-			for (var i = 1; i < n; ++i) {
-				if (indexes.Contains((ylist[ylist.Count - i - 1].index, ylist[0].index)) == false
-					&& indexes.Contains((ylist[0].index, ylist[ylist.Count - i - 1].index)) == false) {
-					long dist = Math.Abs(ylist[ylist.Count - i - 1].value - ylist[0].value);
-					if (distMax < dist) {
-						secondMax = Math.Max(secondMax, dist);
-						break;
-					}
-				}
-			}
-
-			for (var i = 1; i < n; ++i) {
-				if (indexes.Contains((ylist[ylist.Count - 1].index, ylist[i].index)) == false
-					&& indexes.Contains((ylist[i].index, ylist[ylist.Count - 1].index)) == false) {
-					long dist = Math.Abs(ylist[ylist.Count - 1].value - ylist[i].value);
-					if (distMax < dist) {
-						secondMax = Math.Max(secondMax, dist);
-						break;
-					}
-				}
-			}
-			Math.Max(
-				Math.Abs(ylist[ylist.Count - 2].value - ylist[0].value),
-				Math.Abs(ylist[ylist.Count - 1].value - ylist[1].value));
-
-			var answer = Math.Max(secondMaxX, secondMaxY);
-
-			Console.WriteLine($"{answer}");
-		}
-
+		
 	}
 }
 
@@ -404,6 +283,129 @@ namespace AtCoderDotNetCore
 			var answer = max;
 			Console.WriteLine($"{answer}");
 		}
+
+		public static void SecondGreatest()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var xlist = new List<(int index, long value)>();
+			var ylist = new List<(int index, long value)>();
+			for (var i = 0; i < n; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(j => long.Parse(j)).ToArray();
+				xlist.Add((i, xy[0]));
+				ylist.Add((i, xy[1]));
+			}
+
+			/* 愚直
+			var hash = new HashSet<(int x, int y)>();
+			var set = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				for (var j = 1; j < n; ++j) {
+					if (i == j) {
+						continue;
+					}
+
+					if (hash.Contains((i, j)) || hash.Contains((j, i))) {
+						continue;
+					}
+
+					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
+					set.Add(dist);
+					hash.Add((i, j));
+					hash.Add((j, i));
+				}
+			}
+
+			set.Sort((a, b) => b.CompareTo(a));
+
+			var answer = set[1];
+			Console.WriteLine($"{answer}");
+			*/
+
+			/* 愚直2
+			var set = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				for (var j = i + 1; j < n; ++j) {
+					long dist = Math.Max(Math.Abs(xlist[i] - xlist[j]), Math.Abs(ylist[i] - ylist[j]));
+					set.Add(dist);
+				}
+			}
+
+			set.Sort((a, b) => b.CompareTo(a));
+
+			var answer = set[1];
+			Console.WriteLine($"{answer}");
+			*/
+
+			xlist.Sort((a, b) => b.value.CompareTo(a.value));
+			ylist.Sort((a, b) => b.value.CompareTo(a.value));
+
+			long distMax = 0;
+			var indexes = new HashSet<(int i, int j)>();
+			if (Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value) >= Math.Abs(xlist[ylist.Count - 1].value - ylist[0].value)) {
+				distMax = Math.Abs(xlist[xlist.Count - 1].value - xlist[0].value);
+				indexes.Add((xlist[0].index, xlist[xlist.Count - 1].index));
+				indexes.Add((xlist[xlist.Count - 1].index, xlist[0].index));
+			} else {
+				distMax = Math.Abs(ylist[xlist.Count - 1].value - ylist[0].value);
+				indexes.Add((ylist[0].index, ylist[xlist.Count - 1].index));
+				indexes.Add((ylist[xlist.Count - 1].index, ylist[0].index));
+			}
+
+			long secondMax = 0;
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((xlist[xlist.Count - i - 1].index, xlist[0].index)) == false
+					&& indexes.Contains((xlist[0].index, xlist[xlist.Count - i - 1].index)) == false) {
+					long dist = Math.Abs(xlist[xlist.Count - i - 1].value - xlist[0].value);
+					if (distMax < dist && secondMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+
+						break;
+					}
+				}
+			}
+
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((xlist[xlist.Count - 1].index, xlist[i].index)) == false
+					&& indexes.Contains((xlist[i].index, xlist[xlist.Count - 1].index)) == false) {
+					long dist = Math.Abs(xlist[xlist.Count - 1].value - xlist[i].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+
+			long secondMaxY = 0;
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((ylist[ylist.Count - i - 1].index, ylist[0].index)) == false
+					&& indexes.Contains((ylist[0].index, ylist[ylist.Count - i - 1].index)) == false) {
+					long dist = Math.Abs(ylist[ylist.Count - i - 1].value - ylist[0].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+
+			for (var i = 1; i < n; ++i) {
+				if (indexes.Contains((ylist[ylist.Count - 1].index, ylist[i].index)) == false
+					&& indexes.Contains((ylist[i].index, ylist[ylist.Count - 1].index)) == false) {
+					long dist = Math.Abs(ylist[ylist.Count - 1].value - ylist[i].value);
+					if (distMax < dist) {
+						secondMax = Math.Max(secondMax, dist);
+						break;
+					}
+				}
+			}
+			Math.Max(
+				Math.Abs(ylist[ylist.Count - 2].value - ylist[0].value),
+				Math.Abs(ylist[ylist.Count - 1].value - ylist[1].value));
+
+			//var answer = Math.Max(secondMaxX, secondMaxY);
+
+			//Console.WriteLine($"{answer}");
+		}
+
 	}
 }
 
