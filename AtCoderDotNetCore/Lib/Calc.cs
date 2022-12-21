@@ -713,5 +713,19 @@ namespace AtCoderDotNetCore
 
 			return primeList;
 		}
+
+		// https://www.hanachiru-blog.com/entry/2020/03/15/120000
+		public static BigInteger nCk(long n, long k)
+		{
+			if (n < k) return 0;
+			if (n == k) return 1;
+
+			BigInteger x = 1;
+			for (BigInteger i = 0; i < k; i++) {
+				x = x * (n - i) / (i + 1);
+			}
+
+			return x;
+		}
 	}
 }

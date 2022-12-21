@@ -32,43 +32,10 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static void ExecTemp()
+		public static bool IsOdd(long n)
 		{
-			long n = long.Parse(Console.ReadLine());
-
-			var dp = new long[n, 3];
-
-			var list = new (long a, long b, long c)[n];
-			for (var i = 0; i < n; ++i) {
-				var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-				list[i] = (abc[0], abc[1], abc[2]);
-			}
-
-			dp[0, 0] = list[0].a;
-			dp[0, 1] = list[0].b;
-			dp[0, 2] = list[0].c;
-
-			for (var i = 1; i < n; ++i) {
-				if (dp[i - 1, 0] > 0) {
-					dp[i, 1] = Math.Max(dp[i - 1, 0] + list[i].b, dp[i, 1]);
-					dp[i, 2] = Math.Max(dp[i - 1, 0] + list[i].c, dp[i, 2]);
-				}
-
-				if (dp[i - 1, 1] > 0) {
-					dp[i, 2] = Math.Max(dp[i - 1, 1] + list[i].c, dp[i, 2]);
-					dp[i, 0] = Math.Max(dp[i - 1, 1] + list[i].b, dp[i, 0]);
-				}
-
-				if (dp[i - 1, 2] > 0) {
-					dp[i, 0] = Math.Max(dp[i - 1, 2] + list[i].a, dp[i, 0]);
-					dp[i, 1] = Math.Max(dp[i - 1, 2] + list[i].b, dp[i, 0]);
-				}
-			}
-
-			long max = Math.Max(dp[n - 1, 0], Math.Max(dp[n - 1, 1], dp[n - 1, 2]));
-
-			var answer = max;
-			Console.WriteLine($"{answer}");
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
 		}
 	}
 }
@@ -123,6 +90,230 @@ namespace AtCoderDotNetCore
 			var c = abcd[2];
 			var d = abcd[3];
 			var answer = a * b >= c * d ? a * b : c * d;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Vacation()
+		{
+			long n = long.Parse(Console.ReadLine());
+
+			var dp = new long[n, 3];
+			for (var i = 0; i < n; ++i) {
+				dp[i, 0] = 0;
+				dp[i, 1] = 0;
+				dp[i, 2] = 0;
+			}
+
+			var list = new (long a, long b, long c)[n];
+			for (var i = 0; i < n; ++i) {
+				var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				list[i] = (abc[0], abc[1], abc[2]);
+			}
+
+			dp[0, 0] = list[0].a;
+			dp[0, 1] = list[0].b;
+			dp[0, 2] = list[0].c;
+
+			for (var i = 1; i < n; ++i) {
+				dp[i, 1] = Math.Max(dp[i - 1, 0] + list[i].b, dp[i, 1]);
+				dp[i, 2] = Math.Max(dp[i - 1, 0] + list[i].c, dp[i, 2]);
+
+				dp[i, 2] = Math.Max(dp[i - 1, 1] + list[i].c, dp[i, 2]);
+				dp[i, 0] = Math.Max(dp[i - 1, 1] + list[i].a, dp[i, 0]);
+
+				dp[i, 0] = Math.Max(dp[i - 1, 2] + list[i].a, dp[i, 0]);
+				dp[i, 1] = Math.Max(dp[i - 1, 2] + list[i].b, dp[i, 1]);
+			}
+
+			var results = new[] { dp[n - 1, 0], dp[n - 1, 1], dp[n - 1, 2], };
+			var max = results.Max();
+
+			var answer = max;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Baum()
+		{
+			long n = long.Parse(Console.ReadLine());
+
+			var alist = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				alist.Add(long.Parse(Console.ReadLine()));
+			}
+
+			alist.AddRange(alist);
+
+
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Alien()
+		{
+			string s = Console.ReadLine();
+			var reverseCount = 0;
+			var deq = new Deque.Deque<char>();
+
+			for (var i = 0; i < s.Length; ++i) {
+				if (s[i] == 'R') {
+					++reverseCount;
+				} else {
+					if (IsOdd(reverseCount)) {
+						if (deq.Length > 0 && deq[deq.Length - 1] == s[i]) {
+							deq.PopBack();
+						} else {
+							deq.PushBack(s[i]);
+						}
+					} else {
+						if (deq.Length > 0 && deq[0] == s[i]) {
+							deq.PopFront();
+						} else {
+							deq.PushFront(s[i]);
+						}
+					}
+				}
+			}
+
+			var builder = new StringBuilder();
+			for (var i = 0; i < deq.Length; ++i) {
+				if (IsOdd(reverseCount)) {
+					builder.Append(deq[i]);
+				} else {
+					builder.Append(deq[deq.Length - 1 - i]);
+				}
+			}
+
+			var answer = builder.ToString();
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void DuodecimFerra()
+		{
+			long l = long.Parse(Console.ReadLine());
+			long k = Math.Min(l - 1 - 11, 11);
+
+			var answer = Calc.nCk(l - 1, k);
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Voting()
+		{
+			long n = long.Parse(Console.ReadLine());
+
+			var list = new (int x, int y)[n];
+			for (var i = 0; i < n; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				list[i] = (xy[0], xy[1]);
+			}
+
+			long count = 0;
+			bool[] isOKlist = new bool[n];
+			var rui = new int[n + 1];
+			rui[0] = 0;
+
+			if (n <= 3000) {
+				for (var i = 0; i < n; ++i) {
+					if (list[i].y == 0) {
+						isOKlist[i] = true;
+						++count;
+					} else if (list[i].x + 1 == list[i].y) {
+						isOKlist[i] = false;
+						// 反対
+					} else {
+						long count2 = 0;
+						for (var j = 1; j <= list[i].x; ++j) {
+							if (isOKlist[i - j]) {
+								++count2;
+							}
+						}
+
+						if (count2 >= list[i].y) {
+							isOKlist[i] = true;
+							++count;
+						} else {
+							isOKlist[i] = false;
+						}
+					}
+				}
+
+				var answer = count;
+				Console.WriteLine($"{answer}");
+			} else {
+				// 小課題2, 3
+				bool isOK = false;
+				for (var i = 0; i < n; ++i) {
+					if (list[i].y == 0) {
+						isOK = true;
+						++count;
+					} else if (list[i].x + 1 == list[i].y) {
+						isOK = false;
+						// 反対
+					} else {
+						int index = i - list[i].x > 0
+							? i - list[i].x
+							: 0;
+						long count2 = rui[i] - rui[i - list[i].x];
+						if (count2 >= list[i].y) {
+							isOK = true;
+							++count;
+						} else {
+							isOK = false;
+						}
+					}
+
+					rui[i + 1] = rui[i] + (isOK ? 1 : 0);
+				}
+
+				var answer = count;
+				Console.WriteLine($"{answer}");
+			}
+		}
+
+		public static void AlienWithLinkedList()
+		{
+			string s = Console.ReadLine();
+			var reverseCount = 0;
+			var deq = new LinkedList<char>();
+
+			for (var i = 0; i < s.Length; ++i) {
+				if (s[i] == 'R') {
+					++reverseCount;
+				} else {
+					if (IsOdd(reverseCount)) {
+						if (deq.Count > 0 && deq.Last.Value == s[i]) {
+							deq.RemoveLast();
+						} else {
+							deq.AddLast(s[i]);
+						}
+					} else {
+						if (deq.Count > 0 && deq.First.Value == s[i]) {
+							deq.RemoveFirst();
+						} else {
+							deq.AddFirst(s[i]);
+						}
+					}
+				}
+			}
+
+			var builder = new StringBuilder();
+
+			if (IsOdd(reverseCount)) {
+				LinkedListNode<char> node = deq.First;
+				while (node != null) {
+					builder.Append(node.Value);
+					node = node.Next;
+				}
+			} else {
+				LinkedListNode<char> node = deq.Last;
+				while (node != null) {
+					builder.Append(node.Value);
+					node = node.Previous;
+				}
+			}
+
+			var answer = builder.ToString();
 			Console.WriteLine($"{answer}");
 		}
 
