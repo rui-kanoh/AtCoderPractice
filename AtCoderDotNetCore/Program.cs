@@ -27,12 +27,6 @@ namespace AtCoderDotNetCore
 
 	public static class Question
 	{
-		public static bool IsOdd(long n)
-		{
-			bool isOdd = (n & 0x1) == 0x1;
-			return isOdd;
-		}
-
 		public static void Exec()
 		{
 			ExecTemp();
@@ -40,23 +34,40 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			var rnm = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var r = rnm[0];
-			var n = rnm[1];
-			var m = rnm[2];
+			long n = long.Parse(Console.ReadLine());
 
-			double Calc(double r, double angle_rad)
-			{
-				return 2 * r * Math.Sin(angle_rad / 2.0);
+			var dp = new long[n, 3];
+
+			var list = new (long a, long b, long c)[n];
+			for (var i = 0; i < n; ++i) {
+				var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				list[i] = (abc[0], abc[1], abc[2]);
 			}
 
-			if (m == 1) {
-				var cutCount = n - 1;
-				var center = n / 2;
+			dp[0, 0] = list[0].a;
+			dp[0, 1] = list[0].b;
+			dp[0, 2] = list[0].c;
+
+			for (var i = 1; i < n; ++i) {
+				if (dp[i - 1, 0] > 0) {
+					dp[i, 1] = Math.Max(dp[i - 1, 0] + list[i].b, dp[i, 1]);
+					dp[i, 2] = Math.Max(dp[i - 1, 0] + list[i].c, dp[i, 2]);
+				}
+
+				if (dp[i - 1, 1] > 0) {
+					dp[i, 2] = Math.Max(dp[i - 1, 1] + list[i].c, dp[i, 2]);
+					dp[i, 0] = Math.Max(dp[i - 1, 1] + list[i].b, dp[i, 0]);
+				}
+
+				if (dp[i - 1, 2] > 0) {
+					dp[i, 0] = Math.Max(dp[i - 1, 2] + list[i].a, dp[i, 0]);
+					dp[i, 1] = Math.Max(dp[i - 1, 2] + list[i].b, dp[i, 0]);
+				}
 			}
 
-			var answer = 0;
+			long max = Math.Max(dp[n - 1, 0], Math.Max(dp[n - 1, 1], dp[n - 1, 2]));
 
+			var answer = max;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -96,6 +107,23 @@ namespace AtCoderDotNetCore
 			}
 
 			return Gcd(b, a % b);
+		}
+
+		public static long Lcm(long a, long b)
+		{
+			long g = Gcd(a, b);
+			return a / g * b;
+		}
+
+		public static void Rectangle()
+		{
+			var abcd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = abcd[0];
+			var b = abcd[1];
+			var c = abcd[2];
+			var d = abcd[3];
+			var answer = a * b >= c * d ? a * b : c * d;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void TV()
@@ -175,13 +203,6 @@ namespace AtCoderDotNetCore
 
 			var answer = builder.ToString();
 			Console.WriteLine($"{answer}");
-		}
-
-
-		public static long Lcm(long a, long b)
-		{
-			long g = Gcd(a, b);
-			return a / g * b;
 		}
 
 		public static void IsKaibun()
