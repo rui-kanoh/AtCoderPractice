@@ -29,33 +29,23 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			DuodecimFerra3();
+			ExecTemp();
 		}
 
-		public static BigInteger[,] GetPascal(int n)
+		public static void ExecTemp()
 		{
-			var pascal = new BigInteger[n, n];
-			pascal[0, 0] = 1;
-			pascal[1, 0] = 1;
-			pascal[1, 1] = 1;
-			for (var i = 2; i < n; ++i) {
-				pascal[i, 0] = 1;
-				pascal[i, i] = 1;
-				for (var j = 1; j < i; ++j) {
-					pascal[i, j] = pascal[i - 1, j - 1] + pascal[i - 1, j];
-				}
-			}
+			string s = Console.ReadLine();
 
-			return pascal;
-		}
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-		public static void DuodecimFerra3()
-		{
-			int l = int.Parse(Console.ReadLine());
-			int k = Math.Min(l - 1 - 11, 11);
-			var pascal = GetPascal(l);
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			var answer = pascal[l - 1, k];
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
 			Console.WriteLine($"{answer}");
 		}
 	}
