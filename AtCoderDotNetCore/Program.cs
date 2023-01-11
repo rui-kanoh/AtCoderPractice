@@ -30,23 +30,44 @@ namespace AtCoderDotNetCore
 		public static void Exec()
 		{
 			ExecTemp();
-		}
+		}		
 
 		public static void ExecTemp()
 		{
 			string s = Console.ReadLine();
+			var words = new string[] { "dream", "erase", };
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			bool isFound = false;
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			while (string.IsNullOrEmpty(s) == false) {
+				foreach (var word in words) {
+					if (s.StartsWith(word)) {
+						string w = word;
+						string str = word + "r";
+						int count = 5;
+						if (s.StartsWith(str)) {
+							++count;
+						}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+						s = s.Remove(0, count);
 
-			var answer = 0;
+						isFound = true;
+					} else {
+						isFound = false;
+						break;
+					}
+				}
 
-			Console.WriteLine($"{answer}");
+				if (isFound == false) {
+					break;
+				}
+			}
+
+			if (isFound == false) {
+				Console.WriteLine($"NO");
+			} else {
+				Console.WriteLine($"YES");
+			}
 		}
 	}
 }
@@ -55,6 +76,56 @@ namespace AtCoderDotNetCore
 {
 	public class Template
 	{
+		public static void Flu()
+		{
+			long n = long.Parse(Console.ReadLine());
+			long m = long.Parse(Console.ReadLine());
+			long d = long.Parse(Console.ReadLine());
+			long d2 = d * d;
+			long k = long.Parse(Console.ReadLine());
+
+			var citys = new (long x, long y)[n];
+			var dists = new List<long>[n];
+			for (var i = 0; i < n; ++i) {
+				dists[i] = new List<long>();
+			}
+
+			for (var i = 0; i < n; ++i) {
+				var xy = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				citys[i] = (xy[0], xy[1]);
+			}
+
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < n; ++j) {
+					if (i == j) {
+						dists[i].Add(0);
+						continue;
+					}
+
+					var x2 = (citys[i].x - citys[j].x) * (citys[i].x - citys[j].x);
+					var y2 = (citys[i].y - citys[j].y) * (citys[i].y - citys[j].y);
+					dists[i].Add(x2 + y2);
+				}
+			}
+
+			var flus = new (long remain, bool isFlu)[n];
+			flus[0] = (m, true);
+			for (var i = 0; i < dists[0].Count; ++i) {
+				if (i == 0) {
+					continue;
+				}
+
+				if (dists[0][i] <= d2) {
+					flus[i] = (m, true);
+				}
+			}
+
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
 		public static void ExecTemp()
 		{
 			string s = Console.ReadLine();
@@ -91,6 +162,72 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void RingRing()
+		{
+			var abc = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = abc[0];
+			var b = abc[1];
+			var c = abc[2];
+			var answer = Math.Min(a + b, Math.Min(b + c, c + a));
+			Console.WriteLine($"{answer}");
+		}
+
+		public static long Fact2(long value)
+		{
+			if (value == 0) {
+				return 0;
+			}
+
+			return value + Fact2(--value);
+		}
+
+		public static void KakuretaKotoba()
+		{
+			long n = long.Parse(Console.ReadLine());
+			var answer = Fact2(n);
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void FF()
+		{
+			var nq = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
+
+			var buider = new StringBuilder();
+			var dict = new Dictionary<long, HashSet<long>>();
+			for (var i = 0; i < q; ++i) {
+				var tab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var t = tab[0];
+				var a = tab[1] - 1;
+				var b = tab[2] - 1;
+
+				if (t == 1) {
+					if (dict.ContainsKey(a) == false) {
+						dict.Add(a, new HashSet<long>());
+					}
+
+					dict[a].Add(b);
+				} else if (t == 2) {
+					if (dict.ContainsKey(a)) {
+						dict[a].Remove(b);
+					}
+				} else {
+					if (dict.ContainsKey(a)
+						&& dict.ContainsKey(b)
+						&& dict[a].Contains(b)
+						&& dict[b].Contains(a)) {
+						buider.AppendLine("Yes");
+					} else {
+						buider.AppendLine("No");
+					}
+				}
+			}
+
+			var answer = buider.ToString();
+			Console.Write($"{answer}");
 		}
 
 		public static void Rectangle()
