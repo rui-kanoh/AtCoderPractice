@@ -30,9 +30,70 @@ namespace AtCoderDotNetCore
 		public static void Exec()
 		{
 			ExecTemp();
-		}		
+		}
 
 		public static void ExecTemp()
+		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void ExecTemp()
+		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
+
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
+
+		public static long Gcd(long a, long b)
+		{
+			if (b == 0) {
+				return a;
+			}
+
+			return Gcd(b, a % b);
+		}
+
+		public static long Lcm(long a, long b)
+		{
+			long g = Gcd(a, b);
+			return a / g * b;
+		}
+
+		public static void KenkenRace()
 		{
 			var nabcd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 			var n = nabcd[0];
@@ -83,49 +144,41 @@ namespace AtCoderDotNetCore
 			var answer = isOK ? "Yes" : "No";
 			Console.WriteLine($"{answer}");
 		}
-	}
-}
 
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
-		public static void ExecTemp()
+		public static void FriendsFriend()
 		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
-
-			string[] inputStrArray = Console.ReadLine().Split(" ");
-
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
-
-			Console.WriteLine($"{answer}");
-		}
-
-		public static bool IsOdd(long n)
-		{
-			bool isOdd = (n & 0x1) == 0x1;
-			return isOdd;
-		}
-
-		public static long Gcd(long a, long b)
-		{
-			if (b == 0) {
-				return a;
+			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nm[0];
+			var m = nm[1];
+			var lists = new HashSet<int>[n];
+			for (var i = 0; i < n; ++i) {
+				lists[i] = new HashSet<int>();
 			}
 
-			return Gcd(b, a % b);
-		}
+			for (var i = 0; i < m; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var a = ab[0] - 1;
+				var b = ab[1] - 1;
+				lists[a].Add(b);
+				lists[b].Add(a);
+			}
 
-		public static long Lcm(long a, long b)
-		{
-			long g = Gcd(a, b);
-			return a / g * b;
+			var builder = new StringBuilder();
+			for (var i = 0; i < n; ++i) {
+				var hash = new HashSet<int>();
+				foreach (var item in lists[i]) {
+					foreach (var item2 in lists[item]) {
+						if (hash.Contains(item2) == false && i != item2 && lists[i].Contains(item2) == false) {
+							hash.Add(item2);
+						}
+					}
+				}
+
+				builder.AppendLine($"{hash.Count}");
+			}
+
+			var answer = builder.ToString();
+			Console.Write($"{answer}");
 		}
 	}
 }
