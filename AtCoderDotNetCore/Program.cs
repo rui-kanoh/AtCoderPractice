@@ -34,18 +34,53 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
+			var nabcd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nabcd[0];
+			var a = nabcd[1] - 1;
+			var b = nabcd[2] - 1;
+			var c = nabcd[3] - 1;
+			var d = nabcd[4] - 1;
 			string s = Console.ReadLine();
+			var mass = new bool[s.Length];
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			bool isOK = true;
+			for (var i = 0; i < s.Length; ++i) {
+				mass[i] = s[i] == '.';
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+				if ((i == c || i == d) && mass[i] == false) {
+					isOK = false;
+					break;
+				}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				if (i > 0 && i >= a && i <= d) {
+					if (mass[i - 1] == false && mass[i] == false) {
+						isOK = false;
+						break;
+					}
+				}
+			}
 
-			var answer = 0;
+			if (isOK) {
+				if (c < d) {
+					isOK = true;
+				} else {
+					bool exists3blank = false;
+					for (var i = b; i <= d; ++i) {
+						if (i > 1
+							&& i < s.Length - 1
+							&& exists3blank == false) {
+							if (mass[i - 1] && mass[i] && mass[i + 1]) {
+								exists3blank = true;
+								break;
+							}
+						}
+					}
 
+					isOK = exists3blank;
+				}
+			}
+
+			var answer = isOK ? "Yes" : "No";
 			Console.WriteLine($"{answer}");
 		}
 	}
