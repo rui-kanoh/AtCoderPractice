@@ -14,6 +14,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Intrinsics.X86;
 using System.Reflection;
+using System.Drawing;
 
 namespace AtCoderDotNetCore
 {
@@ -34,19 +35,148 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var a = new int[h, w];
+			var hash = new HashSet<int>();
+			for (var i = 0; i < h; ++i) {
+				var array = Console.ReadLine().Split(" ").Select(k => int.Parse(k)).ToArray();
+				for (var j = 0; j < w; ++j) {
+					a[i, j] = array[j];
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+					if (hash.Contains(array[j]) == false) {
+						hash.Add(array[j]);
+					}
+				}
+			}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			if (h == 1) {
+				var mass = new int[w];
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				void Initialize()
+				{
+					for (var i = 0; i < w; ++i) {
+						mass[i] = a[0, i];
+					}
+				}
 
-			var answer = 0;
+				// 各マスについて任意に色を変更して連結成分の最大値を調べる
+				int maxCount = 0;
+				for (var j = 0; j < h; ++j) {
+					Initialize();
+					foreach (int color in hash) {
+						int origin = mass[j];
+						if (origin == color) {
+							continue;
+						}
 
-			Console.WriteLine($"{answer}");
+						// 連結成分を塗りつぶす
+						mass[j] = color;
+						for (var k = j + 1; k < h; ++k) {
+							if (mass[k] == origin) {
+								mass[k] = color;
+							}
+						}
+
+						int count = Calc(color);
+						maxCount = Math.Max(maxCount, count);
+					}
+				}
+
+				// 連結成分の最大の数を数える
+				int Calc(int color)
+				{
+					int max = 0;
+					int count = 1;
+					for (var j = 1; j < h; ++j) {
+						if (a[0, j - 1] == a[0, j]) {
+							++count;
+
+							max = Math.Max(count, max);
+						} else {
+							count = 1;
+						}
+					}
+
+					return max;
+				}
+
+				var answer = maxCount;
+				Console.WriteLine($"{answer}");
+			} else {
+
+				// 小課題2,3
+				if (h <= 30 && w <= 30) {
+					var map = new bool[h, w];
+
+					// 全探索して連結成分の数を数える
+					foreach (int color in hash) {
+						InitializeMap();
+						int max = Calc(color);
+					}
+
+					// 指定したマスの座標を起点にして隣接する同じ色のマスをtrueに変えていく
+					int Dfs(int x, int y, int color, int count)
+					{
+						var vecterX = new int[] { -1, 1, 0, 0 };
+						var vecterY = new int[] { 0, 0, -1, 1 };
+
+						map[y, x] = true;
+
+						for (int i = 0; i < 4; ++i) {
+							int next_x = x + vecterX[i];
+							int next_y = y + vecterY[i];
+
+							if (next_x < 0 || next_y < 0 || next_x >= h || next_y >= w) {
+								continue;
+							}
+
+							if (map[next_x, next_y]) {
+								continue;
+							}
+
+							// 違う色の場合に抜ける
+							if (a[next_x, next_y] != color) {
+								break;
+							}
+
+							++count;
+							return Dfs(next_x, next_y, color, count);
+						}
+
+						return count;
+					}
+
+					// ある色についてtrueとなっている領域の数の最大値を数える
+					int Calc(int color)
+					{
+						int max = 0;
+						for (int i = 0; i < h; ++i) {
+							for (int j = 0; j < w; ++j) {
+								if (map[i, j]) {
+									continue;
+								}
+
+								int count2 = Dfs(i, j, color, 0);
+								max = Math.Max(max, count2);
+							}
+						}
+
+						return max;
+					}
+
+					// mapの初期化
+					void InitializeMap()
+					{
+						for (int k = 0; k < h; ++k) {
+							for (int l = 0; l < w; ++l) {
+								map[k, l] = false;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -91,6 +221,31 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void SnakeToy()
+		{
+			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+			var l = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			l.Sort((a, b) => b.CompareTo(a));
+
+			int count = 0;
+			for (var i = 0; i < k; ++i) {
+				count += l[i];
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Celcius()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			var answer = (9.0 / 5.0 * n) + 32.0;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void KenkenRace()
