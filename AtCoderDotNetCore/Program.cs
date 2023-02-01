@@ -35,148 +35,59 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
-			var a = new int[h, w];
-			var hash = new HashSet<int>();
+			var hwn = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hwn[0];
+			var w = hwn[1];
+			var n = hwn[2];
+
+			var rows = new int[h];
+			var cols = new int[w];
+			var dict = new (int a, int b)[n];
+
+			for (var i = 0; i < n; ++i) {
+				var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var a = ab[0] - 1;
+				var b = ab[1] - 1;
+				dict[i] = (a, b);
+
+				rows[a] = 1;
+				cols[b] = 1;
+			}
+
+			var ruiRows = new int[h];
 			for (var i = 0; i < h; ++i) {
-				var array = Console.ReadLine().Split(" ").Select(k => int.Parse(k)).ToArray();
-				for (var j = 0; j < w; ++j) {
-					a[i, j] = array[j];
-
-					if (hash.Contains(array[j]) == false) {
-						hash.Add(array[j]);
-					}
+				if (i == 0) {
+					ruiRows[i] = rows[i];
+				} else {
+					ruiRows[i] = rows[i] + ruiRows[i - 1];
 				}
 			}
 
-			if (h == 1) {
-				var mass = new int[w];
-
-				void Initialize()
-				{
-					for (var i = 0; i < w; ++i) {
-						mass[i] = a[0, i];
-					}
-				}
-
-				// 各マスについて任意に色を変更して連結成分の最大値を調べる
-				int maxCount = 0;
-				for (var j = 0; j < h; ++j) {
-					Initialize();
-					foreach (int color in hash) {
-						int origin = mass[j];
-						if (origin == color) {
-							continue;
-						}
-
-						// 連結成分を塗りつぶす
-						mass[j] = color;
-						for (var k = j + 1; k < h; ++k) {
-							if (mass[k] == origin) {
-								mass[k] = color;
-							}
-						}
-
-						int count = Calc(color);
-						maxCount = Math.Max(maxCount, count);
-					}
-				}
-
-				// 連結成分の最大の数を数える
-				int Calc(int color)
-				{
-					int max = 0;
-					int count = 1;
-					for (var j = 1; j < h; ++j) {
-						if (a[0, j - 1] == a[0, j]) {
-							++count;
-
-							max = Math.Max(count, max);
-						} else {
-							count = 1;
-						}
-					}
-
-					return max;
-				}
-
-				var answer = maxCount;
-				Console.WriteLine($"{answer}");
-			} else {
-
-				// 小課題2,3
-				if (h <= 30 && w <= 30) {
-					var map = new bool[h, w];
-
-					// 全探索して連結成分の数を数える
-					foreach (int color in hash) {
-						InitializeMap();
-						int max = Calc(color);
-					}
-
-					// 指定したマスの座標を起点にして隣接する同じ色のマスをtrueに変えていく
-					int Dfs(int x, int y, int color, int count)
-					{
-						var vecterX = new int[] { -1, 1, 0, 0 };
-						var vecterY = new int[] { 0, 0, -1, 1 };
-
-						map[y, x] = true;
-
-						for (int i = 0; i < 4; ++i) {
-							int next_x = x + vecterX[i];
-							int next_y = y + vecterY[i];
-
-							if (next_x < 0 || next_y < 0 || next_x >= h || next_y >= w) {
-								continue;
-							}
-
-							if (map[next_x, next_y]) {
-								continue;
-							}
-
-							// 違う色の場合に抜ける
-							if (a[next_x, next_y] != color) {
-								break;
-							}
-
-							++count;
-							return Dfs(next_x, next_y, color, count);
-						}
-
-						return count;
-					}
-
-					// ある色についてtrueとなっている領域の数の最大値を数える
-					int Calc(int color)
-					{
-						int max = 0;
-						for (int i = 0; i < h; ++i) {
-							for (int j = 0; j < w; ++j) {
-								if (map[i, j]) {
-									continue;
-								}
-
-								int count2 = Dfs(i, j, color, 0);
-								max = Math.Max(max, count2);
-							}
-						}
-
-						return max;
-					}
-
-					// mapの初期化
-					void InitializeMap()
-					{
-						for (int k = 0; k < h; ++k) {
-							for (int l = 0; l < w; ++l) {
-								map[k, l] = false;
-							}
-						}
-					}
+			var ruiCols = new int[w];
+			for (var i = 0; i < w; ++i) {
+				if (i == 0) {
+					ruiCols[i] = cols[i];
+				} else {
+					ruiCols[i] = cols[i] + ruiCols[i - 1];
 				}
 			}
+
+			var buider = new StringBuilder();
+			for (var i = 0; i < n; ++i) {
+				(var r, var c) = dict[i];
+
+				int indexR = r == ruiRows.Length - 1 ? ruiRows.Length - 1 : r;
+				var numR = ruiRows[indexR];
+
+				int indexC = c == ruiCols.Length - 1 ? ruiCols.Length - 1 : c;
+				var numC = ruiCols[indexC];
+
+				buider.AppendLine($"{numR} {numC}");
+			}
+
+
+			var answer = buider.ToString();
+			Console.Write($"{answer}");
 		}
 	}
 }
@@ -221,6 +132,37 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void Same()
+		{
+			string s = Console.ReadLine();
+			var answer = (s[0] == s[1] && s[1] == s[2] && s[2] == s[3]) ? "SAME" : "DIFFERENT";
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Syoritsu()
+		{
+			var abcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = abcd[0];
+			var b = abcd[1];
+			var c = abcd[2];
+			var d = abcd[3];
+			var lcm = Lcm(a, c);
+
+			long temp = lcm / a;
+			long taka = b * temp;
+			temp = lcm / c;
+			long aoki = d * temp;
+			if (taka == aoki) {
+				Console.WriteLine($"DRAW");
+			} else {
+				if (taka > aoki) {
+					Console.WriteLine($"TAKAHASHI");
+				} else {
+					Console.WriteLine($"AOKI");
+				}
+			}
 		}
 
 		public static void SnakeToy()
