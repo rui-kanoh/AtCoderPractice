@@ -36,20 +36,6 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var m = 2 * n;
-			var x = 0;
-
-			// mについて [1, m - m/2]の範囲で探索してみれば良さそう
-			// mになる和の組み合わせを全列挙して、それを1/2したときにnになるものを探す
-			long min = long.MaxValue;
-			for (var i = 1; i <= m - m / 2; ++i) {
-				long value = m - i;
-			}
-
-
-			var answer = $"{min} {x}";
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -94,95 +80,6 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
-		}
-
-		public static void DoubleStrings()
-		{
-			string s = Console.ReadLine();
-			var answer = s + s;
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void TensuHenkan()
-		{
-			var nab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nab[0];
-			var a = nab[1];
-			var b = nab[2];
-
-			var s = new List<long>();
-			for (var i = 0; i < n; ++i) {
-				s.Add(long.Parse(Console.ReadLine()));
-			}
-
-			var sum = s.Sum();
-			var max = s.Max();
-			var min = s.Min();
-
-			// Pが無い場合
-			if (max == min) {
-				Console.WriteLine($"-1");
-				return;
-			}
-
-			decimal p = (decimal)b / (max - min);
-			decimal q = (decimal)a - p * sum / n;
-
-			var answer = $"{p} {q}";
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void TakahashiInformation()
-		{
-			var c = new int[3, 3];
-
-			for (var i = 0; i < 3; ++i) {
-				var cc = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				for (var j = 0; j < 3; ++j) {
-					c[i, j] = cc[j];
-				}
-			}
-
-			bool isOK = false;
-
-			int max = 100;
-			for (var p = 0; p <= max; ++p) { // a1
-				for (var q = 0; q <= max; ++q) { // a2
-					for (var k = 0; k <= max; ++k) { // a3
-						var l = c[0, 0] - p;
-						var m = c[0, 1] - p;
-						var n = c[0, 2] - p;
-						if (c[0, 0] == p + l
-							&& c[0, 1] == p + m
-							&& c[0, 2] == p + n
-							&& c[1, 0] == q + l
-							&& c[1, 1] == q + m
-							&& c[1, 2] == q + n
-							&& c[2, 0] == k + l
-							&& c[2, 1] == k + m
-							&& c[2, 2] == k + n) {
-							isOK = true;
-
-							break;
-						}
-
-						if (isOK) {
-							break;
-						}
-					}
-
-					if (isOK) {
-						break;
-					}
-				}
-
-				if (isOK) {
-					break;
-				}
-			}
-
-			var answer = isOK ? "Yes" : "No";
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
