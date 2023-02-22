@@ -36,14 +36,72 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
+			var nk = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nk[0];
+			var k = nk[1];
+
+			var dict = new Dictionary<long, long>();
+
+			var wlist = new List<long>();
+			var dlist = new long[n];
+
+			for (var i = 0; i < n; ++i) {
+				var wd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				var w = nk[0] - 1;
+				var d = nk[1];
+
+				wlist.Add(w);
+				dlist[i] = d;
+			}
+
+			wlist.Sort();
+
+			long count = 0;
+			while (count < k) {
+
+				if (k >= count) {
+					break;
+				}
+			}
+
+
+			long x = -1;
+			foreach (var item in dict) {
+				count += item.Value;
+				if (count >= k) {
+					x = item.Key;
+					break;
+				}
+			}
+
+			var answer = x;
+			Console.WriteLine($"{answer}");
+		}
+	}
+}
+
+namespace AtCoderDotNetCore
+{
+	public class Template
+	{
+		public static void ChangesUserNames()
+		{
 			var n = int.Parse(Console.ReadLine());
 
 			var snames = new HashSet<string>();
 			var tnames = new string[n];
+
+
+
 			for (var i = 0; i < n; ++i) {
 				string[] st = Console.ReadLine().Split(" ");
 				snames.Add(st[0]);
 				tnames[i] = st[1];
+			}
+
+			if (n == 1) {
+				Console.WriteLine("Yes");
+				return;
 			}
 
 			bool isOK = false;
@@ -58,13 +116,7 @@ namespace AtCoderDotNetCore
 			var answer = isOK ? "Yes" : "No";
 			Console.WriteLine($"{answer}");
 		}
-	}
-}
 
-namespace AtCoderDotNetCore
-{
-	public class Template
-	{
 		public static void ExecTemp()
 		{
 			string s = Console.ReadLine();
