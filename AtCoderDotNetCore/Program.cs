@@ -31,96 +31,26 @@ namespace AtCoderDotNetCore
 	{
 		public static void Exec()
 		{
-			ChangesUserNames();
+			ExecTemp();
 		}
 
-		public class UnionFind
+		public static void ExecTemp()
 		{
-			List<int> parents;
-
-			public int GroupCount { get; private set; }
-
-			public UnionFind(int x)
-			{
-				parents = Enumerable.Repeat(-1, x).ToList();
-				GroupCount = x;
-			}
-
-			public int Find(int x)
-			{
-				if (parents[x] < 0) {
-					return x;
-				} else {
-					parents[x] = Find(parents[x]);
-					return parents[x];
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+			var clist = new char[h, w];
+			for (var i = 0; i < w; ++i) {
+				string s = Console.ReadLine();
+				for (var j = 0; j < s.Length; ++j) {
+					clist[j, i] = s[j];
 				}
 			}
 
-			public void Union(int x, int y)
-			{
-				(x, y) = (Find(x), Find(y));
+			var answer = 0;
 
-				if (x != y) {
-					if (Count(x) < Count(y)) (x, y) = (y, x);
-					parents[x] += parents[y];
-					parents[y] = x;
-					GroupCount--;
-				}
-			}
-
-			public int Count(int x) => -parents[Find(x)];
-
-			public bool IsSame(int x, int y) => Find(x) == Find(y);
-		}
-
-		public static void ChangesUserNames()
-		{
-			var n = int.Parse(Console.ReadLine());
-
-			var snames = new string[n];
-			var tnames = new string[n];
-			var dict = new Dictionary<string, int>();
-
-			int index = 0;
-			for (var i = 0; i < n; ++i) {
-				string[] st = Console.ReadLine().Split(" ");
-				snames[i] = st[0];
-				tnames[i] = st[1];
-
-				if (dict.ContainsKey(st[0]) == false) {
-					dict.Add(st[0], index);
-					++index;
-				}
-
-				if (dict.ContainsKey(st[1]) == false) {
-					dict.Add(st[1], index);
-					++index;
-				}
-			}
-
-			if (n == 1) {
-				Console.WriteLine("Yes");
-				return;
-			}
-
-			var union = new UnionFind(dict.Count);
-
-			bool isOK = true;
-
-			// 親が同じものがあれば閉路
-			for (var i = 0; i < n; ++i) {
-				if (union.IsSame(dict[snames[i]], dict[tnames[i]])) {
-					isOK = false;
-					break;
-				}
-
-				union.Union(dict[snames[i]], dict[tnames[i]]);
-			}
-
-			var answer = isOK ? "Yes" : "No";
 			Console.WriteLine($"{answer}");
 		}
-
 	}
 }
 
@@ -164,6 +94,79 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void MaximumSum()
+		{
+			var abc = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var a = abc[0];
+			var b = abc[1];
+			var c = abc[2];
+			var k = int.Parse(Console.ReadLine());
+
+			var list = abc.ToList();
+			list.Sort();
+			var max = list[2];
+			max = (max << k);
+
+			var answer = list[0] + list[1] + max;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Rectangle()
+		{
+			var wab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var w = wab[0];
+			var a = wab[1];
+			var b = wab[2];
+
+			var answer = 0;
+
+			if (a < b) {
+				if (b > a + w) {
+					answer = b - (a + w);
+				} else {
+					answer = 0;
+				}
+			} else {
+				if (a > b + w) {
+					answer = a - (b + w);
+				} else {
+					answer = 0;
+				}
+			}
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void WaterOnBottle()
+		{
+			var abx = Console.ReadLine().Split(" ").Select(i => double.Parse(i)).ToArray();
+			var a = abx[0];
+			var b = abx[1];
+			var x = abx[2];
+
+			var area = a * a * b;
+
+			if (area == x) {
+				Console.WriteLine("0");
+			} else {
+				if (area - x > x) {
+					if (area / 2.0 <= x) {
+						var theta = Math.Atan((2.0 * x) / (a * a * a)) * 180.0 / Math.PI;
+						var answer = theta;
+						Console.WriteLine($"{answer}");
+					} else {
+						var theta = Math.Atan((2.0 * x) / (a * b * b)) * 180.0 / Math.PI;
+						var answer = 90.0 - theta;
+						Console.WriteLine($"{answer}");
+					}
+				} else {
+					var theta = Math.Atan(a * a * a / (2.0 * (area - x))) * 180.0 / Math.PI;
+					var answer = 90.0 - theta;
+					Console.WriteLine($"{answer}");
+				}
+			}
 		}
 
 		public static void A()
