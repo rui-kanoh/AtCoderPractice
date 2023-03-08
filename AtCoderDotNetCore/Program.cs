@@ -40,17 +40,24 @@ namespace AtCoderDotNetCore
 			string s = Console.ReadLine();
 			var clist = s.ToCharArray().ToList();
 
+			if (n == 1) {
+				Console.WriteLine($"0");
+				return;
+			}
+
 			// 後ろから見て行って01が連続したらRemove
 			// 残ったものの個数/2が答え
 			bool canRemove = true;
 			for (var i = 1; i < 2 * n; ++i) {
 				int index = 2 * n - 1 - i;
-				if (clist[index] != clist[index + 1]) {
-					if (canRemove) {
-						clist.RemoveAt(index + 1);
-						clist.RemoveAt(index);
-						canRemove = false;
-						continue;
+				if (clist.Count > index + 1) {
+					if (clist[index] != clist[index + 1]) {
+						if (canRemove) {
+							clist.RemoveAt(index + 1);
+							clist.RemoveAt(index);
+							canRemove = false;
+							continue;
+						}
 					}
 				}
 
