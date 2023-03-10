@@ -38,35 +38,66 @@ namespace AtCoderDotNetCore
 		{
 			int n = int.Parse(Console.ReadLine());
 			string s = Console.ReadLine();
-			var clist = s.ToCharArray().ToList();
 
-			if (n == 1) {
-				Console.WriteLine($"0");
-				return;
-			}
+			int GetAnswer(string s)
+			{
+				var dp = new int[2 * n + 1, n];
+				for (var i = 0; i < 2 * n + 1; ++i) {
+					for (var j = 0; j < n; ++j) {
+						dp[i, j] = int.MaxValue;
+					}
+				}
 
-			// 後ろから見て行って01が連続したらRemove
-			// 残ったものの個数/2が答え
-			bool canRemove = true;
-			for (var i = 1; i < 2 * n; ++i) {
-				int index = 2 * n - 1 - i;
-				if (clist.Count > index + 1) {
-					if (clist[index] != clist[index + 1]) {
-						if (canRemove) {
-							clist.RemoveAt(index + 1);
-							clist.RemoveAt(index);
-							canRemove = false;
+				dp[0, 0] = 0;
+				for (var i = 0; i < s.Length; ++i) {
+					for (var j = 0; j < n; ++j) {
+						if (dp[i, j] == int.MaxValue) {
 							continue;
+						}
+
+						if (s[i] == '0') {
+							if (j >= 1) {
+								dp[i + 1, j - 1] = Math.Min(dp[i + 1, j - 1], dp[i, j]);
+							}
+
+							if (i < s.Length - 1) {
+								if (s[i + 1] == '1') {
+									if (i < 2 * n - 2) {
+										dp[i + 2, j] = Math.Min(dp[i + 2, j], dp[i, j]);
+									}
+								}
+							}
+						} else {
+							if (j < n - 1) {
+								dp[i + 1, j + 1] = Math.Min(dp[i + 1, j + 1], dp[i, j] + 1);
+							}
+
+							if (i < s.Length - 1) {
+								if (s[i + 1] == '0') {
+									if (i < 2 * n - 2) {
+										dp[i + 2, j] = Math.Min(dp[i + 2, j], dp[i, j]);
+									}
+								}
+							}
 						}
 					}
 				}
 
-				if (canRemove == false) {
-					canRemove = true;
-				}
+				var answer = dp[2 * n, 0];
+				return answer;
 			}
 
-			var answer = clist.Count / 2;
+			var answer = GetAnswer(s);
+			if (answer == int.MaxValue) {
+				var chars = new char[s.Length];
+				for (var i = 0; i < s.Length; ++i) {
+					chars[i] = s[i] == '0' ? '1' : '0';
+				}
+
+				string s2 = new string(chars);
+				answer = GetAnswer(s2);
+			}
+
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -192,6 +223,42 @@ namespace AtCoderDotNetCore
 
 			var answer = max;
 
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void 寿司タワー貪欲法()
+		{
+			int n = int.Parse(Console.ReadLine());
+			string s = Console.ReadLine();
+			var clist = s.ToCharArray().ToList();
+
+			if (n == 1) {
+				Console.WriteLine($"0");
+				return;
+			}
+
+			// 後ろから見て行って01が連続したらRemove
+			// 残ったものの個数/2が答え
+			bool canRemove = true;
+			for (var i = 1; i < 2 * n; ++i) {
+				int index = 2 * n - 1 - i;
+				if (clist.Count > index + 1) {
+					if (clist[index] != clist[index + 1]) {
+						if (canRemove) {
+							clist.RemoveAt(index + 1);
+							clist.RemoveAt(index);
+							canRemove = false;
+							continue;
+						}
+					}
+				}
+
+				if (canRemove == false) {
+					canRemove = true;
+				}
+			}
+
+			var answer = clist.Count / 2;
 			Console.WriteLine($"{answer}");
 		}
 	}
