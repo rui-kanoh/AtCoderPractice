@@ -16,6 +16,24 @@ using System.Runtime.Intrinsics.X86;
 using System.Reflection;
 using System.Drawing;
 using System.Net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Buffers.Text;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Runtime.Intrinsics.X86;
+using System.Reflection;
+using System.Drawing;
+using System.Net;
 
 namespace AtCoderDotNetCore
 {
@@ -36,68 +54,72 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			int n = int.Parse(Console.ReadLine());
-			string s = Console.ReadLine();
+			var ij = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var indexI = ij[0];
+			var indexJ = ij[1];
 
-			int GetAnswer(string s)
+			long Calc(long k)
 			{
-				var dp = new int[2 * n + 1, n];
-				for (var i = 0; i < 2 * n + 1; ++i) {
-					for (var j = 0; j < n; ++j) {
-						dp[i, j] = int.MaxValue;
-					}
-				}
-
-				dp[0, 0] = 0;
-				for (var i = 0; i < s.Length; ++i) {
-					for (var j = 0; j < n; ++j) {
-						if (dp[i, j] == int.MaxValue) {
-							continue;
-						}
-
-						if (s[i] == '0') {
-							if (j >= 1) {
-								dp[i + 1, j - 1] = Math.Min(dp[i + 1, j - 1], dp[i, j]);
-							}
-
-							if (i < s.Length - 1) {
-								if (s[i + 1] == '1') {
-									if (i < 2 * n - 2) {
-										dp[i + 2, j] = Math.Min(dp[i + 2, j], dp[i, j]);
-									}
-								}
-							}
-						} else {
-							if (j < n - 1) {
-								dp[i + 1, j + 1] = Math.Min(dp[i + 1, j + 1], dp[i, j] + 1);
-							}
-
-							if (i < s.Length - 1) {
-								if (s[i + 1] == '0') {
-									if (i < 2 * n - 2) {
-										dp[i + 2, j] = Math.Min(dp[i + 2, j], dp[i, j]);
-									}
-								}
-							}
-						}
-					}
-				}
-
-				var answer = dp[2 * n, 0];
-				return answer;
+				return k * (k + 1) / 2;
 			}
 
-			var answer = GetAnswer(s);
-			if (answer == int.MaxValue) {
-				var chars = new char[s.Length];
-				for (var i = 0; i < s.Length; ++i) {
-					chars[i] = s[i] == '0' ? '1' : '0';
+			// i番目の組
+			long group1 = 0;
+			long rem1 = 0;
+			bool found1 = false;
+
+			long group2 = 0;
+			long rem2 = 0;
+			bool found2 = false;
+
+			for (long k = 1; k < long.MaxValue; ++k) {
+				if (indexI <= Calc(k) && found1 == false) {
+					group1 = k;
+					rem1 = indexI == Calc(k)
+						? 0
+						: indexI - Calc(k - 1);
+					found1 = true;
 				}
 
-				string s2 = new string(chars);
-				answer = GetAnswer(s2);
+				if (indexJ <= Calc(k) && found2 == false) {
+					group2 = k;
+					rem2 = indexJ == Calc(k)
+						? 0
+						: indexJ - Calc(k - 1);
+					found2 = true;
+				}
+
+				if (found1 && found2) {
+					break;
+				}
 			}
 
+			long numIa = 0;
+			long numIb = 0;
+			if (rem1 == 0) {
+				numIb = group1;
+				numIa = 1;
+			} else {
+				numIb = rem1;
+				numIa = group1 - numIb + 1;
+			}
+
+			long numJa = 0;
+			long numJb = 0;
+			if (rem2 == 0) {
+				numJb = group2;
+				numJa = 1;
+			} else {
+				numJb = rem2;
+				numJa = group2 - numJb + 1;
+			}
+
+			var numA = numIa + numJa;
+			var numB = numIb + numJb;
+
+			var newGroupNum = numA + numB - 1;
+
+			var answer = Calc(newGroupNum - 1) + newGroupNum - numA + 1;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -143,6 +165,62 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void NewYear()
+		{
+			int m = int.Parse(Console.ReadLine());
+			var answer = 24 + 24 - m;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void CenterSaiten()
+		{
+			int n = int.Parse(Console.ReadLine());
+			string s = Console.ReadLine();
+			var clist = s.ToCharArray();
+			var counts = new[] { clist.Count(s => s == '1'), clist.Count(s => s == '2'), clist.Count(s => s == '3'), clist.Count(s => s == '4'), };
+			Console.WriteLine($"{counts.Max()} {counts.Min()}");
+		}
+
+		public static void LeadingZeros()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			var dict = new SortedDictionary<BigInteger, List<(string str, int count)>>();
+
+			for (var i = 0; i < n; ++i) {
+				string s = Console.ReadLine();
+				var num = BigInteger.Parse(s);
+				if (dict.ContainsKey(num) == false) {
+					dict.Add(num, new List<(string str, int count)>());
+				}
+
+				int countZero = 0;
+				for (var j = 0; j < s.Length; ++j) {
+					if (s[j] == '0') {
+						++countZero;
+					} else {
+						break;
+					}
+				}
+
+				dict[num].Add((s, countZero));
+			}
+
+			foreach (var item in dict) {
+				item.Value.Sort((a, b) => b.count.CompareTo(a.count));
+			}
+
+			var builder = new StringBuilder();
+			foreach (var item in dict) {
+				foreach (var c in item.Value) {
+					builder.AppendLine(c.str);
+				}
+			}
+
+			var answer = builder.ToString();
+			Console.Write($"{answer}");
 		}
 
 		public static void HD()
