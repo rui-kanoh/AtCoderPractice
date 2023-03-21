@@ -34,39 +34,20 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static bool Check(int value, int[] list)
-		{
-			var num = list.Distinct().Count(x => x <= value);
-			var amari = list.Length - num;
-			bool isOK = value <= num + (amari / 2); 
-
-			return isOK;
-		}
-
-		public static (int ok, int ng) BinarySearch(int[] list)
-		{
-			int ok = 0;
-			int ng = list.Length;
-			while (ng - ok > 1) {
-				int mid = (ng + ok) / 2;
-				if (Check(mid, list)) {
-					ok = mid;
-				} else {
-					ng = mid;
-				}
-			}
-
-			return (ok, ng);
-		}
-
 		public static void ExecTemp()
 		{
-			long n = long.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			string s = Console.ReadLine();
 
-			(int ok, int ng) = BinarySearch(a);
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-			var answer = ok;
+			string[] inputStrArray = Console.ReadLine().Split(" ");
+
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			var answer = 0;
+
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -133,6 +114,54 @@ namespace AtCoderDotNetCore
 
 			var answer = count;
 			Console.Write($"{answer}");
+		}
+
+		public static bool Check(long value, long[] list)
+		{
+			var num = list.Distinct().Count(x => x <= value);
+			var amari = list.Length - num > 0
+				? list.Length - num
+				: 0;
+			bool isOK = value <= num + (amari / 2);
+
+			return isOK;
+		}
+
+		public static (long ok, long ng) BinarySearch(long[] list)
+		{
+			long ok = 0;
+			long ng = list.Length + 1;
+			while (ng - ok > 1) {
+				long mid = (ng + ok) / 2;
+				if (Check(mid, list)) {
+					ok = mid;
+				} else {
+					ng = mid;
+				}
+			}
+
+			return (ok, ng);
+		}
+
+		public static void Manga()
+		{
+			long n = long.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+
+			if (n == 1) {
+				if (a[0] != 1) {
+					Console.WriteLine($"0");
+				} else {
+					Console.WriteLine($"1");
+				}
+
+				return;
+			}
+
+			(long ok, long ng) = BinarySearch(a);
+
+			var answer = ok;
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
