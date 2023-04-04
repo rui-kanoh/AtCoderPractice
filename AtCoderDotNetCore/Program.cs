@@ -34,82 +34,32 @@ namespace AtCoderDotNetCore
 		{
 			ExecTemp();
 		}
-
 		public static void ExecTemp()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
+			// メモ化再帰
+			var memo = new Dictionary<long, long>();
 
-			var idols = new List<int>();
-			var pphs = new List<int>();
-			var costs = new List<int>();
-			var clist = new List<int>();
-
-			for (var i = 0; i < m; ++i) {
-				var cc = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var c = cc[0];
-				clist.Add(c);
-				var cost = cc[1];
-				costs.Add(cost);
-
-				for (var j = 0; j < c; ++j) {
-					var ip = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-					var idol = ip[0];
-					var pph = ip[1];
-
-					idols.Add(idol);
-					pphs.Add(pph);
-				}
-			}
-
-			var total = 0.0;
-			for (var i = 1; i <= 20; ++i) {
-				var cost = 300.0;
-				var cost2 = 300.0;
-				for (var j = 0; j < i; ++j) {
-					cost *= (5.0 / 100.0);
-					cost2 *= (95.0 / 100.0);
-				}
-
-				total += cost + cost2;
-			}
-			Console.WriteLine($"{total}");
-
-			if (n == 1 && m == 1) {
-				var answer = costs[0];
-				Console.WriteLine($"{answer}");
-			} else {
-				if (n == 1) {
-					var answer = costs.Min();
-					Console.WriteLine($"{answer}");
+			long Func2(long n)
+			{
+				if (n == 0) {
+					return 1;
 				} else {
-					// Ci = 1 を満たす全ての入力に正解した場合
-					if (clist.Distinct().ElementAt(0) == 1) {
-						// M個のくじ引きが全部100%
-						//var answer = costs.Sum();
-
-						if (m == n) {
-							var answer = costs.Sum();
-							Console.WriteLine($"{answer}");
-						} else {
-							var dict = new Dictionary<int, int>();
-							for (var i = 0; i < m; ++i) {
-								if (dict.ContainsKey(costs[i]) == false) {
-									dict.Add(costs[i], idols[i]);
-								} else {
-									if (dict[costs[i]] > idols[i]) {
-										dict[costs[i]] = idols[i];
-									}
-								}
-							}
-
-							var answer = dict.Values.Sum();
-							Console.WriteLine($"{answer}");
-						}
+					if (memo.ContainsKey(n) == false) {
+						var ret = Func2(n / 2) + Func2(n / 3);
+						memo.Add(n, ret);
+						return ret;
+					} else {
+						return memo[n];
 					}
 				}
 			}
+
+			var n = long.Parse(Console.ReadLine());
+
+			// log2(10^18) = 120 なので最大120回もぐればOK
+
+			var answer = Func2(n);
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -156,162 +106,28 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
-		public static void SocialGame()
+		public static void TwoChar()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
-
-			var idols = new List<int>();
-			var pphs = new List<int>();
-			var costs = new List<int>();
-			var clist = new List<int>();
-
-			for (var i = 0; i < m; ++i) {
-				var cc = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var c = cc[0];
-				clist.Add(c);
-				var cost = cc[1];
-				costs.Add(cost);
-
-				for (var j = 0; j < c; ++j) {
-					var ip = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-					var idol = ip[0];
-					var pph = ip[1];
-
-					idols.Add(idol);
-					pphs.Add(pph);
-				}
-			}
-
-			if (n == 1 && m == 1) {
-				var answer = costs[0];
-				Console.WriteLine($"{answer}");
-			} else {
-				if (n == 1) {
-					var answer = costs.Min();
-					Console.WriteLine($"{answer}");
-				} else {
-					// Ci = 1 を満たす全ての入力に正解した場合
-					if (clist.Distinct().ElementAt(0) == 1) {
-						// M個のくじ引きが全部100%
-						//var answer = costs.Sum();
-
-						if (m == n) {
-							var answer = costs.Sum();
-							Console.WriteLine($"{answer}");
-						} else {
-							var dict = new Dictionary<int, int>();
-							for (var i = 0; i < m; ++i) {
-								if (dict.ContainsKey(costs[i]) == false) {
-									dict.Add(costs[i], idols[i]);
-								} else {
-									if (dict[costs[i]] > idols[i]) {
-										dict[costs[i]] = idols[i];
-									}
-								}
-							}
-
-							var answer = dict.Values.Sum();
-							Console.WriteLine($"{answer}");
-						}
-					}
-				}
-			}
-		}
-
-		public static void Uruu()
-		{
-			int y = int.Parse(Console.ReadLine());
-			bool isOK = false;
-			if (y % 4 == 0) {
-				if (y % 100 == 0 && y % 400 != 0) {
-					isOK = false;
-				} else {
-					isOK = true;
-				}
-			} else {
-				isOK = false;
-			}
-
-			var answer = isOK
-				? "YES"
-				: "NO";
+			string s = Console.ReadLine();
+			var answer = s.Length == 2
+				? s
+				: new string(s.Reverse().ToArray());
 			Console.WriteLine($"{answer}");
 		}
-		public static void Exec229()
+
+		public static void NextChar()
 		{
-			static long Calc(long b)
-			{
-				long count = (b / 4) - (b / 100) + (b / 400);
-				return count;
-			}
-
-			var ab = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var a = ab[0];
-			var b = ab[1];
-			long count = Calc(b);
-			count -= Calc(a - 1);
-
-			// 愚直になげるとTLE
-			/*
-			for (long i = a; i <= b; ++i) {
-				if (i % 4 == 0 && (i % 100 != 0 || i % 400 == 0)) {
-					++count;
+			int n = int.Parse(Console.ReadLine());
+			string s = Console.ReadLine();
+			var builder = new StringBuilder();
+			for (var i = 0; i < n; ++i) {
+				if (i > 0 && s[i] == 'J') {
+					builder.AppendLine($"{s[i - 1]}");
 				}
 			}
-			*/
 
-			var answer = count;
+			var answer = builder.ToString();
 			Console.Write($"{answer}");
-		}
-		
-		public static bool Check(long value, long[] list)
-		{
-			var num = list.Distinct().Count(x => x <= value);
-			var amari = list.Length - num > 0
-				? list.Length - num
-				: 0;
-			bool isOK = value <= num + (amari / 2);
-
-			return isOK;
-		}
-
-		public static (long ok, long ng) BinarySearch(long[] list)
-		{
-			long ok = 0;
-			long ng = list.Length + 1;
-			while (ng - ok > 1) {
-				long mid = (ng + ok) / 2;
-				if (Check(mid, list)) {
-					ok = mid;
-				} else {
-					ng = mid;
-				}
-			}
-
-			return (ok, ng);
-		}
-
-		public static void Manga()
-		{
-			long n = long.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			if (n == 1) {
-				if (a[0] != 1) {
-					Console.WriteLine($"0");
-				} else {
-					Console.WriteLine($"1");
-				}
-
-				return;
-			}
-
-			(long ok, long ng) = BinarySearch(a);
-
-			var answer = ok;
-			Console.WriteLine($"{answer}");
 		}
 	}
 }

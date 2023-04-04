@@ -727,5 +727,33 @@ namespace AtCoderDotNetCore
 
 			return x;
 		}
+
+		// メモ化再帰
+		public static void MemoRecursive()
+		{
+			var memo = new Dictionary<long, long>();
+
+			long Func2(long n)
+			{
+				if (n == 0) {
+					return 1;
+				} else {
+					if (memo.ContainsKey(n) == false) {
+						var ret = Func2(n / 2) + Func2(n / 3);
+						memo.Add(n, ret);
+						return ret;
+					} else {
+						return memo[n];
+					}
+				}
+			}
+
+			var n = long.Parse(Console.ReadLine());
+
+			// log2(10^18) = 120 なので最大120回もぐればOK
+
+			var answer = Func2(n);
+			Console.WriteLine($"{answer}");
+		}
 	}
 }
