@@ -36,29 +36,18 @@ namespace AtCoderDotNetCore
 		}
 		public static void ExecTemp()
 		{
-			// メモ化再帰
-			var memo = new Dictionary<long, long>();
+			string s = Console.ReadLine();
 
-			long Func2(long n)
-			{
-				if (n == 0) {
-					return 1;
-				} else {
-					if (memo.ContainsKey(n) == false) {
-						var ret = Func2(n / 2) + Func2(n / 3);
-						memo.Add(n, ret);
-						return ret;
-					} else {
-						return memo[n];
-					}
-				}
-			}
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-			var n = long.Parse(Console.ReadLine());
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			// log2(10^18) = 120 なので最大120回もぐればOK
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-			var answer = Func2(n);
+			var answer = 0;
+
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -104,30 +93,6 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
-		}
-
-		public static void TwoChar()
-		{
-			string s = Console.ReadLine();
-			var answer = s.Length == 2
-				? s
-				: new string(s.Reverse().ToArray());
-			Console.WriteLine($"{answer}");
-		}
-
-		public static void NextChar()
-		{
-			int n = int.Parse(Console.ReadLine());
-			string s = Console.ReadLine();
-			var builder = new StringBuilder();
-			for (var i = 0; i < n; ++i) {
-				if (i > 0 && s[i] == 'J') {
-					builder.AppendLine($"{s[i - 1]}");
-				}
-			}
-
-			var answer = builder.ToString();
-			Console.Write($"{answer}");
 		}
 	}
 }
