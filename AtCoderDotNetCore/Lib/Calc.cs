@@ -93,6 +93,17 @@ namespace AtCoderDotNetCore
 			return isOdd;
 		}
 
+		public static bool IsOdd(BigInteger n)
+		{
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
+
+		public static BigInteger Abs(BigInteger value)
+		{
+			return value >= 0 ? value : -1 * value;
+		}
+
 		public static long Gcd(long a, long b)
 		{
 			if (b == 0) {
