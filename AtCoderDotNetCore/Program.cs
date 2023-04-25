@@ -36,23 +36,49 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static void ExecTemp()
+		public static bool IsOdd(long n)
 		{
-			string s = Console.ReadLine();
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+		public static void ExecTemp() {
+			var xkd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var x = Math.Abs(xkd[0]); // 正の場合だけ考える
+			var k = xkd[1];
+			var d = xkd[2];
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			var distance = (long)0;
+			if (x > d) {
+				// x > d の場合 なるべく0に近づくようにする |x - n * d|
+				var count = x / d;
+				if (count <= k) {
+					var dist1 = x % d;
+					if (IsOdd(k - count) == false) {
+						distance = Math.Abs(dist1);
+					} else {
+						distance = Math.Abs(dist1 - d);
+					}
+				} else {
+					distance = Math.Abs(x - (k * d));
+				}
+			} else {
+				// x <= d の場合
+				// Kが偶数なら留まる(|x|)
+				// Kが奇数なら |d - x|
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+				if (IsOdd(k) == false) {
+					distance = Math.Abs(x);
+				} else {
+					distance = Math.Abs(d - x);
+				}
+			}
 
-			var answer = 0;
-
+			var answer = distance;
 			Console.WriteLine($"{answer}");
 		}
 	}
+}
 }
 
 namespace AtCoderDotNetCore
@@ -170,42 +196,6 @@ namespace AtCoderDotNetCore
 			b.Sort();
 			var min = Math.Abs(a[0] - b[0]) + Math.Abs(a[1] - b[1]) + Math.Abs(a[2] - b[2]);
 
-			/*
-			var min = int.MaxValue;
-			for (var i = 0; i < a.Length; ++i) {
-				for (var j = 0; j < a.Length; ++j) {
-					if (i == j) {
-						continue;
-					}
-
-					for (var k = 0; k < a.Length; ++k) {
-						if (k == i || k == j) {
-							continue;
-						}
-
-						for (var l = 0; l < a.Length; ++l) {
-							for (var m = 0; m < a.Length; ++m) {
-								if (m == l) {
-									continue;
-								}
-
-								for (var n = 0; n < a.Length; ++n) {
-									if (n == k || n == m) {
-										continue;
-									}
-
-									var dist = Math.Abs(a[i] - b[l]) + Math.Abs(a[j] - b[m]) + Math.Abs(a[k] - b[n]);
-									if (dist < min) {
-										min = dist;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			*/
-
 			var answer = min;
 			Console.WriteLine($"{answer}");
 		}
@@ -230,7 +220,7 @@ namespace AtCoderDotNetCore
 
 			var distance = (BigInteger)0;
 			if (x > d) {
-				// x > d の場合 なるべく0に近づくようにする(x - n * d)
+				// x > d の場合 なるべく0に近づくようにする |x - n * d|
 				var count = x / d;
 				if (count <= k) {
 					var dist1 = x % d;
@@ -244,8 +234,8 @@ namespace AtCoderDotNetCore
 				}
 			} else {
 				// x <= d の場合
-				// Kが偶数なら留まる(x) or 2回移動してなるべく0に近づくようにする(2d - x)
-				// Kが奇数なら d - x
+				// Kが偶数なら留まる(|x|)
+				// Kが奇数なら |d - x|
 
 				if (IsOdd(k) == false) {
 					distance = Abs(x);
