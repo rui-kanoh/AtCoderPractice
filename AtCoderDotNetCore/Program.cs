@@ -36,49 +36,63 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static bool IsOdd(long n)
+		public static void ExecTemp()
 		{
-			bool isOdd = (n & 0x1) == 0x1;
-			return isOdd;
-		}
+			int n = int.Parse(Console.ReadLine());
 
-		public static void ExecTemp() {
-			var xkd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var x = Math.Abs(xkd[0]); // 正の場合だけ考える
-			var k = xkd[1];
-			var d = xkd[2];
+			var tlist = new List<long>();
+			var klist = new List<long>();
+			var alists = new Dictionary<int, List<int>>();
+			for (var i = 0; i < n; ++i) {
+				var tka = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var t = tka[0];
+				var k = tka[1];
+				tlist.Add(t);
+				klist.Add(k);
 
-			var distance = (long)0;
-			if (x > d) {
-				// x > d の場合 なるべく0に近づくようにする |x - n * d|
-				var count = x / d;
-				if (count <= k) {
-					var dist1 = x % d;
-					if (IsOdd(k - count) == false) {
-						distance = Math.Abs(dist1);
-					} else {
-						distance = Math.Abs(dist1 - d);
-					}
-				} else {
-					distance = Math.Abs(x - (k * d));
+				var alist = new List<int>();
+				for (var j = 0; j < k; ++j) {
+					alist.Add(tka[j + 2] - 1);
 				}
-			} else {
-				// x <= d の場合
-				// Kが偶数なら留まる(|x|)
-				// Kが奇数なら |d - x|
 
-				if (IsOdd(k) == false) {
-					distance = Math.Abs(x);
-				} else {
-					distance = Math.Abs(d - x);
+				if (alist.Any()) {
+					alists.Add(i, alist);
 				}
 			}
 
-			var answer = distance;
+			// 後ろから考える。
+			// 技nの修練に必要な時間を初期値として、後ろから見ていく
+			var time = (long)0;
+
+			var hash = new HashSet<int>();
+
+			void Dfs(List<int> items, int n)
+			{
+				if (hash.Contains(n)) {
+					return;
+				}
+
+				time += tlist[n];
+				hash.Add(n);
+
+				if (alists.ContainsKey(n) == false) {
+					return;
+				}
+
+				var children = alists[n];
+				foreach (var child in children) {
+					items.Add(child);
+					Dfs(items, child);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), n - 1);
+
+			var answer = time;
 			Console.WriteLine($"{answer}");
 		}
 	}
-}
 }
 
 namespace AtCoderDotNetCore
@@ -121,6 +135,23 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void AddSubMul()
+		{
+			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+			var answer = Math.Max(Math.Max(a + b, a - b), a * b);
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void JointTheCompany()
+		{
+			string s = Console.ReadLine();
+			string t = Console.ReadLine();
+			var answer = s + t;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void Restaurant()
