@@ -36,60 +36,48 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
+		public static bool Check(int value, List<long> list, long[] rui)
+		{
+			if (value >= 0 && value < list.Count - 1) {
+				var value1 = rui[value + 1] * 2;
+				var value2 = list[value + 1];
+				return value1 >= value2;
+			} else {
+				return true;
+			}
+		}
+
+		public static (long ok, long ng) BinarySearch(List<long> list, long[] rui)
+		{
+			int ok = list.Count;
+			int ng = -1;
+			while (ok - ng > 1) {
+				int mid = (ng + ok) / 2;
+				if (Check(mid, list, rui)) {
+					ok = mid;
+				} else {
+					ng = mid;
+				}
+			}
+
+			return (ok, ng);
+		}
+
 		public static void ExecTemp()
 		{
 			int n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			a.Sort();
 
-			var tlist = new List<long>();
-			var klist = new List<long>();
-			var alists = new Dictionary<int, List<int>>();
+			var rui = new long[n + 1];
+			rui[0] = 0;
 			for (var i = 0; i < n; ++i) {
-				var tka = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var t = tka[0];
-				var k = tka[1];
-				tlist.Add(t);
-				klist.Add(k);
-
-				var alist = new List<int>();
-				for (var j = 0; j < k; ++j) {
-					alist.Add(tka[j + 2] - 1);
-				}
-
-				if (alist.Any()) {
-					alists.Add(i, alist);
-				}
+				rui[i + 1] = rui[i] + a[i];
 			}
 
-			// 後ろから考える。
-			// 技nの修練に必要な時間を初期値として、後ろから見ていく
-			var time = (long)0;
+			(long ok, long ng) = BinarySearch(a, rui);
 
-			var hash = new HashSet<int>();
-
-			void Dfs(List<int> items, int n)
-			{
-				if (hash.Contains(n)) {
-					return;
-				}
-
-				time += tlist[n];
-				hash.Add(n);
-
-				if (alists.ContainsKey(n) == false) {
-					return;
-				}
-
-				var children = alists[n];
-				foreach (var child in children) {
-					items.Add(child);
-					Dfs(items, child);
-					items.RemoveAt(items.Count - 1);
-				}
-			}
-
-			Dfs(new List<int>(), n - 1);
-
-			var answer = time;
+			var answer = ok + 1;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -151,6 +139,63 @@ namespace AtCoderDotNetCore
 			string s = Console.ReadLine();
 			string t = Console.ReadLine();
 			var answer = s + t;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void MartialArts()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			var tlist = new List<long>();
+			var klist = new List<long>();
+			var alists = new Dictionary<int, List<int>>();
+			for (var i = 0; i < n; ++i) {
+				var tka = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var t = tka[0];
+				var k = tka[1];
+				tlist.Add(t);
+				klist.Add(k);
+
+				var alist = new List<int>();
+				for (var j = 0; j < k; ++j) {
+					alist.Add(tka[j + 2] - 1);
+				}
+
+				if (alist.Any()) {
+					alists.Add(i, alist);
+				}
+			}
+
+			// 後ろから考える。
+			// 技nの修練に必要な時間を初期値として、後ろから見ていく
+			var time = (long)0;
+
+			var hash = new HashSet<int>();
+
+			void Dfs(List<int> items, int n)
+			{
+				if (hash.Contains(n)) {
+					return;
+				}
+
+				time += tlist[n];
+				hash.Add(n);
+
+				if (alists.ContainsKey(n) == false) {
+					return;
+				}
+
+				var children = alists[n];
+				foreach (var child in children) {
+					items.Add(child);
+					Dfs(items, child);
+					items.RemoveAt(items.Count - 1);
+				}
+			}
+
+			Dfs(new List<int>(), n - 1);
+
+			var answer = time;
 			Console.WriteLine($"{answer}");
 		}
 
