@@ -36,49 +36,79 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static bool Check(int value, List<long> list, long[] rui)
+		public static void ExecTemp()
 		{
-			if (value >= 0 && value < list.Count - 1) {
-				var value1 = rui[value + 1] * 2;
-				var value2 = list[value + 1];
-				return value1 >= value2;
-			} else {
-				return true;
-			}
-		}
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
 
-		public static (long ok, long ng) BinarySearch(List<long> list, long[] rui)
-		{
-			int ok = list.Count;
-			int ng = -1;
-			while (ok - ng > 1) {
-				int mid = (ng + ok) / 2;
-				if (Check(mid, list, rui)) {
-					ok = mid;
-				} else {
-					ng = mid;
+			var s = new bool[h, w];
+			for (var i = 0; i < h; ++i) {
+				var ss = Console.ReadLine();
+				for (var j = 0; j < ss.Length; ++j) {
+					s[i, j] = (ss[j] == '#');
 				}
 			}
 
-			return (ok, ng);
-		}
+			int aoi = 0;
+			int rin = 0;
 
-		public static void ExecTemp()
-		{
-			int n = int.Parse(Console.ReadLine());
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
-			a.Sort();
+			if (h == 1 && w == 1) {
+				if (s[0, 0]) {
+					aoi = 1;
+					rin = 0;
+				} else {
+					aoi = 0;
+					rin = 1;
+				}
 
-			var rui = new long[n + 1];
-			rui[0] = 0;
-			for (var i = 0; i < n; ++i) {
-				rui[i + 1] = rui[i] + a[i];
+				Console.WriteLine($"{aoi} {rin}");
+			} else {
+				if (h == 1) {
+					// aoiは全てひっくり返さざるを得ない
+					// rinは表のものが一つでもあればひっくり返す
+					int omoteCount = 0;
+					for (var j = 0; j < w; ++j) {
+						if (s[0, j]) {
+							++omoteCount;
+						}
+					}
+
+					if (omoteCount > 0) {
+						rin = omoteCount + 1;
+						aoi = w - rin;
+					} else {
+						// 全部裏だった場合
+						rin = 1;
+						aoi = w - 1;
+					}
+
+					Console.WriteLine($"{aoi} {rin}");
+				} else {
+					if (w == 1) {
+						// aoiは表のものが一つでもあればひっくり返す
+						// rinは全てひっくり返さざるを得ない
+						int omoteCount = 0;
+						for (var i = 0; i < h; ++i) {
+							if (s[i, 0]) {
+								++omoteCount;
+							}
+						}
+
+						if (omoteCount > 0) {
+							aoi = 1 + (h - omoteCount);
+							rin = h - aoi;
+						} else {
+							aoi = h - 1;
+							rin = 1;
+						}
+
+						Console.WriteLine($"{aoi} {rin}");
+					} else if (h == 2 && w == 2) {
+
+					}
+				}
 			}
-
-			(long ok, long ng) = BinarySearch(a, rui);
-
-			var answer = ok + 1;
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -123,6 +153,92 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void RatingGoals()
+		{
+			int r = int.Parse(Console.ReadLine());
+			int g = int.Parse(Console.ReadLine());
+
+			var answer = 2 * g - r;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void TwoProblems()
+		{
+			var tabcd = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var t = tabcd[0];
+			var a = tabcd[1];
+			var b = tabcd[2];
+			var c = tabcd[3];
+			var d = tabcd[4];
+
+			var answer = (long)0;
+
+			if (t < a && t < c) {
+				answer = (long)0;
+			} else {
+				if (a + c <= t) {
+					answer = d + b;
+				} else {
+					if (a <= t && c > t) {
+						answer = b;
+					} else if (a > t && c <= t) {
+						answer = d;
+					} else {
+						answer = d;
+					}
+				}
+			}
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Redocta()
+		{
+			string str = "atcoder";
+			string s = Console.ReadLine();
+			if (s == "atcoder") {
+				Console.WriteLine($"0");
+				return;
+			}
+
+			// atcoderの文字を数字に置き換えてバブルソートする
+			var dict = new Dictionary<char, int>();
+			for (var i = 0; i < str.Length; ++i) {
+				dict.Add(str[i], i);
+			}
+
+			var array = new int[str.Length];
+			for (var i = 0; i < str.Length; ++i) {
+				array[i] = dict[str[i]];
+			}
+
+			// 後ろから順番に隣同士を比較していき、正しい順番になっていなければ2つのデータを入れ替えていきます
+			int count = 0;
+			for (var i = 0; i < s.Length; ++i) {
+				array[i] = dict[s[i]];
+			}
+
+			// https://www.momoyama-usagi.com/entry/info-algo-sort-basic#1
+			int n = str.Length;
+			for (int i = 0; i < n - 1; i += 1) {
+				for (int j = n - 1; j >= i + 1; j -= 1) {
+					// 配列の右側から順番に比較、昇順でなければ入れ替え
+					if (array[j - 1] > array[j]) { //  条件を data[j-1] < [j] に変えると降順ソートに
+												   // data[j-1] と data[j]の入れ替え
+						int tmp = array[j - 1];
+						array[j - 1] = array[j];
+						array[j] = tmp;
+						// 入れ替え終わり
+						++count;
+					}
+				}
+			}
+
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void AddSubMul()
