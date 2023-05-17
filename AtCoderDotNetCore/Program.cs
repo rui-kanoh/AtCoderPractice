@@ -36,79 +36,102 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
+		public static bool Check(int value, List<long> list)
+		{
+			return list[value] >= 0;
+		}
+
+		public static (int ng, int ok) BinarySearch(List<long> list, int count)
+		{
+			int ng = -1;
+			int ok = count;
+			while (ok - ng > 1) {
+				int mid = (ok + ng) / 2;
+				if (Check(mid, list)) {
+					ok = mid;
+				} else {
+					ng = mid;
+				}
+			}
+
+			return (ng, ok);
+		}
+
 		public static void ExecTemp()
 		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
+			var n = int.Parse(Console.ReadLine());
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var b = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-			var s = new bool[h, w];
-			for (var i = 0; i < h; ++i) {
-				var ss = Console.ReadLine();
-				for (var j = 0; j < ss.Length; ++j) {
-					s[i, j] = (ss[j] == '#');
-				}
+			var sumA = (long)0;
+			var sumB = (long)0;
+			for (var i = 0; i < n; ++i) {
+				sumA += a[i];
+				sumB += b[i];
 			}
 
-			int aoi = 0;
-			int rin = 0;
+			if (sumA < sumB) {
+				Console.WriteLine($"-1");
+				return;
+			}
 
-			if (h == 1 && w == 1) {
-				if (s[0, 0]) {
-					aoi = 1;
-					rin = 0;
-				} else {
-					aoi = 0;
-					rin = 1;
+			var diffList = new List<long>();
+			for (var i = 0; i < n; ++i) {
+				diffList.Add(a[i] - b[i]);
+			}
+
+			diffList.Sort();
+
+			// 2butanで-1と0の切り替わりポイントを探す
+			(int ng, int ok) = BinarySearch(diffList, n);
+
+			var rui = new long[diffList.Count + 1];
+			rui[0] = 0;
+			for (var i = 0; i < n; ++i) {
+				rui[i + 1] = diffList[i] + rui[i];
+			}
+
+			// 負の合計
+			var sumM = rui[ok];
+
+			if (sumM >= 0) {
+				Console.WriteLine($"0");
+				return;
+			}
+
+			// 正の合計数が負の合計を上回るポイントをニブタンで探す
+
+			bool Check2(int value, long[] list, int start)
+			{
+				return (rui[value] - rui[start]) + diffList[start] >= Math.Abs(sumM);
+			}
+			(int ng, int ok) BinarySearch2(long[] list, int start, int end)
+			{
+				int ng = start;
+				int ok = end;
+
+				if (ok - ng <= 1) {
+					return (end, end);
 				}
 
-				Console.WriteLine($"{aoi} {rin}");
-			} else {
-				if (h == 1) {
-					// aoiは全てひっくり返さざるを得ない
-					// rinは表のものが一つでもあればひっくり返す
-					int omoteCount = 0;
-					for (var j = 0; j < w; ++j) {
-						if (s[0, j]) {
-							++omoteCount;
-						}
-					}
-
-					if (omoteCount > 0) {
-						rin = omoteCount + 1;
-						aoi = w - rin;
+				while (ok - ng > 1) {
+					int mid = (ok + ng) / 2;
+					if (Check2(mid, list, start)) {
+						ok = mid;
 					} else {
-						// 全部裏だった場合
-						rin = 1;
-						aoi = w - 1;
-					}
-
-					Console.WriteLine($"{aoi} {rin}");
-				} else {
-					if (w == 1) {
-						// aoiは表のものが一つでもあればひっくり返す
-						// rinは全てひっくり返さざるを得ない
-						int omoteCount = 0;
-						for (var i = 0; i < h; ++i) {
-							if (s[i, 0]) {
-								++omoteCount;
-							}
-						}
-
-						if (omoteCount > 0) {
-							aoi = 1 + (h - omoteCount);
-							rin = h - aoi;
-						} else {
-							aoi = h - 1;
-							rin = 1;
-						}
-
-						Console.WriteLine($"{aoi} {rin}");
-					} else if (h == 2 && w == 2) {
-
+						ng = mid;
 					}
 				}
+
+				return (ng, ok);
 			}
+
+			(int ng2, int ok2) = BinarySearch2(rui, ok, n);
+
+			var count = ng2;
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -153,6 +176,48 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void TravelingBudget()
+		{
+			int a = int.Parse(Console.ReadLine());
+			int b = int.Parse(Console.ReadLine());
+			int c = int.Parse(Console.ReadLine());
+			int d = int.Parse(Console.ReadLine());
+
+			var answer = (a <= b ? a : b) + (c <= d ? c : d);
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void ThreeBoxes()
+		{
+			int n = int.Parse(Console.ReadLine());
+			string s = Console.ReadLine();
+
+			int x = 1;
+			int count = 0;
+			for (var i = 0; i < s.Length; ++i) {
+				if (s[i] == 'L') {
+					if (x == 1) {
+						x = 1;
+					} else {
+						x -= 1;
+					}
+				} else {
+					if (x == 3) {
+						x = 3;
+					} else {
+						x += 1;
+					}
+				}
+
+				if (x == 3) {
+					++count;
+				}
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void RatingGoals()
