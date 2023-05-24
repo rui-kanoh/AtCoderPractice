@@ -767,4 +767,176 @@ namespace AtCoderDotNetCore
 			Console.WriteLine($"{answer}");
 		}
 	}
+
+
+	public class PriorityQueue2<T> where T : IComparable<T>
+	{
+		public readonly T[] Array;
+		public readonly bool Greater;
+		public int Count { get; private set; } = 0;
+
+		public PriorityQueue2(int capacity, bool greater = true)
+		{
+			this.Array = new T[capacity];
+			this.Greater = greater;
+		}
+
+		public void Enqueue(T item)
+		{
+			this.Array[this.Count] = item;
+			this.Count += 1;
+			this.UpHeap();
+		}
+
+		public T Dequeue()
+		{
+			// 先頭要素を末尾にして再構成
+			this.Swap(0, this.Count - 1);
+			this.Count -= 1;
+			this.DownHeap();
+
+			return this.Array[this.Count];
+		}
+
+
+		private void UpHeap()
+		{
+			var n = this.Count - 1;
+			while (n != 0) {
+				// 親要素の座標
+				var parent = (n - 1) / 2;
+
+				if (this.Compare(this.Array[n], this.Array[parent]) > 0) {
+					this.Swap(n, parent);
+					n = parent;
+				} else {
+					break;
+				}
+			}
+		}
+
+		private void DownHeap()
+		{
+			var parent = 0;
+			while (true) {
+				var child = 2 * parent + 1;
+				if (child > this.Count - 1) break;
+
+				if (child < this.Count - 1 && this.Compare(this.Array[child], this.Array[child + 1]) < 0) {
+					// 左より右の子のほうが大きい値の場合、右を入れ替え対象にする
+					child += 1;
+				}
+
+				if (this.Compare(this.Array[parent], this.Array[child]) < 0) {
+					this.Swap(parent, child);
+					parent = child;
+				} else {
+					break;
+				}
+			}
+		}
+
+		private int Compare(T a, T b)
+		{
+			var c = a.CompareTo(b);
+			if (!this.Greater) {
+				c = -c;
+			}
+			return c;
+		}
+
+		private void Swap(int a, int b)
+		{
+			var tmp = this.Array[a];
+			this.Array[a] = this.Array[b];
+			this.Array[b] = tmp;
+		}
+	}
+
+	public class Dijkstra
+	{
+		public int N { get; set; }
+		public List<Edge>[] G { get; set; }
+		public Dijkstra(int n)
+		{
+			this.N = n;
+			this.G = new List<Edge>[N];
+			for (int i = 0; i < N; i++) {
+				this.G[i] = new List<Edge>();
+			}
+		}
+		// a から b につながる辺を追加する
+		public void Add(int a, int b, long cost = 1)
+		{
+			this.G[a].Add(new Edge(b, cost));
+		}
+
+		// 単一始点の最短経路を求める
+		// 最短経路を探しつつ
+		public (long[] cost, long[] prev) GetMinCost(int start)
+		{
+			var prev = new long[N];
+			for (int i = 0; i < N; i++) prev[i] = -1;
+
+			// 最短経路(コスト)を格納しておく配列(すべての頂点の初期値をINFにしておく)
+			var cost = new long[N];
+			for (int i = 0; i < N; i++) cost[i] = long.MaxValue;
+			cost[start] = 0;
+
+			// 未確定の頂点を格納する優先度付きキュー(頂点とコストを格納)
+			var q = new PriorityQueue2<P>(this.N, false);
+			q.Enqueue(new P(start, 0));
+
+			// 未確定の頂点があればすべて確認する
+			while (q.Count > 0) {
+				var p = q.Dequeue();
+				// すでに記録されているコストと異なる(より大きい)場合、無視する。
+				if (p.Cost != cost[p.A]) continue;
+
+				// 取り出した頂点を確定する。
+				// 確定した頂点から直接辺でつながる頂点をループ
+				foreach (var e in this.G[p.A]) {
+					// すでに記録されているコストより小さいコストの場合
+					if (cost[e.To] > p.Cost + e.Cost) {
+						// コストを更新して、候補としてキューに入れる
+						cost[e.To] = p.Cost + e.Cost;
+
+						prev[e.To] = p.A;
+
+						q.Enqueue(new P(e.To, cost[e.To]));
+					}
+				}
+			}
+
+			return (cost, prev);
+		}
+
+		// 接続先の頂点とコストを格納する辺のデータ
+		public struct Edge
+		{
+			public int To;
+			public long Cost;
+			public Edge(int to, long cost)
+			{
+				this.To = to;
+				this.Cost = cost;
+			}
+		}
+
+		// 頂点とその頂点までのコストを記録
+		public struct P : IComparable<P>
+		{
+			public int A;
+			public long Cost;
+			public P(int a, long cost)
+			{
+				this.A = a;
+				this.Cost = cost;
+			}
+			public int CompareTo(P other)
+			{
+				return this.Cost.CompareTo(other.Cost);
+			}
+		}
+	}
 }

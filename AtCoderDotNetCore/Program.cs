@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Net;
 using System.Xml.Schema;
 using System.ComponentModel.Design;
+using System.Xml.Serialization;
 
 namespace AtCoderDotNetCore
 {
@@ -29,13 +30,13 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class PriorityQueue2<T> where T : IComparable<T>
+	public class PriorityQueue3<T> where T : IComparable<T>
 	{
 		public readonly T[] Array;
 		public readonly bool Greater;
 		public int Count { get; private set; } = 0;
 
-		public PriorityQueue2(int capacity, bool greater = true)
+		public PriorityQueue3(int capacity, bool greater = true)
 		{
 			this.Array = new T[capacity];
 			this.Greater = greater;
@@ -113,11 +114,11 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class Dijkstra
+	public class Dijkstra2
 	{
 		public int N { get; set; }
 		public List<Edge>[] G { get; set; }
-		public Dijkstra(int n)
+		public Dijkstra2(int n)
 		{
 			this.N = n;
 			this.G = new List<Edge>[N];
@@ -126,29 +127,34 @@ namespace AtCoderDotNetCore
 			}
 		}
 		// a から b につながる辺を追加する
-		public void Add(int a, int b, long cost = 1)
+		public void Add(int a, int b, long cost, long sat)
 		{
-			this.G[a].Add(new Edge(b, cost));
+			this.G[a].Add(new Edge(b, cost, sat));
 		}
 
 		// 単一始点の最短経路を求める
 		// 最短経路を探しつつ
-		public long[] GetMinCost(int start)
+		public (long[] cost, long[] sat) GetMinCost(int start, int startSat)
 		{
 			// 最短経路(コスト)を格納しておく配列(すべての頂点の初期値をINFにしておく)
 			var cost = new long[N];
 			for (int i = 0; i < N; i++) cost[i] = long.MaxValue;
 			cost[start] = 0;
 
+			var sat = new long[N];
+			sat[start] = startSat;
+
 			// 未確定の頂点を格納する優先度付きキュー(頂点とコストを格納)
-			var q = new PriorityQueue2<P>(this.N, false);
-			q.Enqueue(new P(start, 0));
+			var q = new PriorityQueue3<P>(this.N, false);
+			q.Enqueue(new P(start, 0, startSat));
 
 			// 未確定の頂点があればすべて確認する
 			while (q.Count > 0) {
 				var p = q.Dequeue();
 				// すでに記録されているコストと異なる(より大きい)場合、無視する。
-				if (p.Cost != cost[p.A]) continue;
+				if (p.Cost > cost[p.A]) {
+					continue;
+				}
 
 				// 取り出した頂点を確定する。
 				// 確定した頂点から直接辺でつながる頂点をループ
@@ -157,12 +163,18 @@ namespace AtCoderDotNetCore
 					if (cost[e.To] > p.Cost + e.Cost) {
 						// コストを更新して、候補としてキューに入れる
 						cost[e.To] = p.Cost + e.Cost;
-						q.Enqueue(new P(e.To, cost[e.To]));
+						sat[e.To] = p.Sat + e.Sat;
+						q.Enqueue(new P(e.To, cost[e.To], sat[e.To]));
+					} else if (cost[e.To] == p.Cost + e.Cost) {
+						if (sat[e.To] < p.Sat + e.Sat) {
+							sat[e.To] = p.Sat + e.Sat;
+							q.Enqueue(new P(e.To, cost[e.To], sat[e.To]));
+						}
 					}
 				}
 			}
 
-			return cost;
+			return (cost, sat);
 		}
 
 		// 接続先の頂点とコストを格納する辺のデータ
@@ -170,10 +182,12 @@ namespace AtCoderDotNetCore
 		{
 			public int To;
 			public long Cost;
-			public Edge(int to, long cost)
+			public long Sat;
+			public Edge(int to, long cost, long sat)
 			{
 				this.To = to;
 				this.Cost = cost;
+				Sat = sat;
 			}
 		}
 
@@ -182,14 +196,17 @@ namespace AtCoderDotNetCore
 		{
 			public int A;
 			public long Cost;
-			public P(int a, long cost)
+			public long Sat;
+			public P(int a, long cost, long sat)
 			{
 				this.A = a;
 				this.Cost = cost;
+				Sat = sat;
 			}
+
 			public int CompareTo(P other)
 			{
-				return this.Cost.CompareTo(other.Cost);
+				return Cost.CompareTo(other.Cost);
 			}
 		}
 	}
@@ -210,18 +227,18 @@ namespace AtCoderDotNetCore
 			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
 			//var uvtList = new List<int u, int v, int t>
-			var dij = new Dijkstra(n);
+			var dij = new Dijkstra2(n);
 			for (var i = 0; i < m; ++i) {
 				var uvt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 				var u = uvt[0] - 1;
 				var v = uvt[1] - 1;
 				var t = uvt[2];
-				dij.Add(u, v, t);
+				dij.Add(u, v, t, a[v]);
 			}
 
-			var costs = dij.GetMinCost(0);
+			(var cost, var sat) = dij.GetMinCost(0, a[0]);
 
-			var answer = 0;
+			var answer = sat[n - 1];
 			Console.WriteLine($"{answer}");
 		}
 	}
