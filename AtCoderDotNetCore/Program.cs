@@ -19,6 +19,7 @@ using System.Net;
 using System.Xml.Schema;
 using System.ComponentModel.Design;
 using System.Xml.Serialization;
+using System.Security.Cryptography;
 
 namespace AtCoderDotNetCore
 {
@@ -30,184 +31,6 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class PriorityQueue3<T> where T : IComparable<T>
-	{
-		public readonly T[] Array;
-		public readonly bool Greater;
-		public int Count { get; private set; } = 0;
-
-		public PriorityQueue3(int capacity, bool greater = true)
-		{
-			this.Array = new T[capacity];
-			this.Greater = greater;
-		}
-
-		public void Enqueue(T item)
-		{
-			this.Array[this.Count] = item;
-			this.Count += 1;
-			this.UpHeap();
-		}
-
-		public T Dequeue()
-		{
-			// 先頭要素を末尾にして再構成
-			this.Swap(0, this.Count - 1);
-			this.Count -= 1;
-			this.DownHeap();
-
-			return this.Array[this.Count];
-		}
-
-
-		private void UpHeap()
-		{
-			var n = this.Count - 1;
-			while (n != 0) {
-				// 親要素の座標
-				var parent = (n - 1) / 2;
-
-				if (this.Compare(this.Array[n], this.Array[parent]) > 0) {
-					this.Swap(n, parent);
-					n = parent;
-				} else {
-					break;
-				}
-			}
-		}
-
-		private void DownHeap()
-		{
-			var parent = 0;
-			while (true) {
-				var child = 2 * parent + 1;
-				if (child > this.Count - 1) break;
-
-				if (child < this.Count - 1 && this.Compare(this.Array[child], this.Array[child + 1]) < 0) {
-					// 左より右の子のほうが大きい値の場合、右を入れ替え対象にする
-					child += 1;
-				}
-
-				if (this.Compare(this.Array[parent], this.Array[child]) < 0) {
-					this.Swap(parent, child);
-					parent = child;
-				} else {
-					break;
-				}
-			}
-		}
-
-		private int Compare(T a, T b)
-		{
-			var c = a.CompareTo(b);
-			if (!this.Greater) {
-				c = -c;
-			}
-			return c;
-		}
-
-		private void Swap(int a, int b)
-		{
-			var tmp = this.Array[a];
-			this.Array[a] = this.Array[b];
-			this.Array[b] = tmp;
-		}
-	}
-
-	public class Dijkstra2
-	{
-		public int N { get; set; }
-		public List<Edge>[] G { get; set; }
-		public Dijkstra2(int n)
-		{
-			this.N = n;
-			this.G = new List<Edge>[N];
-			for (int i = 0; i < N; i++) {
-				this.G[i] = new List<Edge>();
-			}
-		}
-		// a から b につながる辺を追加する
-		public void Add(int a, int b, long cost, long sat)
-		{
-			this.G[a].Add(new Edge(b, cost, sat));
-		}
-
-		// 単一始点の最短経路を求める
-		// 最短経路を探しつつ
-		public (long[] cost, long[] sat) GetMinCost(int start, int startSat)
-		{
-			// 最短経路(コスト)を格納しておく配列(すべての頂点の初期値をINFにしておく)
-			var cost = new long[N];
-			for (int i = 0; i < N; i++) cost[i] = long.MaxValue;
-			cost[start] = 0;
-
-			var sat = new long[N];
-			sat[start] = startSat;
-
-			// 未確定の頂点を格納する優先度付きキュー(頂点とコストを格納)
-			var q = new PriorityQueue3<P>(this.N, false);
-			q.Enqueue(new P(start, 0, startSat));
-
-			// 未確定の頂点があればすべて確認する
-			while (q.Count > 0) {
-				var p = q.Dequeue();
-				// すでに記録されているコストと異なる(より大きい)場合、無視する。
-				if (p.Cost > cost[p.A]) {
-					continue;
-				}
-
-				// 取り出した頂点を確定する。
-				// 確定した頂点から直接辺でつながる頂点をループ
-				foreach (var e in this.G[p.A]) {
-					// すでに記録されているコストより小さいコストの場合
-					if (cost[e.To] > p.Cost + e.Cost) {
-						// コストを更新して、候補としてキューに入れる
-						cost[e.To] = p.Cost + e.Cost;
-						sat[e.To] = p.Sat + e.Sat;
-						q.Enqueue(new P(e.To, cost[e.To], sat[e.To]));
-					} else if (cost[e.To] == p.Cost + e.Cost) {
-						sat[e.To] = Math.Max(sat[e.To], p.Sat + e.Sat);
-					}
-				}
-			}
-
-			return (cost, sat);
-		}
-
-		// 接続先の頂点とコストを格納する辺のデータ
-		public struct Edge
-		{
-			public int To;
-			public long Cost;
-			public long Sat;
-			public Edge(int to, long cost, long sat)
-			{
-				this.To = to;
-				this.Cost = cost;
-				Sat = sat;
-			}
-		}
-
-		// 頂点とその頂点までのコストを記録
-		public struct P : IComparable<P>
-		{
-			public int A;
-			public long Cost;
-			public long Sat;
-			public P(int a, long cost, long sat)
-			{
-				this.A = a;
-				this.Cost = cost;
-				Sat = sat;
-			}
-
-			public int CompareTo(P other)
-			{
-				return Cost.CompareTo(other.Cost);
-			}
-		}
-	}
-
 	public static class Question
 	{
 		public static void Exec()
@@ -215,26 +38,50 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
+
 		public static void ExecTemp()
 		{
-			var nm = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nm[0];
-			var m = nm[1];
+			var nq = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
 
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-
-			var dij = new Dijkstra2(n);
-			for (var i = 0; i < m; ++i) {
-				var uvt = Console.ReadLine().Split(" ").Select(j => int.Parse(j)).ToArray();
-				var u = uvt[0] - 1;
-				var v = uvt[1] - 1;
-				var t = uvt[2];
-				dij.Add(u, v, t, a[v]);
+			var alist = new List<int>();
+			for (var i = 0; i < q; ++i) {
+				int a = int.Parse(Console.ReadLine());
+				alist.Add(a);
 			}
 
-			(var cost, var sat) = dij.GetMinCost(0, a[0]);
+			// bit全探索で状態を取得
+			var list = new List<long>();
+			var hash = new HashSet<long>();
+			for (int i = 0; i < (1 << (int)q); i++) {
+				long total = 1;
 
-			var answer = sat[n - 1];
+				//現在の状態iにおいての和を計算
+				for (int j = 0; j < (int)q; j++) {
+					if (((i >> j) & 1) != 0) {
+						total *= alist[j];
+					}
+				}
+
+				if (total <= n && hash.Contains(total) == false) {
+					list.Add(total);
+					hash.Add(total);
+				}
+			}
+
+			// totalより大きい数は考えなくてよい。
+			// 愚直にやってみる
+
+			foreach (var a in alist) {
+				for (var i = 0; i < list.Count; ++i) {
+					if (list[i] % a == 0) {
+						list[i] /= a;
+					}
+				}
+			}
+
+			var answer = list.Count(s => s == 1);
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -280,6 +127,112 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void Haiku()
+		{
+			string s = Console.ReadLine();
+			var answer = s.Replace(',', ' ');
+			Console.WriteLine($"{answer}");
+		}
+
+		public static long[] GetDivisors(long k, bool doesSort = false)
+		{
+			var list = new List<long>();
+			long max = (long)Math.Sqrt(k);
+			for (var i = 1; i <= max; ++i) {
+				if (k % i == 0) {
+					list.Add(i);
+					if (i != k / i) {
+						list.Add(k / i);
+					}
+				}
+			}
+
+			if (doesSort) {
+				list.Sort();
+			}
+
+			return list.ToArray();
+		}
+
+		public static void Division2()
+		{
+			var nq = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var n = nq[0];
+			var q = nq[1];
+
+			var alist = new List<int>();
+			for (var i = 0; i < q; ++i) {
+				alist.Add(int.Parse(Console.ReadLine()));
+			}
+
+			var primers = new List<(int index, HashSet<long> p)>();
+			for (var i = 0; i < n; ++i) {
+				var p = GetDivisors(i, true);
+				if (p.Any()) {
+					primers.Add((i, p.ToHashSet()));
+				}
+			}
+
+			int count = 0;
+			var hash = new HashSet<long>();
+			foreach (var a in alist) {
+				for (var i = 0; i < primers.Count; ++i) {
+					if (primers.ElementAt(i).p.Count == 1
+						&& primers.ElementAt(i).p.ElementAt(0) == 1) {
+						if (hash.Contains(primers.ElementAt(i).index) == false) {
+							++count;
+							hash.Add(primers.ElementAt(i).index);
+						}
+					}
+
+					if (primers.ElementAt(i).p.Count <= 1) {
+						continue;
+					}
+
+					if (primers.ElementAt(i).p.Contains(a)) {
+						primers.ElementAt(i).p.Remove(a);
+					}
+
+					if (primers.ElementAt(i).p.Count == 1
+						&& primers.ElementAt(i).p.ElementAt(0) == 1) {
+						if (hash.Contains(primers.ElementAt(i).index) == false) {
+							++count;
+							hash.Add(primers.ElementAt(i).index);
+						}
+					}
+				}
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+
+			/*
+			if (n <= 1000000) {
+				// 愚直にやってみる
+				var numbers = Enumerable.Range(1, (int)n).ToList();
+				foreach (var a in alist) {
+					for (var i = 0; i < numbers.Count; ++i) {
+						if (numbers[i] % a == 0) {
+							numbers[i] /= a;
+						}
+					}
+				}
+
+				var answer = numbers.Count(s => s == 1);
+				Console.WriteLine($"{answer}");
+			} else {
+
+				var primers = new List<long[]>();
+				for (var i = 0; i < n; ++i) {
+					primers.Add(GetDivisors(n));
+				}
+
+				var answer = 0;
+				Console.WriteLine($"{answer}");
+			}
+			*/
 		}
 
 		public static void TwoCoins()

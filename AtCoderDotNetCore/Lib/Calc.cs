@@ -938,5 +938,28 @@ namespace AtCoderDotNetCore
 				return this.Cost.CompareTo(other.Cost);
 			}
 		}
+
+		// この数列から数をいくつか選び、その総和がMに最も近くなるような選び方をします。
+		// そのときのMとの絶対値を求めて下さい。
+		public int BitSearch(int N, int[] A, int M)
+		{
+			int res = int.MaxValue;
+			//全ての状態を列挙
+			for (int i = 0; i < (1 << N); i++) {
+				int sum = 0;
+
+				//現在の状態iにおいての和を計算
+				for (int j = 0; j < N; j++) {
+					if (((i >> j) & 1) != 0) {
+						sum += A[j];
+					}
+				}
+
+				//より良かったらresを更新
+				res = Math.Min(res, Math.Abs(M - sum));
+			}
+
+			return res;
+		}
 	}
 }
