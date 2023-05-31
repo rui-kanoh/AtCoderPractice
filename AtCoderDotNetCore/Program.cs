@@ -166,10 +166,7 @@ namespace AtCoderDotNetCore
 						sat[e.To] = p.Sat + e.Sat;
 						q.Enqueue(new P(e.To, cost[e.To], sat[e.To]));
 					} else if (cost[e.To] == p.Cost + e.Cost) {
-						if (sat[e.To] < p.Sat + e.Sat) {
-							sat[e.To] = p.Sat + e.Sat;
-							q.Enqueue(new P(e.To, cost[e.To], sat[e.To]));
-						}
+						sat[e.To] = Math.Max(sat[e.To], p.Sat + e.Sat);
 					}
 				}
 			}
@@ -226,10 +223,9 @@ namespace AtCoderDotNetCore
 
 			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
 
-			//var uvtList = new List<int u, int v, int t>
 			var dij = new Dijkstra2(n);
 			for (var i = 0; i < m; ++i) {
-				var uvt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+				var uvt = Console.ReadLine().Split(" ").Select(j => int.Parse(j)).ToArray();
 				var u = uvt[0] - 1;
 				var v = uvt[1] - 1;
 				var t = uvt[2];
