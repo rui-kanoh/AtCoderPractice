@@ -40,32 +40,18 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
+			string s = Console.ReadLine();
+
+			long ln = long.Parse(Console.ReadLine());
 			int n = int.Parse(Console.ReadLine());
-			string s1 = Console.ReadLine();
-			string s2 = Console.ReadLine();
 
-			var count = (long)0;
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			var dict = new Dictionary<char, int>();
-			for (var i = 0; i < n; ++i) {
-				if (char.IsNumber(s1[i])) {
-					if (char.IsNumber(s2[i]) == false) {
-						if (dict.ContainsKey(s2[i]) == false) {
-							dict.Add(s2[i], 1);
-						} else {
-							++dict[s2[i]];
-						}
-					}
-				} else {
-					if (dict.ContainsKey(s1[i]) == false) {
-						dict.Add(s1[i], 1);
-					} else {
-						++dict[s1[i]];
-					}
-				}
-			}
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
-			var answer = count;
+			var answer = 0;
+
 			Console.WriteLine($"{answer}");
 		}
 	}
