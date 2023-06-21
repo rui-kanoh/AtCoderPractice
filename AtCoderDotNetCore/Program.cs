@@ -40,18 +40,39 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
-
-			long ln = long.Parse(Console.ReadLine());
 			int n = int.Parse(Console.ReadLine());
+			var wlist = new Dictionary<int, int>();
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+			for (var i = 0; i < n; ++i) {
+				var w = int.Parse(Console.ReadLine());
+				wlist.Add(i, w);
+			}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+			var minList = new List<int>();
+			minList.Add(wlist[0]);
 
-			var answer = 0;
+			for (var i = 1; i < n; ++i) {
+				if (minList.Max() < wlist[i]) {
+					minList.Add(wlist[i]);
+				} else {
+					int min = int.MaxValue;
+					int index = -1;
+					for (var j = 0; j < minList.Count; ++j) {
+						if (minList[j] >= wlist[i]) {
+							if (min >= minList[j]) {
+								min = minList[j];
+								index = j;
+							}
+						}
+					}
 
+					if (index != -1) {
+						minList[index] = wlist[i];
+					}
+				}
+			}
+
+			var answer = minList.Count;
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -97,6 +118,112 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void SecondHighestMountain()
+		{
+			int n = int.Parse(Console.ReadLine());
+
+			var dict = new Dictionary<int, string>();
+			var list = new List<int>();
+			for (var i = 0; i < n; ++i) {
+				var st = Console.ReadLine().Split(" ");
+				var s = st[0];
+				var t = int.Parse(st[1]);
+				dict.Add(t, s);
+				list.Add(t);
+			}
+
+			list.Sort((a, b) => b.CompareTo(a));
+
+			var answer = dict[list[1]];
+
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void GrateOceanView()
+		{
+			int n = int.Parse(Console.ReadLine());
+			var h = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			int count = 1;
+
+			var list = new List<int>();
+			list.Add(h[0]);
+			int max = h[0];
+
+			for (var i = 1; i < n; ++i) {
+				if (h[i] < max) {
+					continue;
+				}
+
+				max = Math.Max(max, h[i]);
+
+				++count;
+			}
+
+			var answer = count;
+			Console.WriteLine($"{answer}");
+		}
+
+		public static void Game()
+		{
+			var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var a = ab[0];
+			var b = ab[1];
+
+			var alist = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			var blist = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+
+			//alist.Reverse();
+			//blist.Reverse();
+
+			var sunu = new List<int>();
+			var sume = new List<int>();
+
+			while (alist.Any() || blist.Any()) {
+				if (alist.Any() && blist.Any()) {
+					if (alist[alist.Count - 1] < blist[blist.Count - 1]) {
+						sunu.Add(blist[blist.Count - 1]);
+						blist.RemoveAt(blist.Count - 1);
+					} else {
+						sunu.Add(alist[alist.Count - 1]);
+						alist.RemoveAt(alist.Count - 1);
+					}
+				} else {
+					if (alist.Any()) {
+						sunu.Add(alist[alist.Count - 1]);
+						alist.RemoveAt(alist.Count - 1);
+					} else if (blist.Any()) {
+						sunu.Add(blist[blist.Count - 1]);
+						blist.RemoveAt(blist.Count - 1);
+					} else {
+						break;
+					}
+				}
+
+				if (alist.Any() && blist.Any()) {
+					if (alist[alist.Count - 1] < blist[blist.Count - 1]) {
+						sume.Add(blist[blist.Count - 1]);
+						blist.RemoveAt(blist.Count - 1);
+					} else {
+						sume.Add(alist[alist.Count - 1]);
+						alist.RemoveAt(alist.Count - 1);
+					}
+				} else {
+					if (alist.Any()) {
+						sume.Add(alist[alist.Count - 1]);
+						alist.RemoveAt(alist.Count - 1);
+					} else if (blist.Any()) {
+						sume.Add(blist[blist.Count - 1]);
+						blist.RemoveAt(blist.Count - 1);
+					} else {
+						break;
+					}
+				}
+			}
+
+			var answer = sunu.Sum();
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void CatAndDog()
