@@ -38,41 +38,19 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
+		public static bool IsOdd(long n)
+		{
+			bool isOdd = (n & 0x1) == 0x1;
+			return isOdd;
+		}
+
 		public static void ExecTemp()
 		{
-			int n = int.Parse(Console.ReadLine());
-			var wlist = new Dictionary<int, int>();
+			var x = int.Parse(Console.ReadLine());
+			long a = 0;
+			long b = 0;
 
-			for (var i = 0; i < n; ++i) {
-				var w = int.Parse(Console.ReadLine());
-				wlist.Add(i, w);
-			}
-
-			var minList = new List<int>();
-			minList.Add(wlist[0]);
-
-			for (var i = 1; i < n; ++i) {
-				if (minList.Max() < wlist[i]) {
-					minList.Add(wlist[i]);
-				} else {
-					int min = int.MaxValue;
-					int index = -1;
-					for (var j = 0; j < minList.Count; ++j) {
-						if (minList[j] >= wlist[i]) {
-							if (min >= minList[j]) {
-								min = minList[j];
-								index = j;
-							}
-						}
-					}
-
-					if (index != -1) {
-						minList[index] = wlist[i];
-					}
-				}
-			}
-
-			var answer = minList.Count;
+			var answer = $"{a} {b}";
 			Console.WriteLine($"{answer}");
 		}
 	}
@@ -118,6 +96,19 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void OddString()
+		{
+			string s = Console.ReadLine();
+			var builder = new StringBuilder();
+
+			for (var i = 0; i < s.Length; i = i + 2) {
+				builder.Append(s[i]);
+			}
+
+			var answer = builder.ToString();
+			Console.WriteLine($"{answer}");
 		}
 
 		public static void SecondHighestMountain()
