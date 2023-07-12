@@ -44,24 +44,26 @@ namespace AtCoderDotNetCore
 			var n = nx[0];
 			var x = nx[1];
 			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-			a.Sort();
 
-			var dp = new int[n + 1, x + 1];
+			var dp = new List<List<int>>();
 			for (var i = 0; i < n + 1; ++i) {
+				var list = new List<int>();
 				for (var j = 0; j < x + 1; ++j) {
-					dp[i, j] = -1;
+					list.Add(-1);
 				}
+
+				dp.Add(list);
 			}
 
-			dp[0, 0] = 0;
+			dp[0][0] = 0;
 
-			for (var i = 1; i < n + 1; ++i) {
-				for (var j = 0; j < x + 1; ++j) {
-					if (dp[i - 1, j] >= 0) {
-						dp[i, j] = dp[i - 1, j];
+			for (var i = 0; i < n; ++i) {
+				for (var j = 0; j < x; ++j) {
+					if (dp[i][j] >= 0) {
+						dp[i + 1][j] = dp[i][j];
 
-						if (j + a[i - 1] < x + 1) {
-							dp[i, j + a[i - 1]] = Math.Max(dp[i - 1, j] + 1, dp[i - 1, j + a[i - 1]]);
+						if (j + a[i] < x + 1) {
+							dp[i + 1] [j + a[i]] = Math.Max(dp[i][j] + 1, dp[i + 1][j + a[i]]);
 						}
 					}
 				}
@@ -71,7 +73,7 @@ namespace AtCoderDotNetCore
 
 			// 右下以外は-1
 			for (var j = 0; j < x + 1; ++j) {
-				answer = Math.Max(answer, j == x ? dp[n, j] : dp[n, j] - 1);
+				answer = Math.Max(answer, j == x ? dp[n][j] : dp[n][j] - 1);
 			}
 
 			Console.WriteLine($"{answer}");
