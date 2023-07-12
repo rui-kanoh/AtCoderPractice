@@ -40,17 +40,25 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			string s = Console.ReadLine();
+			var nx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var n = nx[0];
+			var x = nx[1];
+			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			a.Sort();
 
-			long ln = long.Parse(Console.ReadLine());
-			int n = int.Parse(Console.ReadLine());
+			int count = 0;
+			for (var i = 0; i < n; ++i) {
+				if (x < a[i]) {
+					break;
+				}
 
-			string[] inputStrArray = Console.ReadLine().Split(" ");
+				x -= a[i];
+				++count;
+			}
 
-			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-
-			var answer = 0;
+			var answer = count == 0
+				? 0
+				: x > 0 ? count - 1 : count;
 
 			Console.WriteLine($"{answer}");
 		}
@@ -97,6 +105,13 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
+		}
+
+		public static void Dice()
+		{
+			int a = int.Parse(Console.ReadLine());
+			var answer = 7 - a;
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
