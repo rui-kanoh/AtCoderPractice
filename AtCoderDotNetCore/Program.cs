@@ -44,36 +44,39 @@ namespace AtCoderDotNetCore
 			var n = nx[0];
 			var x = nx[1];
 			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			a.Sort();
 
-			var dp = new List<List<int>>();
-			for (var i = 0; i < n + 1; ++i) {
-				var list = new List<int>();
-				for (var j = 0; j < x + 1; ++j) {
-					list.Add(-1);
-				}
+			int count = 0;
+			long total = 0;
 
-				dp.Add(list);
-			}
+			if (a[0] > x) {
+				count = 0;
+			} else {
+				for (var i = 0; i < n; ++i) {
+					total += a[i];
 
-			dp[0][0] = 0;
-
-			for (var i = 0; i < n; ++i) {
-				for (var j = 0; j < x; ++j) {
-					if (dp[i][j] >= 0) {
-						dp[i + 1][j] = dp[i][j];
-
-						if (j + a[i] < x + 1) {
-							dp[i + 1] [j + a[i]] = Math.Max(dp[i][j] + 1, dp[i + 1][j + a[i]]);
+					if (i < n - 1) {
+						if (total > x) {
+							count = i + 1;
+							break;
 						}
+					} else {
+						count = i + 1;
 					}
 				}
 			}
 
-			var answer = 0;
 
-			// 右下以外は-1
-			for (var j = 0; j < x + 1; ++j) {
-				answer = Math.Max(answer, j == x ? dp[n][j] : dp[n][j] - 1);
+			var answer = (long)0;
+
+			if (count == 0) {
+				answer = 0;
+			} else {
+				if (total == x) {
+					answer = n;
+				} else {
+					answer = count - 1;
+				}
 			}
 
 			Console.WriteLine($"{answer}");
