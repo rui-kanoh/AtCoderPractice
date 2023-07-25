@@ -40,41 +40,17 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			var nx = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
-			var n = nx[0];
-			var x = nx[1];
-			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
+			string s = Console.ReadLine();
 
-			var dp = new List<List<int>>();
-			for (var i = 0; i < n + 1; ++i) {
-				var list = new List<int>();
-				for (var j = 0; j < x + 1; ++j) {
-					list.Add(-1);
-				}
+			long ln = long.Parse(Console.ReadLine());
+			int n = int.Parse(Console.ReadLine());
 
-				dp.Add(list);
-			}
+			string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			dp[0][0] = 0;
-
-			for (var i = 0; i < n; ++i) {
-				for (var j = 0; j < x; ++j) {
-					if (dp[i][j] >= 0) {
-						dp[i + 1][j] = dp[i][j];
-
-						if (j + a[i] < x + 1) {
-							dp[i + 1] [(int)(j + a[i])] = Math.Max(dp[i][j] + 1, dp[i + 1][(int)(j + a[i])]);
-						}
-					}
-				}
-			}
+			var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
 			var answer = 0;
-
-			// 右下以外は-1
-			for (var j = 0; j < x + 1; ++j) {
-				answer = Math.Max(answer, j == x ? dp[(int)n][j] : dp[(int)n][j] - 1);
-			}
 
 			Console.WriteLine($"{answer}");
 		}
@@ -121,13 +97,6 @@ namespace AtCoderDotNetCore
 		{
 			long g = Gcd(a, b);
 			return a / g * b;
-		}
-
-		public static void Dice()
-		{
-			int a = int.Parse(Console.ReadLine());
-			var answer = 7 - a;
-			Console.WriteLine($"{answer}");
 		}
 	}
 }
