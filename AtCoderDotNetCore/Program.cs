@@ -40,10 +40,10 @@ namespace AtCoderDotNetCore
 
 		public static void ExecTemp()
 		{
-			var nx = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var nx = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 			var n = nx[0];
 			var x = nx[1];
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
+			var a = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToList();
 
 			var dp = new List<List<int>>();
 			for (var i = 0; i < n + 1; ++i) {
@@ -63,7 +63,7 @@ namespace AtCoderDotNetCore
 						dp[i + 1][j] = dp[i][j];
 
 						if (j + a[i] < x + 1) {
-							dp[i + 1] [j + a[i]] = Math.Max(dp[i][j] + 1, dp[i + 1][j + a[i]]);
+							dp[i + 1] [(int)(j + a[i])] = Math.Max(dp[i][j] + 1, dp[i + 1][(int)(j + a[i])]);
 						}
 					}
 				}
@@ -73,7 +73,7 @@ namespace AtCoderDotNetCore
 
 			// 右下以外は-1
 			for (var j = 0; j < x + 1; ++j) {
-				answer = Math.Max(answer, j == x ? dp[n][j] : dp[n][j] - 1);
+				answer = Math.Max(answer, j == x ? dp[(int)n][j] : dp[(int)n][j] - 1);
 			}
 
 			Console.WriteLine($"{answer}");
