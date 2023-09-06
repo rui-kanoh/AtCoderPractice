@@ -76,40 +76,145 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static void ExecTemp()
+		public static (int step, bool canReach, int fx, int fy) GridBFS(int h, int w, int sx, int sy, int gx, int gy, bool[,] map)
 		{
-			var nk = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var n = nk[0];
-			var k = nk[1];
+			int[] vx = { 0, 1, 0, -1 };
+			int[] vy = { 1, 0, -1, 0 };
 
-			var dict = new Dictionary<int, int>();
-
-			var cards = new List<(int number, int index)>();
-			bool hasBlank = false;
-			for (var i = 0; i < n; ++i) {
-				int card = int.Parse(Console.ReadLine());
-				if (card > 0) {
-					cards.Add((card, i));
-				} else {
-					hasBlank = true;
-				}
-
-				dict.Add(i, card);
+			if (map[sx, sy] == false || map[gx, gy] == false) {
+				return (0, false, 0, 0);
 			}
 
-			if (n <= 1000 && k <= 500) {
-				// 全探索
-				cards.Sort((a, b) => a.number.CompareTo(b.number));
+			if (sx == gx && sy == gy) {
+				return (0, false, 0, 0);
+			}
 
-				for (var i = 1; i < cards.Count; ++i) {
-					if (cards[i].number - cards[i - 1].number == 1) {
+			var dist = new bool[h, w];
+			var tq = new Queue<(int, int, int)>();
+			int step = 0;
+			tq.Enqueue((sx, sy, step));
+			dist[sx, sy] = true;
 
+			bool canReach = false;
+
+			int fx = 0;
+			int fy = 0;
+			while (0 < tq.Count) {
+				var q = tq.Dequeue();
+				int x = q.Item1;
+				int y = q.Item2;
+				step = q.Item3;
+
+				if (x == gx && y == gy) {
+					canReach = true;
+					break;
+				}
+
+				for (int i = 0; i < 4; i++) {
+					int nx = x + vx[i];
+					int ny = y + vy[i];
+					if ((0 <= nx && nx < h) && (0 <= ny && ny < w) && dist[nx, ny] == false
+						&& map[nx, ny]) {
+						/*
+						if (map[nx, ny] == false) {
+							if (brokenCount < 2) {
+								++brokenCount;
+								map[nx, ny] = true;
+							} else {
+								continue;
+							}
+						}
+						*/
+
+						dist[nx, ny] = true;
+						tq.Enqueue((nx, ny, step + 1));
 					}
 				}
 
-				var answer = 0;
-				Console.WriteLine($"{answer}");
+				if (0 == tq.Count) {
+					Console.WriteLine($"{x} {y}");
+					fx = x;
+					fy = y;
+					break;
+				}
 			}
+
+			return (step, canReach, fx, fy);
+		}
+
+		public static void ExecTemp()
+		{
+			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var h = hw[0];
+			var w = hw[1];
+
+			var map = new bool[h, w];
+
+			int sx = 0;
+			int sy = 0;
+			int gx = 0;
+			int gy = 0;
+			for (var i = 0; i < h; ++i) {
+				var temp = Console.ReadLine();
+				for (var j = 0; j < w; ++j) {
+					if (temp[j] is 's' or 'g' or '.') {
+						map[i, j] = true;
+
+						if (temp[j] is 's') {
+							sx = i;
+							sy = j;
+						} else if (temp[j] is 'g') {
+							gx = i;
+							gy = j;
+						}
+					} else {
+						map[i, j] = false;
+					}
+				}
+			}
+
+			(int step, bool canReach, int fx, int fy) = GridBFS(h, w, sx, sy, gx, gy, map);
+
+			if (fx == gx && fy == gy) {
+				canReach = true;
+			} else {
+				int[] vx = { 0, 1, 0, -1 };
+				int[] vy = { 1, 0, -1, 0 };
+				for (int i = 0; i < 4; i++) {
+					int nx = fx + vx[i];
+					int ny = fy + vy[i];
+					if ((0 <= nx && nx < h) && (0 <= ny && ny < w)) {
+						map[nx, ny] = true;
+						if (map[nx, ny]) {
+							(step, canReach, fx, fy) = GridBFS(h, w, sx, sy, gx, gy, map);
+							if (canReach) {
+								break;
+							}
+						}
+					}
+				}
+
+				if (fx == gx && fy == gy) {
+					canReach = true;
+				} else {
+					for (int i = 0; i < 4; i++) {
+						int nx = fx + vx[i];
+						int ny = fy + vy[i];
+						if ((0 <= nx && nx < h) && (0 <= ny && ny < w)) {
+							map[nx, ny] = true;
+							if (map[nx, ny]) {
+								(step, canReach, fx, fy) = GridBFS(h, w, sx, sy, gx, gy, map);
+								if (canReach) {
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			var answer = canReach ? "YES" : "NO";
+			Console.WriteLine($"{answer}");
 		}
 	}
 }
@@ -156,106 +261,35 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
-		public static void Theater()
+		public static void Tako()
 		{
-			int n = int.Parse(Console.ReadLine());
+			var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+			var x = xy[0];
+			var y = xy[1];
 
-			long total = 0;
-			for (var i = 0; i < n; ++i) {
-				var lr = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var l = lr[0];
-				var r = lr[1];
-				total += (r - l + 1);
-			}
-
-			var answer = total;
+			var answer = y / x;
 			Console.WriteLine($"{answer}");
 		}
 
-		public static void SakasamaJisyo()
+		public static void Overwrite()
 		{
 			int n = int.Parse(Console.ReadLine());
-
-			var dict = new Dictionary<string, string>();
-			var list = new List<string>();
-			for (var i = 0; i < n; ++i) {
-				string s = Console.ReadLine();
-				string rev = new string(s.Reverse().ToArray());
-				list.Add(rev);
-				dict.Add(rev, s);
-			}
-
-			list.Sort();
-
-			var builder = new StringBuilder();
-			for (var i = 0; i < n; ++i) {
-				builder.AppendLine(dict[list[i]]);
-			}
-
-			var answer = builder.ToString();
-			Console.Write($"{answer}");
-		}
-
-		public static void Collision2()
-		{
-			int n = int.Parse(Console.ReadLine());
-
-			var dict = new Dictionary<int, List<(int pos, bool isRight)>>();
-
-			var xylist = new List<(int x, int y)>();
-			for (var i = 0; i < n; ++i) {
-				var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-				var x = xy[0];
-				var y = xy[1];
-				xylist.Add((x, y));
-			}
-
-			bool hasColl = false;
-
 			string s = Console.ReadLine();
 
-			for (var i = 0; i < n; ++i) {
-				if (dict.ContainsKey(xylist[i].y) == false) {
-					dict.Add(xylist[i].y, new List<(int, bool)>());
+			var list = s.ToCharArray().ToList();
+			var tlist = new List<char>();
+
+			for (var i = 0; i < list.Count; ++i) {
+				if (tlist.Contains(s[i])) {
+					tlist.RemoveAll(c => c == s[i]);
 				}
 
-				dict[xylist[i].y].Add((xylist[i].x, s[i] == 'R'));
+				tlist.Add(s[i]);
 			}
 
-			// 各Yについて衝突が発生するかどうかチェックする
-			foreach (var key in dict.Keys) {
-				bool hasColl2 = false;
-				var list = dict[key];
-
-				// ソートして、Rに進むやつが出てくるまで見て、それいこうでLが出たら衝突
-				list.Sort((a, b) => a.pos.CompareTo(b.pos));
-
-				bool right = false;
-				foreach ((var pos, bool isRight) in list) {
-					if (right == false) {
-						if (isRight == false) {
-							continue;
-						} else {
-							right = true;
-						}
-					} else {
-						if (isRight == false) {
-							hasColl2 = true;
-							break;
-						}
-					}
-				}
-
-				if (hasColl2) {
-					hasColl = true;
-					break;
-				}
-			}
-
-			var answer = hasColl ? "Yes" : "No";
+			var answer = new string(tlist.ToArray());
 			Console.WriteLine($"{answer}");
 		}
 	}
-}
 }
 
