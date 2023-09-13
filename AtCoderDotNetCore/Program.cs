@@ -31,44 +31,6 @@ namespace AtCoderDotNetCore
 		}
 	}
 
-	public class UnionFind
-	{
-		List<int> parents;
-
-		public int GroupCount { get; private set; }
-
-		public UnionFind(int x)
-		{
-			parents = Enumerable.Repeat(-1, x).ToList();
-			GroupCount = x;
-		}
-
-		public int Find(int x)
-		{
-			if (parents[x] < 0) return x;
-			else {
-				parents[x] = Find(parents[x]);
-				return parents[x];
-			}
-		}
-
-		public void Union(int x, int y)
-		{
-			(x, y) = (Find(x), Find(y));
-
-			if (x != y) {
-				if (Count(x) < Count(y)) (x, y) = (y, x);
-				parents[x] += parents[y];
-				parents[y] = x;
-				GroupCount--;
-			}
-		}
-
-		public int Count(int x) => -parents[Find(x)];
-
-		public bool IsSame(int x, int y) => Find(x) == Find(y);
-	}
-
 	public static class Question
 	{
 		public static void Exec()
@@ -80,30 +42,26 @@ namespace AtCoderDotNetCore
 		{
 			long n = long.Parse(Console.ReadLine());
 
-			long count = 0;
-
 			var hash = new HashSet<long>();
 
-			for (var a = 2; a <= 10; ++a) {
-				for (var b = 2; b <= 10; ++b) {
+			for (long a = 2; a * a <= n; ++a) {
+				for (long b = 2; b <= (int)Math.Log2(n); ++b) {
 					long value = a;
-					for (var i = 0; i < b; ++i) {
+					for (long i = 2; i <= b; ++i) {
 						value *= a;
 					}
 
 					if (value > n) {
-						continue;
+						break;
 					}
 
 					if (hash.Contains(value) == false) {
-						++count;
-
 						hash.Add(value);
 					}
 				}
 			}
 
-			var answer = n - count;
+			var answer = n - hash.Count;
 			Console.WriteLine($"{answer}");
 		}
 	}
