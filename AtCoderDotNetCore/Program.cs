@@ -80,53 +80,20 @@ namespace AtCoderDotNetCore
 		{
 			long n = long.Parse(Console.ReadLine());
 
-			// n - (a^b で表せるもの）が答え
-			// b = 2 で固定すると aはSQRT(N)まででよい。
-
-			// 階乗の個数の計算
-			int bcount = 0;
-			for (var a = 2; a <= 10; ++a) {
-				if (Math.Pow((double)n, 1.0 / (double)a) < 2) {
-					bcount = a - 1;
-					break;
-				}
-
-				if (a == 10) {
-					bcount = 10;
-				}
-			}
-
 			long count = 0;
 
 			var hash = new HashSet<long>();
 
-			// b = 2
-			for (var a = 2; a * a <= n; ++a) {
-				long value = a * a;
+			for (var a = 2; a <= 10; ++a) {
+				for (var b = 2; b <= 10; ++b) {
+					long value = a;
+					for (var i = 0; i < b; ++i) {
+						value *= a;
+					}
 
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			// b = 3
-			for (var a = 2; a * a * a <= n; ++a) {
-				long value = a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			if (bcount > 3) {
-				/*
-				// b = 4
-				for (var a = 2; a * a * a * a <= n; ++a) {
-					long value = a * a * a * a;
+					if (value > n) {
+						continue;
+					}
 
 					if (hash.Contains(value) == false) {
 						++count;
@@ -134,85 +101,6 @@ namespace AtCoderDotNetCore
 						hash.Add(value);
 					}
 				}
-				*/
-
-				if (bcount > 4) {
-					// b = 5
-					for (var a = 2; a * a * a * a * a <= n; ++a) {
-						long value = a * a * a * a * a;
-
-						if (hash.Contains(value) == false) {
-							++count;
-
-							if (value == 100000) {
-								Console.WriteLine($"{value}");
-							}
-
-							hash.Add(value);
-						}
-					}
-
-					/*
-					// b = 6
-					for (var a = 2; a * a * a * a * a * a <= n; ++a) {
-						long value = a * a * a * a * a * a;
-
-						if (hash.Contains(value) == false) {
-							++count;
-
-							hash.Add(value);
-						}
-					}
-					*/
-
-					if (bcount > 6) {
-						// b = 7
-						for (var a = 2; a * a * a * a * a * a * a <= n; ++a) {
-							long value = a * a * a * a * a * a * a;
-
-							if (hash.Contains(value) == false) {
-								++count;
-
-								hash.Add(value);
-							}
-						}
-					}
-				}
-
-				/*
-				// b = 8
-				for (var a = 2; a * a * a * a * a * a * a * a <= n; ++a) {
-					long value = a * a * a * a * a * a * a * a;
-
-					if (hash.Contains(value) == false) {
-						++count;
-
-						hash.Add(value);
-					}
-				}
-
-				// b = 9
-				for (var a = 2; a * a * a * a * a * a * a * a * a<= n; ++a) {
-					long value = a * a * a * a * a * a * a * a * a;
-
-					if (hash.Contains(value) == false) {
-						++count;
-
-						hash.Add(value);
-					}
-				}
-
-				// b = 10
-				for (var a = 2; a * a * a * a * a * a * a * a * a * a <= n; ++a) {
-					long value = a * a * a * a * a * a * a * a * a * a;
-
-					if (hash.Contains(value) == false) {
-						++count;
-
-						hash.Add(value);
-					}
-				}
-				*/
 			}
 
 			var answer = n - count;
