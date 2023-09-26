@@ -38,118 +38,23 @@ namespace AtCoderDotNetCore
 			ExecTemp();
 		}
 
-		public static void ExecTemp()
-		{
-			var hw = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
-			var h = hw[0];
-			var w = hw[1];
+        public static void ExecTemp()
+        {
+            string s = Console.ReadLine();
 
-			var pazzel = new char[h, w];
+            long ln = long.Parse(Console.ReadLine());
+            int n = int.Parse(Console.ReadLine());
 
-			var array = new (bool isBlock, int label)[h, w];
+            string[] inputStrArray = Console.ReadLine().Split(" ");
 
-			for (var i = 0; i < h; ++i) {
-				string s = Console.ReadLine();
-				for (var j = 0; j < w; ++j) {
-					pazzel[i, j] = s[j];
-				}
-			}
+            var array = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var larray = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
 
+            var answer = 0;
 
-			int label = 1;
-			for (var i = 0; i < h; ++i) {
-				for (var j = 2; j < w; ++j) {
-					if (pazzel[i, j - 2] == pazzel[i, j - 1] && pazzel[i, j - 2] == pazzel[i, j]) {
-
-						if (array[i, j - 2].isBlock == false && array[i, j - 1].isBlock == false) {
-							if (i >= 1
-								&& ((array[i - 1, j - 2].isBlock && pazzel[i - 1, j - 2] == pazzel[i, j])
-								|| (array[i - 1, j - 1].isBlock && pazzel[i - 1, j - 1] == pazzel[i, j])
-								|| (array[i - 1, j - 0].isBlock && pazzel[i - 1, j - 0] == pazzel[i, j]))) {
-								if (array[i - 1, j - 2].isBlock) {
-									array[i, j - 2] = (true, array[i - 1, j - 2].label);
-									array[i, j - 1] = (true, array[i - 1, j - 2].label);
-									array[i, j - 0] = (true, array[i - 1, j - 2].label);
-								}
-
-								if (array[i - 1, j - 1].isBlock) {
-									array[i, j - 2] = (true, array[i - 1, j - 1].label);
-									array[i, j - 1] = (true, array[i - 1, j - 1].label);
-									array[i, j - 0] = (true, array[i - 1, j - 1].label);
-								}
-
-								if (array[i - 1, j - 0].isBlock) {
-									array[i, j - 2] = (true, array[i - 1, j - 0].label);
-									array[i, j - 1] = (true, array[i - 1, j - 0].label);
-									array[i, j - 0] = (true, array[i - 1, j - 0].label);
-								}
-							} else {
-								array[i, j - 2] = (true, label);
-								array[i, j - 1] = (true, label);
-								array[i, j - 0] = (true, label);
-
-								++label;
-							}
-						} else {
-							array[i, j - 2] = (true, array[i - 1, j - 0].label);
-							array[i, j - 1] = (true, array[i - 1, j - 0].label);
-							array[i, j - 0] = (true, array[i - 1, j - 0].label);
-						}
-					}
-				}
-			}
-
-			for (var i = 0; i < h; ++i) {
-				for (var j = 0; j < w; ++j) {
-					Console.Write($"{array[i, j].label} ");
-				}
-
-				Console.WriteLine($"");
-			}
-
-			Console.WriteLine($"");
-
-			for (var j = 0; j < w; ++j) {
-				for (var i = 2; i < h; ++i) {
-					if (pazzel[i - 2, j] == pazzel[i - 1, j] && pazzel[i - 2, j] == pazzel[i, j]) {
-						if (array[i - 2, j].isBlock == false && array[i - 1, j].isBlock == false && array[i, j].isBlock == false) {
-							array[i - 2, j] = (true, label);
-							array[i - 1, j] = (true, label);
-							array[i - 0, j] = (true, label);
-
-							++label;
-						} else {
-							if (array[i - 2, j].isBlock) {
-								array[i - 1, j] = (true, array[i - 2, j].label);
-								array[i - 0, j] = (true, array[i - 2, j].label);
-							}
-
-							if (array[i - 1, j].isBlock) {
-								array[i - 2, j] = (true, array[i - 1, j].label);
-								array[i - 0, j] = (true, array[i - 1, j].label);
-							}
-
-							if (array[i, j].isBlock) {
-								array[i - 2, j] = (true, array[i - 0, j].label);
-								array[i - 1, j] = (true, array[i - 0, j].label);
-							}
-						}
-					}
-				}
-			}
-
-			for (var i = 0; i < h; ++i) {
-				for (var j = 0; j < w; ++j) {
-					Console.Write($"{array[i, j].label} ");
-				}
-
-				Console.WriteLine($"");
-			}
-
-			var answer = label - 1;
-			Console.WriteLine($"{answer}");
-		}
-	}
+            Console.WriteLine($"{answer}");
+        }
+    }
 }
 
 namespace AtCoderDotNetCore
@@ -194,191 +99,185 @@ namespace AtCoderDotNetCore
 			return a / g * b;
 		}
 
-		public static void i18n()
-		{
-			string s = Console.ReadLine();
-			var answer = $"{s[0]}{s.Length - 2}{s[s.Length - 1]}";
-			Console.WriteLine($"{answer}");
-		}
 
-		public static void Fox()
-		{
-			int n = int.Parse(Console.ReadLine());
-			string s = Console.ReadLine();
 
-			var builder = new StringBuilder();
-			for (var i = 0; i < s.Length; ++i) {
-				if (s[i] is not 'f' and not 'o' and not 'x') {
-					builder.Append('?');
-				} else {
-					builder.Append(s[i]);
-				}
-			}
+        public static void Binominal()
+        {
+            int n = int.Parse(Console.ReadLine());
+            var a = Console.ReadLine().Split(" ").Select(i => (int.Parse(i))).ToList();
 
-			s = builder.ToString();
+            if (a.Count == 2) {
+                string str = a[0] > a[1] ? $"{a[0]} {a[1]}" : $"{a[1]} {a[0]}";
+                Console.WriteLine(str);
+                return;
+            }
 
-			var hash = s.ToCharArray().ToHashSet();
+            int max = a.Max();
+            var answer = 0;
+            int min = int.MaxValue;
+            foreach (var item in a) {
+                if (min > Math.Abs(item * 2 - max)) {
+                    min = Math.Abs(item * 2 - max);
+                    answer = item;
+                }
+            }
 
-			while (hash.Contains('f') && hash.Contains('o') && hash.Contains('x')) {
-				s = s.Replace("fox", "");
+            Console.WriteLine($"{max} {answer}");
+        }
 
-				hash = s.ToCharArray().ToHashSet();
-			}
+        public static void KenkenRace()
+        {
+            var nabcd = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var n = nabcd[0];
+            var a = nabcd[1] - 1;
+            var b = nabcd[2] - 1;
+            var c = nabcd[3] - 1;
+            var d = nabcd[4] - 1;
+            string s = Console.ReadLine();
+            var mass = new bool[s.Length];
 
-			var answer = s.Length;
-			Console.WriteLine($"{answer}");
-		}
+            bool isOK = true;
+            for (var i = 0; i < s.Length; ++i) {
+                mass[i] = s[i] == '.';
 
-		public static void TaskScheduling()
-		{
-			var a = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToList();
-			a.Sort();
+                if ((i == c || i == d) && mass[i] == false) {
+                    isOK = false;
+                    break;
+                }
 
-			var answer = Math.Abs(a[1] - a[0]) + Math.Abs(a[2] - a[1]);
-			Console.WriteLine($"{answer}");
-		}
+                if (i > 0 && i >= a && i <= d) {
+                    if (mass[i - 1] == false && mass[i] == false) {
+                        isOK = false;
+                        break;
+                    }
+                }
+            }
 
-		public static void SportsDay()
-		{
-			int n = int.Parse(Console.ReadLine());
-			int k = int.Parse(Console.ReadLine());
-			string s = Console.ReadLine();
+            if (isOK) {
+                if (c < d) {
+                    isOK = true;
+                } else {
+                    bool exists3blank = false;
+                    for (var i = b; i <= d; ++i) {
+                        if (i > 1
+                            && i < s.Length - 1
+                            && exists3blank == false) {
+                            if (mass[i - 1] && mass[i] && mass[i + 1]) {
+                                exists3blank = true;
+                                break;
+                            }
+                        }
+                    }
 
-			bool isRed = true;
+                    isOK = exists3blank;
+                }
+            }
 
-			int count = 0;
-			for (var i = 0; i < n - 1; ++i) {
-				if (s[i] == 'R') {
-					++count;
+            var answer = isOK ? "Yes" : "No";
+            Console.WriteLine($"{answer}");
+        }
 
-					if (count == k) {
-						isRed = false;
-						break;
-					}
-				}
-			}
+        public static void Bitaro()
+        {
+            var hw = Console.ReadLine().Split(" ").Select(i => long.Parse(i)).ToArray();
+            var h = hw[0];
+            var w = hw[1];
+            var mas = new char[h, w];
 
-			var answer = isRed ? "R" : "W";
-			Console.WriteLine($"{answer}");
-		}
 
-		public static void Unexpressed()
-		{
-			long n = long.Parse(Console.ReadLine());
+            var ruiO = new int[h, w];
+            for (var i = 0; i < h; ++i) {
+                string s = Console.ReadLine();
+                for (var j = 0; j < s.Length; ++j) {
+                    mas[i, j] = s[j];
+                    if (j == 0) {
+                        ruiO[i, j] = 0;
+                    } else {
+                        ruiO[i, j] = ruiO[i, j - 1];
+                        if (s[j] == 'O') {
+                            ++ruiO[i, j];
+                        }
+                    }
+                }
+            }
 
-			// n - (a^b で表せるもの）が答え
-			// b = 2 で固定すると aはSQRT(N)まででよい。
+            var ruiI = new int[h, w];
+            for (var j = 0; j < w; ++j) {
+                for (var i = 0; i < h; ++i) {
+                    if (i == 0) {
+                        ruiI[i, j] = 0;
+                    } else {
+                        ruiI[i, j] = ruiI[i - 1, j];
+                        if (mas[i, j] == 'I') {
+                            ++ruiI[i, j];
+                        }
+                    }
+                }
+            }
 
-			long count = 0;
+            long count = 0;
 
-			var hash = new HashSet<long>();
+            for (var i = 0; i < h; ++i) {
+                for (var j = 0; j < w; ++j) {
+                    if (mas[i, j] == 'J') {
+                        long countI = ruiI[h - 1, j] - ruiI[i, j];
+                        long countO = ruiO[i, w - 1] - ruiO[i, j];
+                        count += countI * countO;
+                    }
+                }
+            }
 
-			// b = 2
-			for (var a = 2; a * a <= n; ++a) {
-				long value = a * a;
+            Console.WriteLine($"{count}");
+        }
+        
+        public class Vector
+        {
+            public int X;
+            public int Y;
+            public Vector(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
 
-				if (hash.Contains(value) == false) {
-					++count;
+        public static void HentaiKamen()
+        {
+            var xy = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var x = xy[0];
+            var y = xy[1];
+            var ab = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var a = ab[0];
+            var b = ab[1];
+            var ss = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var sx = ss[0];
+            var sy = ss[1];
+            var tt = Console.ReadLine().Split(" ").Select(i => int.Parse(i)).ToArray();
+            var tx = tt[0];
+            var ty = tt[1];
+            var AS = new Vector(sx - 0, sy - a);
+            var AB = new Vector(x, b - a);
+            var AT = new Vector(tx - 0, ty - a);
 
-					hash.Add(value);
-				}
-			}
+            int CrossVector(Vector a, Vector b)
+            {
+                return a.X * b.Y - a.Y * b.X;
+            }
 
-			// b = 3
-			for (var a = 2; a * a * a <= n; ++a) {
-				long value = a * a * a;
+            int CrossVector2(Vector a, Vector b)
+            {
+                int value = CrossVector(a, b);
+                return value != 0 ? value / Math.Abs(value) : value;
+            }
 
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			/*
-			// b = 4
-			for (var a = 2; a * a * a * a <= n; ++a) {
-				long value = a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-			*/
-
-			// b = 5
-			for (var a = 2; a * a * a * a * a <= n; ++a) {
-				long value = a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			// b = 6
-			for (var a = 2; a * a * a * a * a * a <= n; ++a) {
-				long value = a * a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			// b = 7
-			for (var a = 2; a * a * a * a * a * a * a <= n; ++a) {
-				long value = a * a * a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			/*
-			// b = 8
-			for (var a = 2; a * a * a * a * a * a * a * a <= n; ++a) {
-				long value = a * a * a * a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			// b = 9
-			for (var a = 2; a * a * a * a * a * a * a * a * a<= n; ++a) {
-				long value = a * a * a * a * a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-			*/
-
-			// b = 10
-			for (var a = 2; a * a * a * a * a * a * a * a * a * a <= n; ++a) {
-				long value = a * a * a * a * a * a * a * a * a * a;
-
-				if (hash.Contains(value) == false) {
-					++count;
-
-					hash.Add(value);
-				}
-			}
-
-			var answer = n - count;
-			Console.WriteLine($"{answer}");
-		}
-	}
+            bool isCross1 = CrossVector2(AS, AB) * CrossVector2(AT, AB) < 0;
+            var TA = new Vector(0 - tx, a - ty);
+            var TS = new Vector(sx - tx, sy - ty);
+            var TB = new Vector(x - tx, b - ty);
+            bool isCross2 = CrossVector2(TA, TS) * CrossVector2(TB, TS) < 0;
+            bool isCross = isCross1 && isCross2;
+            Console.WriteLine(isCross ? "Yes" : "No");
+        }
+    }
 }
 
